@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE web-app
+    PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+    "http://java.sun.com/dtd/web-app_2_3.dtd">
+
+<web-app>
+
+	<!--  filters -->
+	<!-- 
+	<filter>
+		<filter-name>AuthenticationFilter</filter-name>
+		<filter-class>com.anteboth.agrisys.server.AuthenticationServlet</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>AuthenticationFilter</filter-name>
+		<url-pattern>/agrisys/*</url-pattern>
+	</filter-mapping>
+	-->
+	
+	<!-- Servlets -->
+	<servlet>
+		<servlet-name>agrisysServlet</servlet-name>
+		<servlet-class>com.anteboth.agrisys.server.AgrisysServiceImpl</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>agrisysServlet</servlet-name>
+		<url-pattern>/agrisys/agrisys</url-pattern>
+	</servlet-mapping>
+	
+	<!-- 
+	 <security-constraint>
+        <web-resource-collection> 
+        	<web-resource-name>agrisys</web-resource-name>
+            <url-pattern>/agrisys/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>*</role-name>
+        </auth-constraint>
+    </security-constraint>
+	-->
+	
+	<!-- Default page to serve -->
+	<welcome-file-list>
+		<welcome-file>Agrisys.html</welcome-file>
+	</welcome-file-list>
+
+
+
+</web-app>
