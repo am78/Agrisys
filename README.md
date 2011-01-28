@@ -24,8 +24,7 @@ the google web toolit 2.1 installed.
 
 ### Agrisys in action
 
-To just see it in action go to 
-	[http://agri-sys.appspot.com][1]
+To just see it in action go to this [google app website][1].
     
     
 [1]: http://agri-sys.appspot.com
