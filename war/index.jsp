@@ -51,13 +51,11 @@
 		<td align="left" width="230"> <!-- header -->
 			<img src="/img/agrisys_logo.png" alt="logo"/>
 		</td>
-		<td align="left" width="30">
+		<td width="80" align="left">
 			<div id="buttonStammdatenPanel" />
 		</td>
-		<td>
-			<div id="logoutLink">
-				<a href="<%= userService.createLogoutURL(request.getRequestURI()) %>">Logout</a>
-			</div>
+		<td width="60" align="left">
+			<a href="<%= userService.createLogoutURL(request.getRequestURI()) %>">Logout</a>
 		</td>
 		<td align="left">
 			<div id="userInfoPanel" />

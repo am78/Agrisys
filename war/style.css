@@ -12,6 +12,7 @@ html, body{
 }
  
 
-#logutLink {
-		
+A:LINK, A:HOVER, A:VISITED	{ 
+	color: black; font-family: sans-serif; font-size: small; 
 }
+

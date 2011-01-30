@@ -11,19 +11,16 @@ import com.anteboth.agrisys.client.grid.SchlaglisteGrid;
 import com.anteboth.agrisys.client.grid.data.SchlagRecord;
 import com.anteboth.agrisys.client.model.SchlagErntejahr;
 import com.anteboth.agrisys.client.model.UserDataTO;
-import com.anteboth.agrisys.client.ui.LoginScreen;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.GWT.UncaughtExceptionHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.smartgwt.client.types.Alignment;
-import com.smartgwt.client.types.SelectionType;
 import com.smartgwt.client.types.Side;
-import com.smartgwt.client.types.VerticalAlignment;
 import com.smartgwt.client.util.SC;
 import com.smartgwt.client.widgets.Canvas;
-import com.smartgwt.client.widgets.ImgButton;
 import com.smartgwt.client.widgets.Label;
 import com.smartgwt.client.widgets.events.ClickEvent;
 import com.smartgwt.client.widgets.events.ClickHandler;
@@ -84,15 +81,7 @@ public class Agrisys implements EntryPoint, UncaughtExceptionHandler {
 					//user is logged -> proceed loading the module
 					loadModule();
 				} else {
-					//if the user isn't logged in, go to the login page
-					LoginScreen loginDlg = new LoginScreen() {
-						@Override
-						public void performLogin(String name, String pass) {
-							login(name, pass);
-							this.removeFromParent();
-						}
-					};
-					RootPanel.get("mainPanel").add(loginDlg);
+					//TODO
 				}
 			}
 			
@@ -111,39 +100,6 @@ public class Agrisys implements EntryPoint, UncaughtExceptionHandler {
 		return agrisysService;
 	}
 
-	/**
-	 * Called when the login dialog submits.
-	 * @param name
-	 * @param pass
-	 */
-	protected void login(String name, String pass) {
-		//authenticate the user
-		agrisysService.authenticate(name, pass, new AsyncCallback<UserDataTO>() {
-			@Override
-			public void onSuccess(UserDataTO userData) {
-				setUserData(userData);
-				if (userData != null) {
-					loadModule();
-				} else {
-					//user not logged in
-					//start another try
-					onModuleLoad();
-				}
-			}
-			
-			@Override
-			public void onFailure(Throwable caught) {
-				System.out.println("Fehler:");
-				System.err.println(caught.getLocalizedMessage());
-			}
-		});		
-	}
-
-
-	/**
-	 * Sets the user data.
-	 * @param userData
-	 */
 	protected void setUserData(UserDataTO userData) {
 		this.userData = userData;
 	}
@@ -187,22 +143,15 @@ public class Agrisys implements EntryPoint, UncaughtExceptionHandler {
 		RootPanel.get("userInfoPanel").add(userLabel);
 		
 		//create the stammdaten button
-		ImgButton btnStammdaten = new ImgButton();
-		btnStammdaten.setSrc("/img/stammdaten_s.png");  
-		btnStammdaten.setWidth(25);  
-		btnStammdaten.setHeight(25);  
-		btnStammdaten.setShowRollOver(false);  
-		btnStammdaten.setShowDown(false);  
-		btnStammdaten.setActionType(SelectionType.BUTTON); 
-		btnStammdaten.addClickHandler(new ClickHandler() {
+		Anchor stammdatenLink = new Anchor("Stammdaten");
+		stammdatenLink.addClickHandler(new com.google.gwt.event.dom.client.ClickHandler() {
 			@Override
-			public void onClick(ClickEvent event) {
+			public void onClick(com.google.gwt.event.dom.client.ClickEvent event) {
 				loadStammdaten();
 			}
 		});
-		btnStammdaten.setValign(VerticalAlignment.BOTTOM);
 		
-		RootPanel.get("buttonStammdatenPanel").add(btnStammdaten);
+		RootPanel.get("buttonStammdatenPanel").add(stammdatenLink);
 	}
 	
 	
@@ -212,46 +161,6 @@ public class Agrisys implements EntryPoint, UncaughtExceptionHandler {
 	 * @return
 	 */
 	private VLayout createRightPanel() {
-		// create button panel
-//		int w = 120, h = 25; //int w = 138, h = 25;
-//		String[] btns = new String[]{
-//				"[APP]/img/button-boden.png", "/img/button-aussaat.png", "/img/button-duenger.png",
-//				"/img/button-pflanzenschutz.png", "/img/button-ernte.png"
-//		};
-//
-//		HLayout btnlayout = new HLayout(2);
-//		btnlayout.setAlign(Alignment.CENTER);
-//		for (String s : btns) {
-//			final ImgButton imgButton = new ImgButton();
-//			//        	if (i == 0) imgButton.setSelected(true);
-//			imgButton.setSrc(s);  
-//			imgButton.setWidth(w);  
-//			imgButton.setHeight(h);  
-//			imgButton.setShowRollOver(true);  
-//			imgButton.setShowDown(true);  
-//			imgButton.setActionType(SelectionType.RADIO); 
-//			imgButton.setRadioGroup("schlagnavigationGroup");
-//			btnlayout.addMember(imgButton);
-//		}
-//
-//
-//		ImgButton imgButton = new ImgButton();
-//		imgButton.setSrc("/img/stammdaten_s.png");  
-//		imgButton.setWidth(25);  
-//		imgButton.setHeight(25);  
-//		imgButton.setShowRollOver(false);  
-//		imgButton.setShowDown(false);  
-//		imgButton.setActionType(SelectionType.BUTTON); 
-//		btnlayout.addMember(imgButton);
-//		
-//		imgButton.addClickHandler(new ClickHandler() {
-//			@Override
-//			public void onClick(ClickEvent event) {
-//				loadStammdaten();
-//			}
-//		});
-		
-		
 		this.bodenbearbeitungGrid = new BodenbearbeitungGrid();
 		this.bodenbearbeitungGrid.setHeight("100%");
 		
@@ -362,8 +271,6 @@ public class Agrisys implements EntryPoint, UncaughtExceptionHandler {
 		this.rightLayout = new VLayout();
 		this.rightLayout.addMember(tabSet);
 		
-//		this.rightLayout.addMember(btnlayout);
-//		this.rightLayout.addMember(this.currentRightGrid);
 		this.rightLayout.addMember(this.rightToolStrip);
 
 		return this.rightLayout;
