@@ -19,6 +19,9 @@ import com.anteboth.agrisys.client.model.stammdaten.Duengerart;
 import com.anteboth.agrisys.client.model.stammdaten.Kultur;
 import com.anteboth.agrisys.client.model.stammdaten.PSMittel;
 import com.anteboth.agrisys.client.model.stammdaten.Sorte;
+import com.google.appengine.api.users.User;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
@@ -32,6 +35,7 @@ import com.googlecode.objectify.Query;
 public class AgrisysServiceImpl extends RemoteServiceServlet implements AgrisysService {
 	
 	private static final int ACT_ERNTEJAHR = 2011;
+	
 	
 	/**
 	 * Construtor.
@@ -60,9 +64,9 @@ public class AgrisysServiceImpl extends RemoteServiceServlet implements AgrisysS
 
 	private void createBaseData() {
 		//insert testuser if not exists
-		createAccount("user", "pass");
-		createAccount("admin", "agrisysadmin");
-		createAccount("user2", "pass");
+//		createAccount("user", "pass");
+//		createAccount("admin", "agrisysadmin");
+//		createAccount("user2", "pass");
 		
 		Objectify ofy = ObjectifyService.begin();
 
@@ -79,29 +83,32 @@ public class AgrisysServiceImpl extends RemoteServiceServlet implements AgrisysS
 
 
 	/**
-	 * Creates an account item in datastore if the username is not yet existing.
+	 * Retrieves/Creates an account item in datastore if the email is not yet existing.
 	 * @param name the account user name
 	 * @param pass the account password
+	 * @param email the email address, must not be null, is unique for each user
 	 */
-	private void createAccount(String name, String pass) {
+	private Account getOrCreateAccount(String name, String pass, String email, String betriebName) {
 		Objectify ofy = ObjectifyService.begin();
 		
-		//get test account
-		Query<Account> accountQuery = ofy.query(Account.class).filter("username", name);
+		//get the account for the email address
+		Query<Account> accountQuery = ofy.query(Account.class).filter("email", email);
 		Account a = accountQuery.get();
 		
 		if (a == null) {
-			//creat new accoutn and store the item if it's not yet existing
-			a = new Account(name, pass);
+			//creat new account and store the item if it's not yet existing
+			a = new Account(name, pass, email);
 			Key<Account> accountKey = ofy.put(a);
 			
 			//create Betrieb instance
 			Betrieb b = new Betrieb();
-			b.setName("Testbetrieb");
+			b.setName(betriebName);
 			b.setManagerKey(accountKey);
 			
 			ofy.put(b);
 		}
+		
+		return a;
 	}
 
 
@@ -183,10 +190,18 @@ public class AgrisysServiceImpl extends RemoteServiceServlet implements AgrisysS
 	 */
 	public UserDataTO isUserAuthenticated() {
 		
-		Account account = (Account) this.getThreadLocalRequest().getSession().getAttribute(WebConstants.CURRENT_ACCOUNT);
-		if (account == null) {
+		UserService userService = UserServiceFactory.getUserService();
+		User user = userService.getCurrentUser();
+		
+		Account account = null;
+		if (user != null) {
+			String email = user.getEmail();
+			account = getOrCreateAccount(email, "", email, "Betrieb von " + email );
+		}
+		else {
 			return null;
 		}
+		
 		
 		Betrieb betrieb = getBetriebForAccount(account); 
 		
@@ -204,47 +219,16 @@ public class AgrisysServiceImpl extends RemoteServiceServlet implements AgrisysS
 	 * @return Betrieb
 	 */
 	private Betrieb getBetriebForAccount(Account account) {
-		if (account == null) return null;
+		if (account == null) {
+			return null;
+		}
+		
 		Objectify ofy = ObjectifyService.begin();
 		//get betrieb for account
 		Betrieb b = ofy.query(Betrieb.class).filter("manager", account).get();
 		return b;
 	}
 
-
-//	public String greetServer(String input) throws IllegalArgumentException {
-//		// Verify that the input is valid. 
-//		if (!FieldVerifier.isValidName(input)) {
-//			// If the input is not valid, throw an IllegalArgumentException back to
-//			// the client.
-//			throw new IllegalArgumentException(
-//					"Name must be at least 4 characters long");
-//		}
-//
-//		String serverInfo = getServletContext().getServerInfo();
-//		String userAgent = getThreadLocalRequest().getHeader("User-Agent");
-//
-//		// Escape data from the client to avoid cross-site script vulnerabilities.
-//		input = escapeHtml(input);
-//		userAgent = escapeHtml(userAgent);
-//
-//		return "Hello, " + input + "!<br><br>I am running " + serverInfo
-//				+ ".<br><br>It looks like you are using:<br>" + userAgent;
-//	}
-
-	/**
-	 * Escape an html string. Escaping data received from the client helps to
-	 * prevent cross-site script vulnerabilities.
-	 * 
-	 * @param html the html string to escape
-	 * @return the escaped string
-	 */
-	private String escapeHtml(String html) {
-		if (html == null) {
-			return null;
-		}
-		return html.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
-	}
 
 	/* Stammdaten */
 
