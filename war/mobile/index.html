@@ -1,0 +1,74 @@
+<!doctype html>
+<html manifest="dontuse.agrisys.manifest"> 
+	<head> 
+	<title>Agrisys mobile</title>
+	<link rel="stylesheet" href="style.css" /> 
+	<link rel="stylesheet" href="jquery.mobile-1.0a2.css" />
+	<script type="text/javascript" src="jquery-1.4.4.js"></script>
+	<script type="text/javascript" src="jquery.mobile-1.0a2.js"></script>
+	<!-- jquery-tmpl infos at: http://github.com/jquery/jquery-tmpl -->
+	<script type="text/javascript" 
+		src="http://ajax.microsoft.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js"></script>
+</head> 
+<body>
+
+<script>
+$.mobile.pageLoading( true );	
+</script>
+
+<script id="schlagTemplate" type="text/x-jquery-tmpl"> 
+    <tr><td>
+		<a href="#">
+			<div id="dataItem">
+				<b>${name}</b> <br/>
+				${flaeche} ha</div>
+		</a>
+	</td></tr>
+</script>		
+
+
+<!-- Start of first page -->
+<div data-role="page" id="master">
+
+	<div data-role="header" data-position="fixed">
+		<div id="networkState" align="center">Schlagliste</div>		
+	</div><!-- /header -->
+
+	<div data-role="content1">	
+		<table id="schlagList" cellspacing="0" cellpadding="0">
+<!-- 			<div id="dataItem">
+				<tr><td><div id="dataItem">test 1<br>test</br></div></td></tr>
+				<tr><td><div id="dataItem">test 2<br>test1</br></div></td></tr>
+			</div>-->
+		</table>
+		
+		<ul data-role="listview" data-theme="c" id="schlagList2">
+		</ul>		
+	</div><!-- /content -->
+
+	<div data-role="footer">
+		&nbsp;
+	</div><!-- /header -->
+</div><!-- /page -->
+
+<script type="text/javascript">
+
+	//get connection state
+	var connectionStatus = ((navigator.onLine) ? 'online' : 'offline');
+	
+	//render networkState template
+	$.template( "netStatTmpl", '&nbsp;-&nbsp;<i>${connectionStatus}</i>');
+	$.tmpl( "netStatTmpl", connectionStatus ).appendTo( "#networkState" );
+
+			  
+	$.getJSON('SchlagList.jsp', function(data) {
+		$( "#schlagTemplate" ).tmpl( data ).appendTo( "#schlagList" );
+	});
+		
+	$('#btn').click(function(){
+	});
+  	
+</script>
+
+</body>
+</html>

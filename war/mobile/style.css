@@ -1,0 +1,31 @@
+
+#dataItem {	
+	border-bottom:1px solid #fff;
+	border-color:rgba( 25, 25, 25, .5);
+	padding: 10px 10px 10px 10px;
+
+	background: #silver; /* for non-css3 browsers */
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#ebebeb', endColorstr='#d1d1d1'); /* for IE */
+	background: -webkit-gradient(linear, left top, left bottom, from(#ebebeb), to(#d1d1d1)); /* for webkit browsers */
+	background: -moz-linear-gradient(top,  #ebebeb,  #d1d1d1); /* for firefox 3.6+ */	
+}
+
+#dataItem:focus { background-color:red; }
+#dataItem:active { background-color:lightblue; }
+
+#dataItem:hover {
+	background: #silver; /* for non-css3 browsers */
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#ebebeb', endColorstr='#ebebeb'); /* for IE */
+	background: -webkit-gradient(linear, left top, left bottom, from(#ebebeb), to(#e1e1e1)); /* for webkit browsers */
+	background: -moz-linear-gradient(top,  #ebebeb,  #ebebeb); /* for firefox 3.6+ */ 
+}
+
+
+a:link, a:visited, a:focus, a:hover, a:active { 
+		font-weight:normal; color:black; text-decoration:none;
+}
+
+#schlagList {
+	width: 100%;
+	padding: 0,0,0,0;
+}

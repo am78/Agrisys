@@ -26,12 +26,18 @@
 		<url-pattern>/agrisys/*</url-pattern>
 	</servlet-mapping>
 
+	<!-- mime type mapping -->
+	<mime-mapping>
+		<extension>manifest</extension>
+		<mime-type>text/cache-manifest</mime-type>
+	</mime-mapping>
 
 	<!-- Default page to serve -->
 	<welcome-file-list>
 		<welcome-file>index.jsp</welcome-file>
 	</welcome-file-list>
 
+	<!--  security settings -->
 	<security-constraint>
 		<web-resource-collection>
 			<web-resource-name>agrisys</web-resource-name>
@@ -41,7 +47,5 @@
 			<role-name>*</role-name>
 		</auth-constraint>
 	</security-constraint>
-
-
 
 </web-app>
