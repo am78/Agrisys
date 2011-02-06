@@ -35,4 +35,9 @@ public class PSMittel implements Serializable, IDTO {
 	public Long getId() {
 		return id;
 	}
+	
+	@Override
+	public String toString() {
+		return name;
+	}
 }

@@ -14,17 +14,48 @@
 		<filter-name>AuthFilter</filter-name>
 		<url-pattern>/agrisys/*</url-pattern>
 	</filter-mapping>
+<!-- <filter-mapping>
+		<filter-name>AuthFilter</filter-name>
+		<url-pattern>/service/*</url-pattern>
+	</filter-mapping>
+-->
 
 	<!-- Servlets -->
 	<servlet>
 		<servlet-name>agrisysServlet</servlet-name>
 		<servlet-class>com.anteboth.agrisys.server.AgrisysServiceImpl</servlet-class>
 	</servlet>
-
 	<servlet-mapping>
 		<servlet-name>agrisysServlet</servlet-name>
 		<url-pattern>/agrisys/*</url-pattern>
 	</servlet-mapping>
+
+	<!-- REST Servlet -->
+	<servlet>
+		<servlet-name>RestletServlet</servlet-name>
+		<servlet-class>org.restlet.ext.servlet.ServerServlet</servlet-class>
+		<init-param>
+			<param-name>org.restlet.application</param-name>
+			<param-value>com.anteboth.agrisys.service.AgrisysRestApplication  </param-value>
+		</init-param>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>RestletServlet</servlet-name>
+		<url-pattern>/service/*</url-pattern>
+	</servlet-mapping>
+	
+	<!-- StartupServlet -->
+	<servlet>
+  		<servlet-name>StartupServlet</servlet-name>
+  		<servlet-class>com.anteboth.agrisys.server.StartupServlet</servlet-class>
+  		<load-on-startup>1</load-on-startup>
+	</servlet>
+ 
+ 	<servlet-mapping>
+  		<servlet-name>StartupServlet</servlet-name>
+  		<url-pattern>/Startup</url-pattern>
+	</servlet-mapping>
+
 
 	<!-- mime type mapping -->
 	<mime-mapping>
@@ -42,6 +73,7 @@
 		<web-resource-collection>
 			<web-resource-name>agrisys</web-resource-name>
 			<url-pattern>/agrisys/*</url-pattern>
+<!-- 			<url-pattern>/service/*</url-pattern> -->
 		</web-resource-collection>
 		<auth-constraint>
 			<role-name>*</role-name>
