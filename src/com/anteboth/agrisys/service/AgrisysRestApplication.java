@@ -15,12 +15,10 @@ public class AgrisysRestApplication extends Application {
         Router router = new Router(getContext());
 
         
-        // Defines a route for the resource "list of flurstueck"  
         router.attach("/schlagList", SchlagListResource.class);  
-        // Defines a route for the resource "flurstueck"  
         router.attach("/schlag/{id}", SchlagResource.class);
-        
         router.attach("/stammdaten", StammdatenResource.class);
+        router.attach("/aktivitaetList/{id}", AktivitaetListResource.class);
 
         return router;
     }

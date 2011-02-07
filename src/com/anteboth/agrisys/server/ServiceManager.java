@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.anteboth.agrisys.client.model.Account;
+import com.anteboth.agrisys.client.model.Aktivitaet;
 import com.anteboth.agrisys.client.model.Aussaat;
 import com.anteboth.agrisys.client.model.Betrieb;
 import com.anteboth.agrisys.client.model.Bodenbearbeitung;
@@ -304,9 +305,9 @@ public class ServiceManager {
 	
 	
 	/**
-	 * Loads the {@link Schlag} item for the specified SchlagErntejahr id.
-	 * @param id
-	 * @return
+	 * Loads the {@link Schlag} item for the specified {@link SchlagErntejahr} id.
+	 * @param id the {@link SchlagErntejahr} id
+	 * @return the {@link Schlag} item
 	 */
 	public Schlag getSchlag(long id) {
 		//TODO auf Scope des aktuellen Benutzers einschränken, sonst Sicherheitsrisiko
@@ -419,6 +420,42 @@ public class ServiceManager {
 			return ofy.get(key);
 		}
 		return null;
+	}
+	
+	
+	
+	/* Aktivit‰ten */
+	
+	/**
+	 * Loads the list of {@link Aktivitaet} entries for the specified {@link SchlagErntejahr} id.
+	 * @param id the {@link SchlagErntejahr} id
+	 * @return the list of {@link Aktivitaet} entries
+	 */
+	public List<Aktivitaet> loadAktivitaetData(Long id) {
+		List<Aktivitaet> data = new ArrayList<Aktivitaet>();
+		if (id != null) {
+			Objectify ofy = ObjectifyService.begin();
+			//get SchlagErntejahr for id
+			SchlagErntejahr se = ofy.query(SchlagErntejahr.class).filter("id", id).get();
+			if (se != null) {
+				List<Bodenbearbeitung> bd = loadBodenbearbeitungData(se);
+				if (bd != null) {
+					data.addAll(bd);
+				}
+				List<Aussaat> ad = loadAussaatData(se);
+				if (ad != null) {
+					data.addAll(ad);
+				}
+				List<Ernte> ed = loadErnteData(se);
+				if (ed != null) {
+					data.addAll(ed);
+				}
+				//TODO loadPflanzenschutzData
+				//TODO loadDuengungData
+				//TODO sortieren nach Type oder Zeit ???
+			}
+		}
+		return data;
 	}
 	
 	/* Bodenbearbeitung */
