@@ -10,7 +10,7 @@ import com.anteboth.agrisys.server.ServiceManager;
 import com.google.gson.Gson;
 
 /**
- * Resource for a list of SchlagErntejahr items.
+ * Resource for a list of {@link Aktivitaet} items.
  * 
  */
 public class AktivitaetListResource extends ServerResource implements IAktivitaetListResource {

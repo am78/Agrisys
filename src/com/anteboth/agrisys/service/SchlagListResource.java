@@ -12,8 +12,10 @@ import com.anteboth.agrisys.server.ServiceManager;
 import com.google.gson.Gson;
 
 /**
- * Resource for a list of SchlagErntejahr items.
- * 
+ * Resource for a list of Schlag items.
+ * Get retrieves the array of {@link Schlag} items
+ * for the session user and the current Erntejahr.
+ *  
  */
 public class SchlagListResource extends ServerResource implements ISchlagListResource {
 

@@ -1,13 +1,8 @@
-package com.anteboth.agrisys.client.model;
+package com.anteboth.agrisys.client.model.stammdaten;
 
 import java.io.Serializable;
 import java.util.List;
 
-import com.anteboth.agrisys.client.model.stammdaten.BodenbearbeitungTyp;
-import com.anteboth.agrisys.client.model.stammdaten.Duengerart;
-import com.anteboth.agrisys.client.model.stammdaten.Kultur;
-import com.anteboth.agrisys.client.model.stammdaten.PSMittel;
-import com.anteboth.agrisys.client.model.stammdaten.Sorte;
 
 @SuppressWarnings("serial")
 public class Stammdaten implements Serializable {

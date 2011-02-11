@@ -2,7 +2,7 @@ package com.anteboth.agrisys.client.model.res;
 
 import org.restlet.resource.Get;
 
-import com.anteboth.agrisys.client.model.Stammdaten;
+import com.anteboth.agrisys.client.model.stammdaten.Stammdaten;
 
 public interface IStammdatenResource {
 
