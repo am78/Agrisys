@@ -450,6 +450,7 @@ public class ServiceManager {
 				if (ed != null) {
 					data.addAll(ed);
 				}
+				
 				//TODO loadPflanzenschutzData
 				//TODO loadDuengungData
 				//TODO sortieren nach Type oder Zeit ???

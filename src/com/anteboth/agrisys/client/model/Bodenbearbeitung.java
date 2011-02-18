@@ -30,4 +30,9 @@ public class Bodenbearbeitung extends Aktivitaet {
 	public void setBodenbearbeitungTyp(BodenbearbeitungTyp bodenbearbeitungTyp) {
 		this.bodenbearbeitungTyp = bodenbearbeitungTyp;
 	}
+	
+	@Override
+	public Long getId() {
+		return this.id;
+	}
 }

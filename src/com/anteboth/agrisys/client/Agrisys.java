@@ -65,7 +65,7 @@ public class Agrisys implements EntryPoint, UncaughtExceptionHandler {
 		e.printStackTrace();
 		SC.warn(e.getLocalizedMessage());
 	}
-
+	
 	/**
 	 * This is the entry point method.
 	 */

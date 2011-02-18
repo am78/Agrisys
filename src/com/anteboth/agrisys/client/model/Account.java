@@ -42,5 +42,9 @@ public class Account implements Serializable, IDTO {
 	public void setEmail(String email) {
 		this.email = email;
 	}
+	
+	public Long getId() {
+		return id;
+	}
 
 }
