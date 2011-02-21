@@ -67,7 +67,7 @@ public class DuengerartStammdatenGrid extends AbstractListGrid<DuengerartRecord>
 	@SuppressWarnings("unchecked")
 	protected void udpateAndSaveRecord(DuengerartRecord record, EditCompleteEvent event) {
 		if (record != null) {
-			Map<String, String> vals = event.getNewValues();
+			Map<String, Object> vals = event.getNewValues();
 			record.updateDTO(vals);
 			
 			//save changes

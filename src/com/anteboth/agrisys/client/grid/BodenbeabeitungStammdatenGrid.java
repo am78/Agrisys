@@ -65,7 +65,7 @@ public class BodenbeabeitungStammdatenGrid extends AbstractListGrid<Bodenbearbei
 	@SuppressWarnings("unchecked")
 	protected void udpateAndSaveRecord(BodenbearbeitungTypRecord record, EditCompleteEvent event) {
 		if (record != null) {
-			Map<String, String> vals = event.getNewValues();
+			Map<String, Object> vals = event.getNewValues();
 			record.updateDTO(vals);
 			
 			//save changes

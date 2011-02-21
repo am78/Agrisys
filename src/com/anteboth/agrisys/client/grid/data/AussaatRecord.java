@@ -37,10 +37,10 @@ public class AussaatRecord extends ListRecord<Aussaat> {
     }
     
     @Override
-    public void updateDTO(Map<String, String> vals) {
+    public void updateDTO(Map<String, Object> vals) {
     	//update DTO values
     	Aussaat dto = getDTO();
-		for (Entry<String, String> entry : vals.entrySet()) {
+		for (Entry<String, Object> entry : vals.entrySet()) {
 			String att = entry.getKey();
 			Object val = entry.getValue();
 			GWT.log("Name: " + att + " Value: " + val);

@@ -5,11 +5,11 @@ import java.util.List;
 import java.util.Map;
 
 import com.anteboth.agrisys.client.ISchlagErntejahrSelectionListener;
-import com.anteboth.agrisys.client.grid.data.BodenbearbeitungRecord;
 import com.anteboth.agrisys.client.grid.data.DataManager;
-import com.anteboth.agrisys.client.model.Bodenbearbeitung;
+import com.anteboth.agrisys.client.grid.data.DuengungRecord;
+import com.anteboth.agrisys.client.model.Duengung;
 import com.anteboth.agrisys.client.model.SchlagErntejahr;
-import com.anteboth.agrisys.client.ui.BodenbearbeitungDetailsWindow;
+import com.anteboth.agrisys.client.ui.DuengungDetailsWindow;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.googlecode.objectify.Key;
 import com.smartgwt.client.types.ListGridEditEvent;
@@ -20,14 +20,14 @@ import com.smartgwt.client.widgets.grid.events.EditCompleteEvent;
 import com.smartgwt.client.widgets.grid.events.RecordDoubleClickEvent;
 import com.smartgwt.client.widgets.grid.events.RecordDoubleClickHandler;
 
-public class BodenbearbeitungGrid 
-extends AbstractListGrid<BodenbearbeitungRecord> implements ISchlagErntejahrSelectionListener {
+public class DuengungGrid 
+extends AbstractListGrid<DuengungRecord> implements ISchlagErntejahrSelectionListener {
 	
 	private DataManager dataManager;
 	/** The current SchlagErntejahr item. */
 	private SchlagErntejahr schlagErntejahr;
 
-	public BodenbearbeitungGrid() {
+	public DuengungGrid() {
 		super();
 		
 		//disable default editing in table cells
@@ -64,7 +64,7 @@ extends AbstractListGrid<BodenbearbeitungRecord> implements ISchlagErntejahrSele
 	@Override
 	protected void initGridFields() {
 		final DateTimeFormat dateFormatter = DateTimeFormat.getFormat("dd.MM.yyyyy");  
-		ListGridField datumField = new ListGridField("datum", "Datum");
+		ListGridField datumField = new ListGridField(DuengungRecord.DATUM, "Datum");
 		datumField.setCellFormatter(new CellFormatter() {
             public String format(Object value, ListGridRecord record, int rowNum, int colNum) {  
                 if (value != null) {  
@@ -80,30 +80,37 @@ extends AbstractListGrid<BodenbearbeitungRecord> implements ISchlagErntejahrSele
             }  
         }); 
 		
-		ListGridField flaecheField = new ListGridField("flaeche", "Fl&auml;che");
-		ListGridField bemField = new ListGridField("bemerkung", "Bemerkung");
-		ListGridField typField = new ListGridField("typ", "Typ");
+		ListGridField flaecheField = new ListGridField(
+				DuengungRecord.FLAECHE, "Fl&auml;che");
+		ListGridField bemField = new ListGridField(
+				DuengungRecord.BEMERKUNG, "Bemerkung");
+		ListGridField duengerartField = new ListGridField(
+				DuengungRecord.DUENGERART, "D&uuml;ngerart");
+		ListGridField ecField = new ListGridField(
+				DuengungRecord.EC, "EC");
+		ListGridField kgProHaField = new ListGridField(
+				DuengungRecord.KG_PRO_HA, "kg/ha");
 		
-		setFields(datumField, typField, flaecheField, bemField);
+		setFields(datumField, duengerartField, flaecheField, kgProHaField, ecField, bemField);
 	}
 
 	@Override
 	protected void reloadData() {
 		//load the data
-		this.dataManager.loadBodenbearbeitungData(this.schlagErntejahr, this);
+		this.dataManager.loadDuengungData(this.schlagErntejahr, this);
 	}
 
 	@Override
-	protected void deleteRecords(List<BodenbearbeitungRecord> records) {
+	protected void deleteRecords(List<DuengungRecord> records) {
 		//delete records
 		this.dataManager.delete(records, this);
 	}
 	
 	@Override
 	public Boolean startEditing() {
-		BodenbearbeitungRecord r = (BodenbearbeitungRecord) getSelectedRecord();
+		DuengungRecord r = (DuengungRecord) getSelectedRecord();
 		if (r != null) {
-			BodenbearbeitungDetailsWindow window = new BodenbearbeitungDetailsWindow(r, false, this);
+			DuengungDetailsWindow window = new DuengungDetailsWindow(r, false, this);
 			window.draw();
 		}
 		return false;
@@ -116,19 +123,19 @@ extends AbstractListGrid<BodenbearbeitungRecord> implements ISchlagErntejahrSele
 		}
 		
 		//create the data entry
-		Bodenbearbeitung b = new Bodenbearbeitung();
+		Duengung b = new Duengung();
 		b.setSchlagErntejahr(new Key<SchlagErntejahr>(SchlagErntejahr.class, schlagErntejahr.getId()));
 
 		//create new record
-		BodenbearbeitungRecord r = new BodenbearbeitungRecord(b);
+		DuengungRecord r = new DuengungRecord(b);
 		
-		BodenbearbeitungDetailsWindow window = new BodenbearbeitungDetailsWindow(r, true, this);
+		DuengungDetailsWindow window = new DuengungDetailsWindow(r, true, this);
 		window.draw();
 
 	}
 
 	@Override
-	protected void udpateAndSaveRecord(BodenbearbeitungRecord record, EditCompleteEvent event) {
+	protected void udpateAndSaveRecord(DuengungRecord record, EditCompleteEvent event) {
 		if (record != null) {
 			Map<String, Object> vals = event.getNewValues();
 			record.updateDTO(vals);

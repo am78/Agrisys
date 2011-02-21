@@ -6,7 +6,9 @@ import java.util.List;
 import com.anteboth.agrisys.client.grid.AbstractListGrid;
 import com.anteboth.agrisys.client.grid.AussaatGrid;
 import com.anteboth.agrisys.client.grid.BodenbearbeitungGrid;
+import com.anteboth.agrisys.client.grid.DuengungGrid;
 import com.anteboth.agrisys.client.grid.ErnteGrid;
+import com.anteboth.agrisys.client.grid.PflanzenschutzGrid;
 import com.anteboth.agrisys.client.grid.SchlaglisteGrid;
 import com.anteboth.agrisys.client.grid.data.SchlagRecord;
 import com.anteboth.agrisys.client.model.SchlagErntejahr;
@@ -56,6 +58,8 @@ public class Agrisys implements EntryPoint, UncaughtExceptionHandler {
 	private ToolStrip rightToolStrip;
 
 	private BodenbearbeitungGrid bodenbearbeitungGrid;
+	private DuengungGrid duengungGrid;
+	private PflanzenschutzGrid pflanzenschutzGrid;
 	private AussaatGrid aussaatGrid;
 	private ErnteGrid ernteGrid;
 	
@@ -140,7 +144,7 @@ public class Agrisys implements EntryPoint, UncaughtExceptionHandler {
 			"Benutzer: " + user + " | Betrieb: " + betrieb + " | Erntejahr: " + erntejahr);
 		userLabel.setWidth("300");
 		
-		RootPanel.get("userInfoPanel").add(userLabel);
+		RootPanel.get("userInfoPanel").add(userLabel);		
 		
 		//create the stammdaten button
 		Anchor stammdatenLink = new Anchor("Stammdaten");
@@ -150,8 +154,8 @@ public class Agrisys implements EntryPoint, UncaughtExceptionHandler {
 				loadStammdaten();
 			}
 		});
-		
 		RootPanel.get("buttonStammdatenPanel").add(stammdatenLink);
+		
 	}
 	
 	
@@ -166,6 +170,12 @@ public class Agrisys implements EntryPoint, UncaughtExceptionHandler {
 		
 		this.currentRightGrid = this.bodenbearbeitungGrid;
 		
+		this.duengungGrid = new DuengungGrid();
+		this.duengungGrid.setHeight("100%");
+		
+		this.pflanzenschutzGrid = new PflanzenschutzGrid();
+		this.pflanzenschutzGrid.setHeight("100%");
+
 		this.aussaatGrid = new AussaatGrid();
 		this.aussaatGrid.setHeight("100%");
 		
@@ -186,9 +196,11 @@ public class Agrisys implements EntryPoint, UncaughtExceptionHandler {
         tabAussaat.setIcon("[APP]/img/aussaat_16x16.png");
         	
         Tab tabDuengung = new Tab("D&uuml;ngung");
+        tabDuengung.setPane(this.duengungGrid);
         tabDuengung.setIcon("[APP]/img/duengung_16x16.png");
         
         Tab tabPflanzenschutz = new Tab("Pflanzenschutz");
+        tabPflanzenschutz.setPane(this.pflanzenschutzGrid);
         tabPflanzenschutz.setIcon("[APP]/img/pflanzenschutz_16x16.png");
         
         Tab tabErnte = new Tab("Ernte");
@@ -230,6 +242,8 @@ public class Agrisys implements EntryPoint, UncaughtExceptionHandler {
 		
 		//add ISchlagErntejahrSelectionListener
 		this.addSchlagErntejahrSelectionListener(bodenbearbeitungGrid);
+		this.addSchlagErntejahrSelectionListener(duengungGrid);
+		this.addSchlagErntejahrSelectionListener(pflanzenschutzGrid);
 		this.addSchlagErntejahrSelectionListener(aussaatGrid);
 		this.addSchlagErntejahrSelectionListener(ernteGrid);
 

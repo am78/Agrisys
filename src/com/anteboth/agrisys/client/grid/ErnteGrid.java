@@ -135,7 +135,7 @@ extends AbstractListGrid<ErnteRecord> implements ISchlagErntejahrSelectionListen
 	@Override
 	protected void udpateAndSaveRecord(ErnteRecord record, EditCompleteEvent event) {
 		if (record != null) {
-			Map<String, String> vals = event.getNewValues();
+			Map<String, Object> vals = event.getNewValues();
 			record.updateDTO(vals);
 			
 			//update data

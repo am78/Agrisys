@@ -46,27 +46,27 @@ public class SchlagdetailsWindow extends Window {
         setAutoCenter(true);
         
 		/* create the form */
-		TextItem nameItem = new TextItem("name", "Name");
+		TextItem nameItem = new TextItem(SchlagRecord.NAME, "Name");
 		nameItem.setRequired(true);
 
 		FloatItem flaecheItem = new FloatItem();
-		flaecheItem.setName("flaeche");
+		flaecheItem.setName(SchlagRecord.FLAECHE);
 		flaecheItem.setTitle("Fl&auml;che");
 		flaecheItem.setRequired(true);
 		
-		SelectItem erntejahrItem = new SelectItem("erntejahr", "Erntejahr");  
+		SelectItem erntejahrItem = new SelectItem(SchlagRecord.ERNTEJAHR, "Erntejahr");  
         erntejahrItem.setRequired(true);
         this.stammdatenManager.loadErntejahrData(erntejahrItem);
         
-        SelectItem vorfruchtItem = new SelectItem("vorfrucht", "Vorfrucht");  
+        SelectItem vorfruchtItem = new SelectItem(SchlagRecord.VORFRUCHT, "Vorfrucht");  
         vorfruchtItem.setRequired(true);
         KulturDataSource vorfruchtDataSource = new KulturDataSource(vorfruchtItem);
         
-        final SelectItem kulturItem = new SelectItem("kultur", "Kultur");  
+        final SelectItem kulturItem = new SelectItem(SchlagRecord.KULTUR, "Kultur");  
         kulturItem.setRequired(true);
         this.kulturDataSource = new KulturDataSource(kulturItem);
         
-        final SelectItem sorteItem = new SelectItem("sorte", "Sorte");  
+        final SelectItem sorteItem = new SelectItem(SchlagRecord.SORTE, "Sorte");  
         sorteItem.setRequired(true);
         this.sorteDataSource = new SorteDataSource(sorteItem);
         
@@ -81,7 +81,7 @@ public class SchlagdetailsWindow extends Window {
 			}
 		});
         
-        TextAreaItem bemItem = new TextAreaItem("bemerkung", "Bemerkung");
+        TextAreaItem bemItem = new TextAreaItem(SchlagRecord.BEMERKUNG, "Bemerkung");
 
         final DynamicForm form = new DynamicForm();
         form.setItems(erntejahrItem, nameItem, flaecheItem, kulturItem, sorteItem, vorfruchtItem, bemItem);
@@ -177,17 +177,17 @@ public class SchlagdetailsWindow extends Window {
 
 	private void onSavePressed(SchlagRecord record, DynamicForm form, boolean addNewRecord) {
 		//get values from from
-		String name = form.getValueAsString("name");
-		double flaeche = Double.valueOf(form.getValueAsString("flaeche"));
-		String bemerkung = form.getValueAsString("bemerkung");
-		int erntejahr = Integer.parseInt(form.getValueAsString("erntejahr"));
+		String name = form.getValueAsString(SchlagRecord.NAME);
+		double flaeche = Double.valueOf(form.getValueAsString(SchlagRecord.FLAECHE));
+		String bemerkung = form.getValueAsString(SchlagRecord.BEMERKUNG);
+		int erntejahr = Integer.parseInt(form.getValueAsString(SchlagRecord.ERNTEJAHR));
 
 		//get selected Anbausorte
-		String sorteId = (String) form.getValue("sorte");
+		String sorteId = (String) form.getValue(SchlagRecord.SORTE);
 		Sorte anbau = this.sorteDataSource.getSorteForId(sorteId);
 		
 		//get selected Vorfrucht-Kultur
-		String vorfruchId = (String) form.getValue("vorfrucht");
+		String vorfruchId = (String) form.getValue(SchlagRecord.VORFRUCHT);
 		Kultur vorfrucht = this.kulturDataSource.getKulturForId(vorfruchId);
 		
 		if (addNewRecord) {
@@ -198,7 +198,7 @@ public class SchlagdetailsWindow extends Window {
 			//save data and update table
 			Schlag schlag = record.getDTO();
 			this.dataManager.updateSchlag(schlag, name, flaeche, bemerkung, erntejahr, anbau, vorfrucht, this.grid);
-			record.updateAttributes();
+			record.updateDTO(form.getValues());
 			this.grid.redraw();
 		}
 	}

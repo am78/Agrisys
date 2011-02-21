@@ -7,12 +7,16 @@ import com.anteboth.agrisys.client.AgrisysServiceAsync;
 import com.anteboth.agrisys.client.grid.AbstractListGrid;
 import com.anteboth.agrisys.client.grid.AussaatGrid;
 import com.anteboth.agrisys.client.grid.BodenbearbeitungGrid;
+import com.anteboth.agrisys.client.grid.DuengungGrid;
 import com.anteboth.agrisys.client.grid.ErnteGrid;
+import com.anteboth.agrisys.client.grid.PflanzenschutzGrid;
 import com.anteboth.agrisys.client.grid.SchlaglisteGrid;
 import com.anteboth.agrisys.client.model.Aussaat;
 import com.anteboth.agrisys.client.model.Bodenbearbeitung;
+import com.anteboth.agrisys.client.model.Duengung;
 import com.anteboth.agrisys.client.model.Ernte;
 import com.anteboth.agrisys.client.model.Erntejahr;
+import com.anteboth.agrisys.client.model.Pflanzenschutz;
 import com.anteboth.agrisys.client.model.Schlag;
 import com.anteboth.agrisys.client.model.SchlagErntejahr;
 import com.anteboth.agrisys.client.model.UserDataTO;
@@ -135,7 +139,6 @@ public class DataManager {
 				public void onSuccess(Schlag result) {
 					if (result != null) {
 						SchlagRecord r = new SchlagRecord(result);
-						//TODO
 						grid.redraw();
 					}
 				}
@@ -144,6 +147,11 @@ public class DataManager {
 					handleException(caught);
 				}
 			});
+	}
+	
+	public void delete(List<SchlagRecord> records, SchlaglisteGrid schlaglisteGrid) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	/* Bodenbearbeitung */
@@ -239,6 +247,222 @@ public class DataManager {
 				
 				for (Bodenbearbeitung b : data) {
 					BodenbearbeitungRecord r = new BodenbearbeitungRecord(b);
+					result.add(r);
+				}
+				
+				//set the grid data
+				grid.setData(result);
+			}
+			
+			@Override
+			public void onFailure(Throwable caught) {
+				handleException(caught);
+			}
+		});
+	}
+	
+	
+	/* Duengung */
+	
+	/**
+	 * @param record
+	 * @param grid
+	 */
+	public void update(final DuengungRecord record, final AbstractListGrid<DuengungRecord> grid) {
+		Duengung b = record.getDTO();
+		service.save(b, new AsyncCallback<Duengung>() {
+			@Override
+			public void onSuccess(Duengung result) {
+				if (result != null) {					
+					record.setDTO(result);
+				}
+			}
+			@Override
+			public void onFailure(Throwable caught) {
+				handleException(caught);
+			}
+		});
+	}
+	
+	/**
+	 * @param record
+	 * @param grid
+	 */
+	public void save(final DuengungRecord record, final AbstractListGrid<DuengungRecord> grid) {
+		Duengung b = record.getDTO();
+		service.save(b, new AsyncCallback<Duengung>() {
+			@Override
+			public void onSuccess(Duengung result) {
+				if (result != null) {					
+					record.setDTO(result);
+					grid.addData(record);
+					grid.redraw();
+				}
+			}
+			@Override
+			public void onFailure(Throwable caught) {
+				handleException(caught);
+			}
+		});
+	}
+	
+	/**
+	 * Delets the obtained records and removes them from the grid.
+	 * @param records the records to delete
+	 * @param grid the grid
+	 */
+	public void delete(List<DuengungRecord> records, final DuengungGrid grid) {
+		if (records == null || records.isEmpty()) {
+			return;
+		}
+		
+		for (final DuengungRecord r : records) {
+			if (r != null && r.getDTO() != null){
+				Duengung b = r.getDTO();
+				AsyncCallback<Void> callback = new AsyncCallback<Void>() {
+					@Override
+					public void onSuccess(Void result) {
+						//if deleted, remove the record from the grid
+						grid.removeData(r);
+					}
+					@Override
+					public void onFailure(Throwable caught) {
+						handleException(caught);
+					}
+				};
+				//delete the entries
+				service.delete(b, callback);
+			}
+		}
+	}
+
+	/**
+	 * Loads the {@link Duengung} entries for the obtained {@link SchlagErntejahr} item.
+	 * @param schlagErntejahr the {@link SchlagErntejahr} item
+	 * @param grid the grid to update with the loaded values
+	 */
+	public void loadDuengungData(final SchlagErntejahr schlagErntejahr, 
+			final AbstractListGrid<DuengungRecord> grid) 
+	{
+		//load Schlag items via service
+		service.loadDuengungData(schlagErntejahr,  
+		new AsyncCallback<List<Duengung>>() 
+		{
+			@Override
+			public void onSuccess(List<Duengung> data) {
+				//create record list for the grid view
+				RecordList result = new RecordList();
+				
+				for (Duengung b : data) {
+					DuengungRecord r = new DuengungRecord(b);
+					result.add(r);
+				}
+				
+				//set the grid data
+				grid.setData(result);
+			}
+			
+			@Override
+			public void onFailure(Throwable caught) {
+				handleException(caught);
+			}
+		});
+	}
+	
+	
+	/* Pflanzenschutz */
+	
+	/**
+	 * @param record
+	 * @param grid
+	 */
+	public void update(final PflanzenschutzRecord record, final AbstractListGrid<PflanzenschutzRecord> grid) {
+		Pflanzenschutz ps = record.getDTO();
+		service.save(ps, new AsyncCallback<Pflanzenschutz>() {
+			@Override
+			public void onSuccess(Pflanzenschutz result) {
+				if (result != null) {					
+					record.setDTO(result);
+				}
+			}
+			@Override
+			public void onFailure(Throwable caught) {
+				handleException(caught);
+			}
+		});
+	}
+	
+	/**
+	 * @param record
+	 * @param grid
+	 */
+	public void save(final PflanzenschutzRecord record, final AbstractListGrid<PflanzenschutzRecord> grid) {
+		Pflanzenschutz ps = record.getDTO();
+		service.save(ps, new AsyncCallback<Pflanzenschutz>() {
+			@Override
+			public void onSuccess(Pflanzenschutz result) {
+				if (result != null) {					
+					record.setDTO(result);
+					grid.addData(record);
+					grid.redraw();
+				}
+			}
+			@Override
+			public void onFailure(Throwable caught) {
+				handleException(caught);
+			}
+		});
+	}
+	
+	/**
+	 * Delets the obtained records and removes them from the grid.
+	 * @param records the records to delete
+	 * @param grid the grid
+	 */
+	public void delete(List<PflanzenschutzRecord> records, final PflanzenschutzGrid grid) {
+		if (records == null || records.isEmpty()) {
+			return;
+		}
+		
+		for (final PflanzenschutzRecord r : records) {
+			if (r != null && r.getDTO() != null){
+				Pflanzenschutz ps = r.getDTO();
+				AsyncCallback<Void> callback = new AsyncCallback<Void>() {
+					@Override
+					public void onSuccess(Void result) {
+						//if deleted, remove the record from the grid
+						grid.removeData(r);
+					}
+					@Override
+					public void onFailure(Throwable caught) {
+						handleException(caught);
+					}
+				};
+				//delete the entries
+				service.delete(ps, callback);
+			}
+		}
+	}
+
+	/**
+	 * Loads the {@link Pflanzenschutz} entries for the obtained {@link SchlagErntejahr} item.
+	 * @param schlagErntejahr the {@link SchlagErntejahr} item
+	 * @param grid the grid to update with the loaded values
+	 */
+	public void loadPflanzenschutzData(final SchlagErntejahr schlagErntejahr, 
+			final AbstractListGrid<PflanzenschutzRecord> grid) 
+	{
+		//load Schlag items via service
+		service.loadPflanzenschutzData(schlagErntejahr,  
+		new AsyncCallback<List<Pflanzenschutz>>() 
+		{
+			@Override
+			public void onSuccess(List<Pflanzenschutz> data) {
+				//create record list for the grid view
+				RecordList result = new RecordList();
+				
+				for (Pflanzenschutz ps : data) {
+					PflanzenschutzRecord r = new PflanzenschutzRecord(ps);
 					result.add(r);
 				}
 				
@@ -467,5 +691,4 @@ public class DataManager {
 			}
 		});
 	}
-
 }

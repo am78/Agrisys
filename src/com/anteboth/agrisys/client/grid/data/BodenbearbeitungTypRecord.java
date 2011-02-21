@@ -23,18 +23,18 @@ public class BodenbearbeitungTypRecord extends ListRecord<BodenbearbeitungTyp>{
 	}
 
 	@Override
-	public void updateDTO(Map<String, String> vals) {
+	public void updateDTO(Map<String, Object> vals) {
 		//update DTO values
-		for (Entry<String, String> entry : vals.entrySet()) {
+		for (Entry<String, Object> entry : vals.entrySet()) {
 			String att = entry.getKey();
-			String val = entry.getValue();
+			Object val = entry.getValue();
 			
 			BodenbearbeitungTyp typ = getDTO();
 			if (att.equals("name")) {
-				typ.setName(val);
+				typ.setName((String) val);
 			} 
 			else if (att.equals("beschreibung")) {
-				typ.setBeschreibung(val);
+				typ.setBeschreibung((String) val);
 			}
 		}
 	}

@@ -67,7 +67,7 @@ public class KulturGrid extends AbstractListGrid<KulturRecord> {
 	@SuppressWarnings("unchecked")
 	protected void udpateAndSaveRecord(KulturRecord record, EditCompleteEvent event) {
 		if (record != null) {
-			Map<String, String> vals = event.getNewValues();
+			Map<String, Object> vals = event.getNewValues();
 			record.updateDTO(vals);
 			
 			//save changes

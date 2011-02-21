@@ -7,8 +7,10 @@ import com.anteboth.agrisys.client.model.Account;
 import com.anteboth.agrisys.client.model.Aussaat;
 import com.anteboth.agrisys.client.model.Betrieb;
 import com.anteboth.agrisys.client.model.Bodenbearbeitung;
+import com.anteboth.agrisys.client.model.Duengung;
 import com.anteboth.agrisys.client.model.Ernte;
 import com.anteboth.agrisys.client.model.Erntejahr;
+import com.anteboth.agrisys.client.model.Pflanzenschutz;
 import com.anteboth.agrisys.client.model.Schlag;
 import com.anteboth.agrisys.client.model.SchlagErntejahr;
 import com.anteboth.agrisys.client.model.UserDataTO;
@@ -328,7 +330,34 @@ public class AgrisysServiceImpl extends RemoteServiceServlet implements AgrisysS
 	}
 
 
-
+	@Override
+	public List<Duengung> loadDuengungData(SchlagErntejahr schlagErntejahr) {
+		return this.serviceManager.loadDuengungData(schlagErntejahr);
+	}
 	
+	@Override
+	public Duengung save(Duengung d) {		
+		return this.serviceManager.save(d);
+	}
+	
+	@Override
+	public void delete(Duengung d) {
+		this.serviceManager.delete(d);
+	}
+	
+	@Override
+	public List<Pflanzenschutz> loadPflanzenschutzData(SchlagErntejahr schlagErntejahr) {
+		return this.serviceManager.loadPflanzenschutzData(schlagErntejahr);
+	}
+	
+	@Override
+	public Pflanzenschutz save(Pflanzenschutz ps) {		
+		return this.serviceManager.save(ps);
+	}
+	
+	@Override
+	public void delete(Pflanzenschutz ps) {
+		this.serviceManager.delete(ps);
+	}
 	
 }

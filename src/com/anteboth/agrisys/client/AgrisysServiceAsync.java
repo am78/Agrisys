@@ -5,8 +5,10 @@ import java.util.List;
 import com.anteboth.agrisys.client.model.Aussaat;
 import com.anteboth.agrisys.client.model.Betrieb;
 import com.anteboth.agrisys.client.model.Bodenbearbeitung;
+import com.anteboth.agrisys.client.model.Duengung;
 import com.anteboth.agrisys.client.model.Ernte;
 import com.anteboth.agrisys.client.model.Erntejahr;
+import com.anteboth.agrisys.client.model.Pflanzenschutz;
 import com.anteboth.agrisys.client.model.Schlag;
 import com.anteboth.agrisys.client.model.SchlagErntejahr;
 import com.anteboth.agrisys.client.model.UserDataTO;
@@ -70,5 +72,12 @@ public interface AgrisysServiceAsync {
 	void loadErnteData(SchlagErntejahr schlagErntejahr, AsyncCallback<List<Ernte>> asyncCallback);
 	void delete(Ernte dto, AsyncCallback<Void> callback);
 	void save(Ernte dto, AsyncCallback<Ernte> asyncCallback);
-
+	
+	void save(Duengung b, AsyncCallback<Duengung> asyncCallback);
+	void delete(Duengung b, AsyncCallback<Void> callback);
+	void loadDuengungData(SchlagErntejahr schlagErntejahr, AsyncCallback<List<Duengung>> asyncCallback);
+	void save(Pflanzenschutz d, AsyncCallback<Pflanzenschutz> callback);
+	void delete(Pflanzenschutz d, AsyncCallback<Void> callback);
+	void loadPflanzenschutzData(SchlagErntejahr schlagErntejahr,
+			AsyncCallback<List<Pflanzenschutz>> callback);
 }

@@ -5,8 +5,10 @@ import java.util.List;
 import com.anteboth.agrisys.client.model.Aussaat;
 import com.anteboth.agrisys.client.model.Betrieb;
 import com.anteboth.agrisys.client.model.Bodenbearbeitung;
+import com.anteboth.agrisys.client.model.Duengung;
 import com.anteboth.agrisys.client.model.Ernte;
 import com.anteboth.agrisys.client.model.Erntejahr;
+import com.anteboth.agrisys.client.model.Pflanzenschutz;
 import com.anteboth.agrisys.client.model.Schlag;
 import com.anteboth.agrisys.client.model.SchlagErntejahr;
 import com.anteboth.agrisys.client.model.UserDataTO;
@@ -67,6 +69,7 @@ public interface AgrisysService extends RemoteService {
 	 * @param typ
 	 */
 	void delete(BodenbearbeitungTyp typ);
+	
 	
 	/**
 	 * Returns all {@link PSMittel} items.
@@ -260,5 +263,46 @@ public interface AgrisysService extends RemoteService {
 	 */
 	Ernte save(Ernte dto);
 
+	/**
+	 * Saves/updates the specified {@link Duengung} item.
+	 * @param d the item to save
+	 * @return the saved item
+	 */
+	Duengung save(Duengung d);
+
+	/**
+	 * Deletes the specified {@link Duengung} from the data store.
+	 * @param d the item to delete
+	 */
+	void delete(Duengung d);
+
+	/**
+	 * Loads the list of {@link Duengung} items for the obtained {@link SchlagErntejahr} item.
+	 * 
+	 * @param schlagErntejahr load {@link Duengung} items for this entry
+	 * @return a list of {@link Duengung}
+	 */
+	List<Duengung> loadDuengungData(SchlagErntejahr schlagErntejahr);
+	
+	/**
+	 * Saves/updates the specified {@link Pflanzenschutz} item.
+	 * @param d the item to save
+	 * @return the saved item
+	 */
+	Pflanzenschutz save(Pflanzenschutz d);
+
+	/**
+	 * Deletes the specified {@link Pflanzenschutz} from the data store.
+	 * @param d the item to delete
+	 */
+	void delete(Pflanzenschutz d);
+
+	/**
+	 * Loads the list of {@link Pflanzenschutz} items for the obtained {@link SchlagErntejahr} item.
+	 * 
+	 * @param schlagErntejahr load {@link Pflanzenschutz} items for this entry
+	 * @return a list of {@link Duengung}
+	 */
+	List<Pflanzenschutz> loadPflanzenschutzData(SchlagErntejahr schlagErntejahr);
 	
 }

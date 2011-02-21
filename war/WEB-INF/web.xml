@@ -14,12 +14,20 @@
 		<filter-name>AuthFilter</filter-name>
 		<url-pattern>/agrisys/*</url-pattern>
 	</filter-mapping>
-<!--
- <filter-mapping>
+<!-- 
+ 	<filter-mapping>
 		<filter-name>AuthFilter</filter-name>
 		<url-pattern>/service/*</url-pattern>
 	</filter-mapping>
- -->
+	<filter-mapping>
+		<filter-name>AuthFilter</filter-name>
+		<url-pattern>/backup/*</url-pattern>
+	</filter-mapping>	
+-->
+	<filter-mapping>
+		<filter-name>AuthFilter</filter-name>
+		<url-pattern>/report/*</url-pattern>
+	</filter-mapping>
 
 	<!-- Servlets -->
 	<servlet>
@@ -51,12 +59,31 @@
   		<servlet-class>com.anteboth.agrisys.server.StartupServlet</servlet-class>
   		<load-on-startup>1</load-on-startup>
 	</servlet>
- 
  	<servlet-mapping>
   		<servlet-name>StartupServlet</servlet-name>
   		<url-pattern>/Startup</url-pattern>
 	</servlet-mapping>
 
+	<!-- Backup Servlet -->
+	<servlet>
+		<servlet-name>backupServlet</servlet-name>
+		<servlet-class>com.anteboth.agrisys.server.BackupServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>backupServlet</servlet-name>
+		<url-pattern>/backup/*</url-pattern>
+	</servlet-mapping>
+	
+	<!-- ReportServlet -->
+	<servlet>
+		<servlet-name>reportServlet</servlet-name>
+		<servlet-class>com.anteboth.agrisys.server.ReportServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>reportServlet</servlet-name>
+		<url-pattern>/report/*</url-pattern>
+	</servlet-mapping>
+	
 
 	<!-- mime type mapping -->
 	<mime-mapping>
@@ -74,7 +101,11 @@
 		<web-resource-collection>
 			<web-resource-name>agrisys</web-resource-name>
 			<url-pattern>/agrisys/*</url-pattern>
-<!--	<url-pattern>/service/*</url-pattern> --> 
+    		<url-pattern>/report/*</url-pattern>
+		<!-- 	
+		    <url-pattern>/service/*</url-pattern> 
+    		<url-pattern>/backup/*</url-pattern> 
+    		--> 
 		</web-resource-collection>
 		<auth-constraint>
 			<role-name>*</role-name>

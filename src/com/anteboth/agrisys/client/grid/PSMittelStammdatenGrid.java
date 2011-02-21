@@ -67,7 +67,7 @@ public class PSMittelStammdatenGrid extends AbstractListGrid<PSMittelRecord> {
 	@SuppressWarnings("unchecked")
 	protected void udpateAndSaveRecord(PSMittelRecord record, EditCompleteEvent event) {
 		if (record != null) {
-			Map<String, String> vals = event.getNewValues();
+			Map<String, Object> vals = event.getNewValues();
 			record.updateDTO(vals);
 			
 			//save changes

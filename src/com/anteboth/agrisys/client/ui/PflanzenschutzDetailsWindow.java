@@ -3,42 +3,44 @@ package com.anteboth.agrisys.client.ui;
 import java.util.Date;
 
 import com.anteboth.agrisys.client.grid.AbstractListGrid;
-import com.anteboth.agrisys.client.grid.data.BodenbearbeitungRecord;
 import com.anteboth.agrisys.client.grid.data.DataManager;
+import com.anteboth.agrisys.client.grid.data.PflanzenschutzRecord;
 import com.anteboth.agrisys.client.grid.data.StammdatenManager;
-import com.anteboth.agrisys.client.model.Bodenbearbeitung;
-import com.anteboth.agrisys.client.model.BodenbearbeitungTypDataSource;
+import com.anteboth.agrisys.client.model.PSMittelDataSource;
+import com.anteboth.agrisys.client.model.Pflanzenschutz;
 import com.smartgwt.client.widgets.Window;
 import com.smartgwt.client.widgets.form.DynamicForm;
 import com.smartgwt.client.widgets.form.fields.DateItem;
 import com.smartgwt.client.widgets.form.fields.FloatItem;
 import com.smartgwt.client.widgets.form.fields.SelectItem;
 import com.smartgwt.client.widgets.form.fields.TextAreaItem;
+import com.smartgwt.client.widgets.form.fields.TextItem;
 import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.VLayout;
 
 /**
- * Details panel for a {@link Bodenbearbeitung} entry.
+ * Details panel for a {@link Pflanzenschutz} entry.
  * @author michael
  */
-public class BodenbearbeitungDetailsWindow extends Window {
+public class PflanzenschutzDetailsWindow extends Window {
 
 	private AbstractListGrid grid;
 	private StammdatenManager stammdatenManager;
 	private DataManager dataManager;
-	private BodenbearbeitungTypDataSource btypDataSource;
+	private PSMittelDataSource psDataSource;
 	
-	public BodenbearbeitungDetailsWindow(final BodenbearbeitungRecord record, final boolean addNewRecord, AbstractListGrid grid) {
+	public PflanzenschutzDetailsWindow(final PflanzenschutzRecord record, final boolean addNewRecord, AbstractListGrid grid) {
 		super();
-		SelectItem typItem = new SelectItem("typ", "Typ");  
-		typItem.setRequired(true);
-		this.btypDataSource = new BodenbearbeitungTypDataSource(typItem);
+		SelectItem pflanzenschutzItem = new SelectItem(
+				PflanzenschutzRecord.PS_MITTEL, "Pflanzenschutzmittel");  
+		pflanzenschutzItem.setRequired(true);
+		this.psDataSource = new PSMittelDataSource(pflanzenschutzItem);
 
 		this.stammdatenManager = new StammdatenManager();
 		this.dataManager = new DataManager();
 		
 		this.grid = grid;
-		setTitle("Bodenbearbeitung");
+		setTitle("D&uuml;ngung");
 		setAutoSize(true);
 		setCanDragResize(true);
 		setIsModal(true);  
@@ -47,28 +49,45 @@ public class BodenbearbeitungDetailsWindow extends Window {
         
 		/* create the form */
 		FloatItem flaecheItem = new FloatItem();
-		flaecheItem.setName("flaeche");
+		flaecheItem.setName(PflanzenschutzRecord.FLAECHE);
 		flaecheItem.setTitle("Fl&auml;che");
 		flaecheItem.setRequired(true);
 		
-		DateItem datumItem = new DateItem("datum", "Datum");
+		DateItem datumItem = new DateItem(
+				PflanzenschutzRecord.DATUM, "Datum");
 		datumItem.setRequired(true);
 		
+		FloatItem kgProHaItem = new FloatItem();
+		kgProHaItem.setName(PflanzenschutzRecord.KG_PRO_HA);
+		kgProHaItem.setTitle("kg/ha");
+		kgProHaItem.setRequired(false);
+		
+		FloatItem ecItem = new FloatItem();
+		ecItem.setName(PflanzenschutzRecord.EC);
+		ecItem.setTitle("EC");
+		ecItem.setRequired(false);
         
-        TextAreaItem bemItem = new TextAreaItem("bemerkung", "Bemerkung");
+		TextItem indItem = new TextItem(
+        		PflanzenschutzRecord.INDIKATION, "Indikation");
+		
+        TextAreaItem bemItem = new TextAreaItem(
+        		PflanzenschutzRecord.BEMERKUNG, "Bemerkung");
 
         final DynamicForm form = new DynamicForm();
-        form.setItems(datumItem, typItem, flaecheItem, bemItem);
+        form.setItems(datumItem, pflanzenschutzItem, flaecheItem, kgProHaItem, ecItem, indItem, bemItem);
         
         //display values form an existing entry
         if (!addNewRecord && record != null) {
-        	Bodenbearbeitung b = record.getDTO();
+        	Pflanzenschutz ps = record.getDTO();
         	
-        	bemItem.setValue(b.getBemerkung() != null ? b.getBemerkung() : "");
-        	flaecheItem.setValue(b.getFlaeche());
-        	datumItem.setValue(b.getDatum() != null ? b.getDatum() : new Date());
-        	if (b.getTypKey() != null) {
-        		btypDataSource.setSelectedValue(b.getTypKey().getId());
+        	bemItem.setValue(ps.getBemerkung() != null ? ps.getBemerkung() : "");
+        	flaecheItem.setValue(ps.getFlaeche());
+        	datumItem.setValue(ps.getDatum() != null ? ps.getDatum() : new Date());
+        	ecItem.setValue(ps.getEc() != null ? ps.getEc() : Double.valueOf(0));
+        	kgProHaItem.setValue(ps.getKgProHa() != null ? ps.getKgProHa() : Double.valueOf(0));
+        	indItem.setValue(ps.getIndikation() != null ? ps.getIndikation() : "");
+        	if (ps.getPsMittelKey() != null) {
+        		psDataSource.setSelectedValue(ps.getPsMittelKey().getId());
         	}
         }
 
@@ -81,7 +100,7 @@ public class BodenbearbeitungDetailsWindow extends Window {
 					//save changes
 					onSavePressed(record, form, addNewRecord);
 					//close dialog window
-					BodenbearbeitungDetailsWindow.this.destroy();
+					PflanzenschutzDetailsWindow.this.destroy();
 				}  
 			}
 		});
@@ -91,7 +110,7 @@ public class BodenbearbeitungDetailsWindow extends Window {
 			@Override
 			public void onClick(com.smartgwt.client.widgets.events.ClickEvent event) {
 				//close dialog window
-				BodenbearbeitungDetailsWindow.this.destroy();
+				PflanzenschutzDetailsWindow.this.destroy();
 			}
 		});
 		
@@ -119,7 +138,7 @@ public class BodenbearbeitungDetailsWindow extends Window {
 		addItem(verticalPanel);
 	}
 	
-	private void onSavePressed(BodenbearbeitungRecord record, DynamicForm form, boolean addNewRecord) {
+	private void onSavePressed(PflanzenschutzRecord record, DynamicForm form, boolean addNewRecord) {
 		//update the internal DTO values with the values stored in the form 
 		record.updateDTO(form.getValues());
 

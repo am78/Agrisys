@@ -13,7 +13,7 @@ public abstract class Aktivitaet implements Serializable, IDTO {
 	private Date datum;
 	private double flaeche;
 	private String bemerkung;
-	private Date lastMadification;
+	private Date lastModification;
 	private boolean synchron = true;
 	
 	public Date getDatum() {
@@ -43,12 +43,12 @@ public abstract class Aktivitaet implements Serializable, IDTO {
 		this.schlagErntejahr = schlagErntejahr;
 	}
 	
-	public Date getLastMadification() {
-		return lastMadification;
+	public Date getLastModification() {
+		return lastModification;
 	}
 	
-	public void setLastMadification(Date lastMadification) {
-		this.lastMadification = lastMadification;
+	public void setLastModification(Date lastModification) {
+		this.lastModification = lastModification;
 	}
 	
 	public abstract Long getId();

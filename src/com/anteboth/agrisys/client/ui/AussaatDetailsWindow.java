@@ -1,5 +1,7 @@
 package com.anteboth.agrisys.client.ui;
 
+import java.util.Date;
+
 import com.anteboth.agrisys.client.grid.AbstractListGrid;
 import com.anteboth.agrisys.client.grid.data.AussaatRecord;
 import com.anteboth.agrisys.client.grid.data.DataManager;
@@ -65,11 +67,11 @@ public class AussaatDetailsWindow extends Window {
         if (!addNewRecord && record != null) {
         	Aussaat a = record.getDTO();
         	
-        	bemItem.setValue(a.getBemerkung());
+        	bemItem.setValue(a.getBemerkung() != null ? a.getBemerkung() : "");
         	flaecheItem.setValue(a.getFlaeche());
-        	datumItem.setValue(a.getDatum());
-        	kgProHaItem.setValue(a.getKgProHa());
-        	beizeItem.setValue(a.getBeize());
+        	datumItem.setValue(a.getDatum() != null ? a.getDatum() : new Date());
+        	kgProHaItem.setValue(a.getKgProHa() != null ? a.getKgProHa() : Double.valueOf(0));
+        	beizeItem.setValue(a.getBeize() != null ? a.getBeize() : "");
         }
 
 		/* create the save & cancel buttons */

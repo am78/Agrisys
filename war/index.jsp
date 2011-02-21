@@ -52,7 +52,10 @@
 			<img src="/img/agrisys_logo.png" alt="logo"/>
 		</td>
 		<td width="80" align="left">
-			<div id="buttonStammdatenPanel" />
+			<div id="buttonStammdatenPanel" /> 
+		</td>
+		<td>
+			<a href="report" target="_blank">Report</a>
 		</td>
 		<td width="60" align="left">
 			<a href="<%= userService.createLogoutURL(request.getRequestURI()) %>">Logout</a>
@@ -62,7 +65,7 @@
 		</td>
 	</tr>
 	<tr>
-		<td colspan="4">	
+		<td colspan="5">	
 			<p>
 			<!-- mainPanel holds the application panel -->
 			<div id="mainPanel" />

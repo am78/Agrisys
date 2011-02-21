@@ -3,11 +3,12 @@ package com.anteboth.agrisys.client.ui;
 import java.util.Date;
 
 import com.anteboth.agrisys.client.grid.AbstractListGrid;
-import com.anteboth.agrisys.client.grid.data.BodenbearbeitungRecord;
 import com.anteboth.agrisys.client.grid.data.DataManager;
+import com.anteboth.agrisys.client.grid.data.DuengungRecord;
 import com.anteboth.agrisys.client.grid.data.StammdatenManager;
 import com.anteboth.agrisys.client.model.Bodenbearbeitung;
-import com.anteboth.agrisys.client.model.BodenbearbeitungTypDataSource;
+import com.anteboth.agrisys.client.model.DuengerartDataSource;
+import com.anteboth.agrisys.client.model.Duengung;
 import com.smartgwt.client.widgets.Window;
 import com.smartgwt.client.widgets.form.DynamicForm;
 import com.smartgwt.client.widgets.form.fields.DateItem;
@@ -21,24 +22,25 @@ import com.smartgwt.client.widgets.layout.VLayout;
  * Details panel for a {@link Bodenbearbeitung} entry.
  * @author michael
  */
-public class BodenbearbeitungDetailsWindow extends Window {
+public class DuengungDetailsWindow extends Window {
 
 	private AbstractListGrid grid;
 	private StammdatenManager stammdatenManager;
 	private DataManager dataManager;
-	private BodenbearbeitungTypDataSource btypDataSource;
+	private DuengerartDataSource duengerartDataSource;
 	
-	public BodenbearbeitungDetailsWindow(final BodenbearbeitungRecord record, final boolean addNewRecord, AbstractListGrid grid) {
+	public DuengungDetailsWindow(final DuengungRecord record, final boolean addNewRecord, AbstractListGrid grid) {
 		super();
-		SelectItem typItem = new SelectItem("typ", "Typ");  
-		typItem.setRequired(true);
-		this.btypDataSource = new BodenbearbeitungTypDataSource(typItem);
+		SelectItem duengerartItem = new SelectItem(
+				DuengungRecord.DUENGERART, "D&uuml;ungerart");  
+		duengerartItem.setRequired(true);
+		this.duengerartDataSource = new DuengerartDataSource(duengerartItem);
 
 		this.stammdatenManager = new StammdatenManager();
 		this.dataManager = new DataManager();
 		
 		this.grid = grid;
-		setTitle("Bodenbearbeitung");
+		setTitle("D&uuml;ngung");
 		setAutoSize(true);
 		setCanDragResize(true);
 		setIsModal(true);  
@@ -47,28 +49,41 @@ public class BodenbearbeitungDetailsWindow extends Window {
         
 		/* create the form */
 		FloatItem flaecheItem = new FloatItem();
-		flaecheItem.setName("flaeche");
+		flaecheItem.setName(DuengungRecord.FLAECHE);
 		flaecheItem.setTitle("Fl&auml;che");
 		flaecheItem.setRequired(true);
 		
-		DateItem datumItem = new DateItem("datum", "Datum");
+		DateItem datumItem = new DateItem(
+				DuengungRecord.DATUM, "Datum");
 		datumItem.setRequired(true);
 		
+		FloatItem kgProHaItem = new FloatItem();
+		kgProHaItem.setName(DuengungRecord.KG_PRO_HA);
+		kgProHaItem.setTitle("kg/ha");
+		kgProHaItem.setRequired(false);
+		
+		FloatItem ecItem = new FloatItem();
+		ecItem.setName(DuengungRecord.EC);
+		ecItem.setTitle("EC");
+		ecItem.setRequired(false);
         
-        TextAreaItem bemItem = new TextAreaItem("bemerkung", "Bemerkung");
+        TextAreaItem bemItem = new TextAreaItem(
+        		DuengungRecord.BEMERKUNG, "Bemerkung");
 
         final DynamicForm form = new DynamicForm();
-        form.setItems(datumItem, typItem, flaecheItem, bemItem);
+        form.setItems(datumItem, duengerartItem, flaecheItem, kgProHaItem, ecItem, bemItem);
         
         //display values form an existing entry
         if (!addNewRecord && record != null) {
-        	Bodenbearbeitung b = record.getDTO();
+        	Duengung d = record.getDTO();
         	
-        	bemItem.setValue(b.getBemerkung() != null ? b.getBemerkung() : "");
-        	flaecheItem.setValue(b.getFlaeche());
-        	datumItem.setValue(b.getDatum() != null ? b.getDatum() : new Date());
-        	if (b.getTypKey() != null) {
-        		btypDataSource.setSelectedValue(b.getTypKey().getId());
+        	bemItem.setValue(d.getBemerkung() != null ? d.getBemerkung() : "");
+        	flaecheItem.setValue(d.getFlaeche());
+        	datumItem.setValue(d.getDatum() != null ? d.getDatum() : new Date());
+        	ecItem.setValue(d.getEc() != null ? d.getEc() : Double.valueOf(0));
+        	kgProHaItem.setValue(d.getKgProHa() != null ? d.getKgProHa() : Double.valueOf(0));
+        	if (d.getDuengerartKey() != null) {
+        		duengerartDataSource.setSelectedValue(d.getDuengerartKey().getId());
         	}
         }
 
@@ -81,7 +96,7 @@ public class BodenbearbeitungDetailsWindow extends Window {
 					//save changes
 					onSavePressed(record, form, addNewRecord);
 					//close dialog window
-					BodenbearbeitungDetailsWindow.this.destroy();
+					DuengungDetailsWindow.this.destroy();
 				}  
 			}
 		});
@@ -91,7 +106,7 @@ public class BodenbearbeitungDetailsWindow extends Window {
 			@Override
 			public void onClick(com.smartgwt.client.widgets.events.ClickEvent event) {
 				//close dialog window
-				BodenbearbeitungDetailsWindow.this.destroy();
+				DuengungDetailsWindow.this.destroy();
 			}
 		});
 		
@@ -119,7 +134,7 @@ public class BodenbearbeitungDetailsWindow extends Window {
 		addItem(verticalPanel);
 	}
 	
-	private void onSavePressed(BodenbearbeitungRecord record, DynamicForm form, boolean addNewRecord) {
+	private void onSavePressed(DuengungRecord record, DynamicForm form, boolean addNewRecord) {
 		//update the internal DTO values with the values stored in the form 
 		record.updateDTO(form.getValues());
 

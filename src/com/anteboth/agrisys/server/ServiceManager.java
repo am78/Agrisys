@@ -8,9 +8,11 @@ import com.anteboth.agrisys.client.model.Aktivitaet;
 import com.anteboth.agrisys.client.model.Aussaat;
 import com.anteboth.agrisys.client.model.Betrieb;
 import com.anteboth.agrisys.client.model.Bodenbearbeitung;
+import com.anteboth.agrisys.client.model.Duengung;
 import com.anteboth.agrisys.client.model.Ernte;
 import com.anteboth.agrisys.client.model.Erntejahr;
 import com.anteboth.agrisys.client.model.Flurstueck;
+import com.anteboth.agrisys.client.model.Pflanzenschutz;
 import com.anteboth.agrisys.client.model.Schlag;
 import com.anteboth.agrisys.client.model.SchlagErntejahr;
 import com.anteboth.agrisys.client.model.stammdaten.BodenbearbeitungTyp;
@@ -50,6 +52,8 @@ public class ServiceManager {
 		ObjectifyService.register(Account.class);
 		ObjectifyService.register(Betrieb.class);
 		ObjectifyService.register(Bodenbearbeitung.class);
+		ObjectifyService.register(Duengung.class);
+		ObjectifyService.register(Pflanzenschutz.class);
 		ObjectifyService.register(Erntejahr.class);
 		ObjectifyService.register(Ernte.class);
 		ObjectifyService.register(Flurstueck.class);
@@ -450,9 +454,11 @@ public class ServiceManager {
 				if (ed != null) {
 					data.addAll(ed);
 				}
-				
+				List<Duengung> dd = loadDuengungData(se);
+				if (dd != null) {
+					data.addAll(dd);
+				}
 				//TODO loadPflanzenschutzData
-				//TODO loadDuengungData
 				//TODO sortieren nach Type oder Zeit ???
 			}
 		}
@@ -491,6 +497,75 @@ public class ServiceManager {
 	public void delete(Bodenbearbeitung b) {
 		Objectify ofy = ObjectifyService.begin();
 		ofy.delete(b);
+	}
+	
+	
+	/* Duengung */
+	
+	public List<Duengung> loadDuengungData(SchlagErntejahr schlagErntejahr) {
+		Objectify ofy = ObjectifyService.begin();
+		List<Duengung> data = 
+			ofy.query(Duengung.class).filter("schlagErntejahr", schlagErntejahr).list();
+		
+		for (Duengung duengung : data) {
+			Key<Duengerart> k = duengung.getDuengerartKey();
+			if (k != null) {
+				Duengerart duengerart = ofy.find(k);
+				duengung.setDuengerart(duengerart);
+			}
+		}
+		
+		return data;
+	}
+	
+	public Duengung save(Duengung d) {
+		Objectify ofy = ObjectifyService.begin();
+		Key<Duengung> key = ofy.put(d);
+		Duengung result = ofy.find(key);
+		
+		Duengerart duengerart = ofy.find(result.getDuengerartKey());
+		result.setDuengerart(duengerart);
+		
+		return result;
+	}
+
+	public void delete(Duengung d) {
+		Objectify ofy = ObjectifyService.begin();
+		ofy.delete(d);
+	}
+	
+	/* Pflanzenschutz */
+	
+	public List<Pflanzenschutz> loadPflanzenschutzData(SchlagErntejahr schlagErntejahr) {
+		Objectify ofy = ObjectifyService.begin();
+		List<Pflanzenschutz> data = 
+			ofy.query(Pflanzenschutz.class).filter("schlagErntejahr", schlagErntejahr).list();
+		
+		for (Pflanzenschutz ps : data) {
+			Key<PSMittel> k = ps.getPsMittelKey();
+			if (k != null) {
+				PSMittel psMittel = ofy.find(k);
+				ps.setPsMittel(psMittel);
+			}
+		}
+		
+		return data;
+	}
+	
+	public Pflanzenschutz save(Pflanzenschutz d) {
+		Objectify ofy = ObjectifyService.begin();
+		Key<Pflanzenschutz> key = ofy.put(d);
+		Pflanzenschutz result = ofy.find(key);
+		
+		PSMittel psMittel = ofy.find(result.getPsMittelKey());
+		result.setPsMittel(psMittel);
+		
+		return result;
+	}
+
+	public void delete(Pflanzenschutz d) {
+		Objectify ofy = ObjectifyService.begin();
+		ofy.delete(d);
 	}
 	
 	/* Kultur */
@@ -639,6 +714,18 @@ public class ServiceManager {
 	public void delete(Ernte ernte) {
 		Objectify ofy = ObjectifyService.begin();
 		ofy.delete(ernte);
+	}
+
+
+	public Kultur getKulur(Key<Kultur> key) {
+		Objectify ofy = ObjectifyService.begin();
+		return ofy.find(key);
+	}
+
+
+	public Sorte getSorte(Key<Sorte> key) {
+		Objectify ofy = ObjectifyService.begin();
+		return ofy.find(key);
 	}
 
 }

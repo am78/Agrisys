@@ -53,6 +53,6 @@ public class ListRecord <T extends IDTO> extends ListGridRecord {
 	 * Updates the {@link IDTO} attributes with the values of the obtained map. 
 	 * @param vals the values map
 	 */
-	public void updateDTO(Map<String, String> vals) {
+	public void updateDTO(Map<String, Object> vals) {
 	}
 }

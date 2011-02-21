@@ -36,7 +36,6 @@ public class SchlaglisteGrid extends AbstractListGrid<SchlagRecord> {
 	}
 	
 	
-	
 	@Override
 	protected void initialize() {
 		this.dataManager = new DataManager();
@@ -45,17 +44,20 @@ public class SchlaglisteGrid extends AbstractListGrid<SchlagRecord> {
 	@Override
 	protected void initGridFields() {
 		//ListGridField nrField = new ListGridField("nummer", "#");
-		ListGridField nameField = new ListGridField("name", "Schlag");
-		ListGridField areaField = new ListGridField("flaeche", "Fl&auml;che");  
+		ListGridField nameField = new ListGridField(SchlagRecord.NAME, "Schlag");
+		ListGridField areaField = new ListGridField(SchlagRecord.FLAECHE, "Fl&auml;che");  
 		setFields(new ListGridField[] {nameField, areaField});  
 	}
 	
 	@Override
 	protected void udpateAndSaveRecord(SchlagRecord record, EditCompleteEvent event) {
+		this.redraw();
 	}
 	
 	@Override
 	protected void deleteRecords(List<SchlagRecord> records) {
+		//delete records
+		this.dataManager.delete(records, this);
 	}
 	
 	@Override

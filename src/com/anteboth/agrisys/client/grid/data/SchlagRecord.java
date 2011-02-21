@@ -10,7 +10,16 @@ import com.anteboth.agrisys.client.model.SchlagErntejahr;
 
 public class SchlagRecord extends ListRecord<Schlag> {
 
-    public SchlagRecord(Schlag s) {
+    public static final String FLAECHE 		= "flaeche";
+	public static final String BEMERKUNG 	= "bemerkung";
+	public static final String NAME 		= "name";
+	public static final String NUMMER 		= "nummer";
+	public static final String ERNTEJAHR 	= "erntejahr";
+	public static final String SORTE 		= "sorte";
+	public static final String VORFRUCHT 	= "vorfrucht";
+	public static final String KULTUR 		= "kultur";
+
+	public SchlagRecord(Schlag s) {
     	super(s);
     	updateAttributes();
     }
@@ -31,30 +40,30 @@ public class SchlagRecord extends ListRecord<Schlag> {
 		
 		double flaeche = se != null ? se.getFlaeche() : 0; 
 		
-		setAttribute("nummer", id);
-		setAttribute("name", name);
-		setAttribute("beschreibung", beschreibung);
-		setAttribute("flaeche", flaeche);
+		setAttribute(NUMMER, id);
+		setAttribute(NAME, name);
+		setAttribute(BEMERKUNG, beschreibung);
+		setAttribute(FLAECHE, flaeche);
 //		setAttribute("sorte", se.getAnbau());
 	}
 
-	@Override
-	public void updateDTO(Map<String, String> vals) {
+    @Override
+	public void updateDTO(Map<String, Object> vals) {
+		Schlag s = getDTO();
 		//update DTO values
-		for (Entry<String, String> entry : vals.entrySet()) {
+		for (Entry<String, Object> entry : vals.entrySet()) {
 			String att = entry.getKey();
-			String val = entry.getValue();
+			Object val = entry.getValue().toString();
 			
-//			Schlag s = getDTO();
-//			if (att.equals("name")) {
-//				s.setName(val);
-//			} 
-//			else if (att.equals("beschreibung")) {
-//				s.setBeschreibung(val);
-//			}
-//			else if (att.equals("flaeche")) {
-//				s.setFlaeche(Double.valueOf(val));
-//			}
+			if (NAME.equals(att)) {
+				s.getFlurstueck().setName((String) val);
+			}
+			else if (FLAECHE.equals(att)) {
+				s.getSchlagErntejahr().setFlaeche(Double.parseDouble(val.toString()));
+			}
+			else if (BEMERKUNG.equals(att)) {
+				s.getSchlagErntejahr().setBemerkung((String) val);
+			}
 		}
 	}
 
