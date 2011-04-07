@@ -28,7 +28,7 @@ public class SchlagListResource extends ServerResource implements ISchlagListRes
 		Betrieb betrieb = mgr.getBetriebForAccount(mgr.getCurrentUserAccount());
 		
 		List<Schlag> data = mgr.loadSchlagData(erntejahr, betrieb);
-		
+
 		return data.toArray(new Schlag[data.size()]);
 	}
 	

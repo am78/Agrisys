@@ -1,74 +1,119 @@
-<!doctype html>
-<html manifest="dontuse.agrisys.manifest"> 
-	<head> 
+<!DOCTYPE html>  
+<!-- <html manifest="dontuse.agrisys.manifest"> -->
+
+<head>
 	<title>Agrisys mobile</title>
-	<link rel="stylesheet" href="style.css" /> 
-	<link rel="stylesheet" href="jquery.mobile-1.0a2.css" />
-	<script type="text/javascript" src="jquery-1.4.4.js"></script>
-	<script type="text/javascript" src="jquery.mobile-1.0a2.js"></script>
-	<!-- jquery-tmpl infos at: http://github.com/jquery/jquery-tmpl -->
-	<script type="text/javascript" 
-		src="http://ajax.microsoft.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js"></script>
-</head> 
-<body>
 
-<script>
-$.mobile.pageLoading( true );	
-</script>
-
-<script id="schlagTemplate" type="text/x-jquery-tmpl"> 
-    <tr><td>
-		<a href="#">
-			<div id="dataItem">
-				<b>${name}</b> <br/>
-				${flaeche} ha</div>
-		</a>
-	</td></tr>
-</script>		
-
-
-<!-- Start of first page -->
-<div data-role="page" id="master">
-
-	<div data-role="header" data-position="fixed">
-		<div id="networkState" align="center">Schlagliste</div>		
-	</div><!-- /header -->
-
-	<div data-role="content1">	
-		<table id="schlagList" cellspacing="0" cellpadding="0">
-<!-- 			<div id="dataItem">
-				<tr><td><div id="dataItem">test 1<br>test</br></div></td></tr>
-				<tr><td><div id="dataItem">test 2<br>test1</br></div></td></tr>
-			</div>-->
-		</table>
-		
-		<ul data-role="listview" data-theme="c" id="schlagList2">
-		</ul>		
-	</div><!-- /content -->
-
-	<div data-role="footer">
-		&nbsp;
-	</div><!-- /header -->
-</div><!-- /page -->
-
-<script type="text/javascript">
-
-	//get connection state
-	var connectionStatus = ((navigator.onLine) ? 'online' : 'offline');
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<script type="text/javascript" src="js/agrisys.js"></script>
+    <script type="text/javascript" src="js/jquery-1.4.2.js"></script>
+    <script src="jqtouch/jqtouch.js" type="application/x-javascript" charset="utf-8"></script>
+	<link rel="stylesheet" type="text/css" href="jqtouch/jqtouch.css"/>
+	<link rel="stylesheet" type="text/css" href="themes/jqt/theme.css"/>
+	<link rel="stylesheet" type="text/css" href="style.css"/>
 	
-	//render networkState template
-	$.template( "netStatTmpl", '&nbsp;-&nbsp;<i>${connectionStatus}</i>');
-	$.tmpl( "netStatTmpl", connectionStatus ).appendTo( "#networkState" );
-
-			  
-	$.getJSON('SchlagList.jsp', function(data) {
-		$( "#schlagTemplate" ).tmpl( data ).appendTo( "#schlagList" );
-	});
+	<script language="javascript"> 	
+    	$.jQTouch({
+        	statusBar: 'black'
+	    });
+  	    
+	</script>
+</head>
+<body>
+	
+	<!-- Liste der schläge -->
+	<div id="schlagliste">
+            <div class="toolbar">
+                <h1>Agrisys</h1>
+                <a href="/mobile/index.html" class="button">Aktualisieren</a>
+            </div>
+            <ul class="edgetoedge">
+                <li id="schlagEntryTemplate" class="arrow" style="display:none" entryid="-1">
+            		<a href="#actList" id="-1">
+            			<span class="label">Label</span><br/>
+            			<h6><span class="kultur">Weizen</span> - <span class="sorte">Sorte</span></h6>
+	            		<h6><span class="flaeche">10.00 ha</span></h6>
+            		</a>
+		        </li>            
+            </ul>
+            <div class="info" id="info">
+            </div>
+	</div>
+	
+	<!-- Liste der aktivitäten/schlag -->
+	<div id="actList">
+		<div class="toolbar">
+			<a href="#" class="back">Zurück</a>
+			<h1>Schlagname</h1>
+			<a href="#newActForm" class="button slideup">&nbsp;+&nbsp;</a>
+		</div>
 		
-	$('#btn').click(function(){
-	});
-  	
-</script>
+		<ul class="edgetoedge">
+			<li id="actEntryTemplate" entryid="-1" class="arrow" style="display: none">
+				<a href="#actDetails" id="entryid">
+					<span class="label">Label</span>
+					<h6><span class="flaeche">10.00 ha</span></h6>
+				</a>
+			</li>
+		</ul>
+	</div>
+	
+	<!-- Details für Aktivität -->
+	<div id="actDetails">
+		<div class="toolbar">
+			<a href="#" class="back">Zurück</a>
+			<h1>Title</h1>
+		</div>
+		<ul class="edgetoedge">
+			<li id="actDetailsEntryTemplate" class="entry" style="display: none">
+				<span class="label">Label</span><span class="value">value</span>
+			</li>
+		</ul>
+	</div>
+	
+	<!-- Eingabeformular für Aktivität -->
+	<div id="newActForm">
+		<div class="toolbar">
+			<h1>Neue Aktivität</h1>
+			<a class="button cancel" href="#">Abbrechen</a>
+		</div>
+		<form method="post" id="actInputForm">
+			<ul class="rounded">
+				<li>
+					<h3>Datum</h3>
+					<input type="text" value="02.12.2010" name="dateInput" id="dateInput"
+						autocapitalize="off" autocorrect="off" autocomplete="off" />
+				</li>
+				<li>
+					<h3>Fläche in ha</h3>
+					<input type="text" placeholder="" name="flaeche"
+						id="flaeche" autocapitalize="off" autocorrect="off"
+						autocomplete="off" />
+				</li>
+				<li>
+					<h3>Bemerkung</h3>
+					<input type="text" placeholder="" name="remark"
+						id="remark" autocapitalize="off" autocorrect="off"
+						autocomplete="off" />
+				</li>
+				<li>
+					<h3>Typ</h3>
+					<select name="bodenbearbeitungTypInput">
+					</select>
+				</li>
+				<li>
+					<input type="submit" class="submit" name="action" value="Speichern" />
+				</li>
+			</ul>
+		</form>
+	</div>
+	
 
+<script language="javascript">
+
+//do some init stuff
+init();
+
+</script>
 </body>
 </html>

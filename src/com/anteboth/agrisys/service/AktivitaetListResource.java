@@ -21,10 +21,21 @@ public class AktivitaetListResource extends ServerResource implements IAktivitae
 		if (getRequestAttributes().containsKey("id")) {
 			Long id = Long.parseLong((String) getRequestAttributes().get("id"));
 			List<Aktivitaet> l = ServiceManager.getInstance().loadAktivitaetData(id);
+			
+			for (Aktivitaet a : l) {
+				a.updateType();
+			}
+			
 			if (l != null) {
 				data = l.toArray(new Aktivitaet[l.size()]);
 			}
 		}	
+		
+//		try {
+//			Thread.sleep(1000);
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		}
 		
 		return data;
 	}

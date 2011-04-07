@@ -18,6 +18,10 @@ public class Duengung extends Aktivitaet {
 	@Transient
 	private Duengerart duengerart;
 	
+	public Duengung() {
+		setType(DUENGUNG_TYPE);
+	}
+	
 	@Override
 	public Long getId() {
 		return this.id;
@@ -53,5 +57,10 @@ public class Duengung extends Aktivitaet {
 
 	public void setDuengerart(Duengerart duengerart) {
 		this.duengerart = duengerart;
+	}
+	
+	@Override
+	public void updateType() {
+		setType(DUENGUNG_TYPE);
 	}
 }

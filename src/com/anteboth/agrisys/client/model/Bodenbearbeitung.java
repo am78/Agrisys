@@ -15,6 +15,10 @@ public class Bodenbearbeitung extends Aktivitaet {
 	@Transient
 	private BodenbearbeitungTyp bodenbearbeitungTyp;
 	
+	public Bodenbearbeitung() {
+		setType(BODENBEARBEITUNG_TYPE);
+	}
+	
 	public Key<BodenbearbeitungTyp> getTypKey() {
 		return typ;
 	}
@@ -34,5 +38,10 @@ public class Bodenbearbeitung extends Aktivitaet {
 	@Override
 	public Long getId() {
 		return this.id;
+	}
+	
+	@Override
+	public void updateType() {
+		setType(BODENBEARBEITUNG_TYPE);
 	}
 }

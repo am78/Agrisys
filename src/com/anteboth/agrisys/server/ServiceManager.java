@@ -1,6 +1,9 @@
 package com.anteboth.agrisys.server;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 import com.anteboth.agrisys.client.model.Account;
@@ -186,6 +189,12 @@ public class ServiceManager {
 		}
 		
 		return result;
+	}
+	
+	public BodenbearbeitungTyp getBodenbearbeitungTyp(long id) {
+		Objectify ofy = ObjectifyService.begin();
+		BodenbearbeitungTyp t = ofy.find(new Key<BodenbearbeitungTyp>(BodenbearbeitungTyp.class, id));
+		return t;
 	}
 	
 	public BodenbearbeitungTyp save(BodenbearbeitungTyp typ) {
@@ -458,10 +467,40 @@ public class ServiceManager {
 				if (dd != null) {
 					data.addAll(dd);
 				}
-				//TODO loadPflanzenschutzData
-				//TODO sortieren nach Type oder Zeit ???
+				List<Pflanzenschutz> pd = loadPflanzenschutzData(se);
+				if (pd != null) {
+					data.addAll(pd);
+				}
+			}
+			
+			//ensure that LastModification date is set
+			for (Aktivitaet a : data) {
+				if (a.getLastModification() == null) {
+					//set to now if value not set
+					a.setLastModification(new Date());
+				}
+				
+				//is always true if the data comes from the server
+				a.setSynchron(true);
 			}
 		}
+		
+		//sort by time 
+		Collections.sort(data, new Comparator<Aktivitaet>() {
+			@Override
+			public int compare(Aktivitaet a1, Aktivitaet a2) {
+				if (a1 != null && a2 != null) {
+					Date d1 = a1.getDatum();
+					Date d2 = a2.getDatum();
+					if (d1 != null && d2 != null) {
+						return d2.compareTo(d1);
+					}
+				}
+				return 0;
+			}
+		});
+		
+		
 		return data;
 	}
 	
@@ -728,4 +767,55 @@ public class ServiceManager {
 		return ofy.find(key);
 	}
 
+
+	public Aktivitaet getAktivitaet(Long id) {
+		Objectify ofy = ObjectifyService.begin();
+		//TODO use concrete Aktivitaet type
+		Key<Aktivitaet> key = new Key<Aktivitaet>(Aktivitaet.class, id);
+		return ofy.find(key);
+	}
+
+
+	/**
+	 * Delete {@link Aktivitaet} for specified ID.
+	 * @param id the id of the item to delete
+	 */
+	public void deleteAktivitaet(Long id) {
+		Objectify ofy = ObjectifyService.begin();
+		
+		//TODO use concrete Aktivitaet type
+		ofy.delete(Aktivitaet.class, id);
+	}
+
+
+	/**
+	 * Store {@link Aktivitaet} using synchronization mechanism.
+	 * @param aktivitaet item to update
+	 */
+	public void store(Aktivitaet aktivitaet) {
+		System.out.println("store aktivitaet entry:" + aktivitaet);
+		// TODO Auto-generated method stub
+		
+		//if ID is set (entry already exists) ensure that the modification date of the 
+		//changed item is newer than the last modification date of the persisted entry
+		
+		if (aktivitaet.getId() == null) {
+			if (aktivitaet instanceof Bodenbearbeitung) {
+				save((Bodenbearbeitung) aktivitaet);
+			}
+			else if (aktivitaet instanceof Aussaat) {
+				save((Aussaat) aktivitaet);
+			}
+			else if (aktivitaet instanceof Duengung) {
+				save((Duengung) aktivitaet);
+			}
+			else if (aktivitaet instanceof Ernte) {
+				save((Ernte) aktivitaet);
+			}
+			else if (aktivitaet instanceof Pflanzenschutz) {
+				save((Pflanzenschutz) aktivitaet);
+			}
+		}
+		
+	}
 }

@@ -19,6 +19,10 @@ public class Pflanzenschutz extends Aktivitaet {
 	@Transient
 	private PSMittel psMittel;
 	
+	public Pflanzenschutz() {
+		setType(PFLANZENSCHUTZ_TYPE);
+	}
+	
 	@Override
 	public Long getId() {
 		return this.id;
@@ -62,6 +66,11 @@ public class Pflanzenschutz extends Aktivitaet {
 
 	public void setPsMittel(PSMittel psMittel) {
 		this.psMittel = psMittel;
+	}
+	
+	@Override
+	public void updateType() {
+		setType(PFLANZENSCHUTZ_TYPE);
 	}
 
 }

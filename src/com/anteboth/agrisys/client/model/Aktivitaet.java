@@ -8,6 +8,12 @@ import com.googlecode.objectify.Key;
 @SuppressWarnings("serial")
 public abstract class Aktivitaet implements Serializable, IDTO {
 	
+	public static final int BODENBEARBEITUNG_TYPE = 0;
+	public static final int AUSSAAT_TYPE = 1;
+	public static final int DUENGUNG_TYPE = 2;
+	public static final int ERNTE_TYPE = 3;
+	public static final int PFLANZENSCHUTZ_TYPE = 4;
+	
 	Key<SchlagErntejahr> schlagErntejahr;
 	
 	private Date datum;
@@ -15,6 +21,13 @@ public abstract class Aktivitaet implements Serializable, IDTO {
 	private String bemerkung;
 	private Date lastModification;
 	private boolean synchron = true;
+	private boolean deleted = false;
+	private int type;
+	
+	public Aktivitaet() {
+		//set the lastModification date to if creating a new activity entry on server
+		this.lastModification = new Date();
+	}
 	
 	public Date getDatum() {
 		return datum;
@@ -60,5 +73,23 @@ public abstract class Aktivitaet implements Serializable, IDTO {
 	public void setSynchron(boolean synchron) {
 		this.synchron = synchron;
 	}
+
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
+	}
+
+	public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
+	}
+
+	public abstract void updateType();
 
 }

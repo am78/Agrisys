@@ -20,6 +20,9 @@ public class Aussaat extends Aktivitaet {
 	private Double kgProHa;
 	private String beize;
 
+	public Aussaat() {
+		setType(AUSSAAT_TYPE);
+	}
 
 	public Long getId() {
 		return id;
@@ -55,5 +58,10 @@ public class Aussaat extends Aktivitaet {
 	
 	public void setKultur(Kultur kultur) {
 		this.kultur = kultur;
+	}
+	
+	@Override
+	public void updateType() {
+		setType(AUSSAAT_TYPE);
 	}
 }

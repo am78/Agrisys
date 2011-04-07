@@ -20,6 +20,10 @@ public class Ernte extends Aktivitaet {
 	private Double dtProHa;
 	private String anlieferung;
 	private Double gesamtMenge;
+	
+	public Ernte() {
+		setType(ERNTE_TYPE);
+	}
 
 	public Long getId() {
 		return id;
@@ -63,5 +67,10 @@ public class Ernte extends Aktivitaet {
 
 	public void setGesamtMenge(Double gesamtMenge) {
 		this.gesamtMenge = gesamtMenge;
+	}
+	
+	@Override
+	public void updateType() {
+		setType(ERNTE_TYPE);
 	}
 }

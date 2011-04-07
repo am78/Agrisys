@@ -1,43 +1,48 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<!-- <html manifest="dontuse.agrisys.manifest"> -->
 
-<!DOCTYPE html> 
-<html> 
-	<head> 
-	<title>Agrisys mobile</title> 
-	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.0a2/jquery.mobile-1.0a2.min.css" />
-	<script type="text/javascript" src="http://code.jquery.com/jquery-1.4.4.min.js"></script>
-	<script type="text/javascript" src="http://code.jquery.com/mobile/1.0a2/jquery.mobile-1.0a2.min.js"></script>
-</head> 
-<body> 
+<head>
+	<title>Agrisys mobile</title>
 
-<!-- Start of first page -->
-<div data-role="page" id="foo">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script type="text/javascript" src="js/jquery-1.4.2.js"></script>
+    <script src="jqtouch/jqtouch.js" type="application/x-javascript" charset="utf-8"></script>
+	<link rel="stylesheet" type="text/css" href="jqtouch/jqtouch.css"/>
+	<link rel="stylesheet" type="text/css" href="themes/jqt/theme.css"/>
+	
+	<script language="javascript"> 
+    	$.jQTouch({
 
-	<div data-role="header">
-		<h1>Wiese I - 2011</h1>
-	</div><!-- /header -->
+        	statusBar: 'black'
 
-	<div data-role="content">	
-		<ul data-role="listview" data-theme="c">
-			<li>
-				<h1>Grubbern - 16.09.2010</h1>
-				<p>22.32 ha</p>
-				<p>Bemerkung ....</p>
-				
-			</li>
-			<li>
-				<h1>Aussaat - 20.09.2010</h1>
-				<p>22.32 ha | Weizen (Superweizen xyz)</p>
-				
-			</li>
-		</ul>	
-	</div><!-- /content -->
+	    });
+	</script>
+</head>
+<body>
+	
+	<div id="schlag">
+            <div class="toolbar">
+	            <a href="index.html" class="back">Zurück</a>            
+                <h1>Schlag 1</h1>
+            </div>
 
-	<div data-role="footer">
-		<h4></h4>
-	</div><!-- /header -->
-</div><!-- /page -->
-
-
-
+            <ul class="edgetoedge">
+                <li><a href="#">Grubbern - 20.10.2010</a></li>
+                <li><a href="#">Eggen - 10.03.2011</a></li>
+            </ul>          
+	</div>
+<script language="javascript">
+var i = 0;
+for (; i<10; i++) {
+    var newEntryRow = $('#entryTemplate').clone();
+	newEntryRow.removeAttr('id');
+    newEntryRow.removeAttr('style');
+    
+    newEntryRow.data('entryId', i);
+    newEntryRow.appendTo('#schlagliste ul');
+    newEntryRow.find('.label').text("item " + i);
+}
+</script>
 </body>
 </html>
