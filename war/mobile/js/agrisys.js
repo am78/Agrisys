@@ -1,4 +1,3 @@
-
 var schlagData;
 var actListData;
 var stammdaten;
@@ -110,7 +109,12 @@ function onSaveNewAktivitaet(form) {
 		type:'PUT',
 		contentType: "application/json",
 		data: data,
-		success : function() { console.log("Data stored!"); },
+		success : function() { 
+			console.log("Data stored!");
+			//TODO go back to Aktivitaet list and reload entries
+			loadAndDisplayAktivitaetListData(schlagErntejahrId);
+			jQT.goTo('#actList', 'back'); 
+		},
     	error: function(error) { 
 			alert("Error while storing data.\nError " + error.status + " : " + error.statusText); 
 		}
@@ -152,7 +156,7 @@ function getSchlag(schlagErntejahrId) {
 }
 
 function loadAndDisplayAktivitaetListData(schlagErntejahrId) {
-	$('body').append('<div id="progress" class="current">Bitte warten...</div>'); 
+//	$('body').append('<div id="progress" class="current">Bitte warten...</div>'); 
 	
 	//empty this list
 	$('#actList ul li').hide();
@@ -172,7 +176,7 @@ function loadAndDisplayAktivitaetListData(schlagErntejahrId) {
 
 function onActListDataLoaded(data, schlagErntejahrId) {
 	actListData = data;
-	$('#progress').remove();
+//	$('#progress').remove();
 	
 	console.log('Load was performed.');
 	console.log(data);

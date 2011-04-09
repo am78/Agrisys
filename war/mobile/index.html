@@ -16,6 +16,8 @@
     	$.jQTouch({
         	statusBar: 'black'
 	    });
+
+        var jQT = new $.jQTouch();
   	    
 	</script>
 </head>
@@ -74,8 +76,8 @@
 	<!-- Eingabeformular für Aktivität -->
 	<div id="newActForm">
 		<div class="toolbar">
-			<h1>Neue Aktivität</h1>
 			<a class="button cancel" href="#">Abbrechen</a>
+			<h1>Neue Aktivität</h1>
 		</div>
 		<form method="post" id="actInputForm">
 			<ul class="rounded">
@@ -86,7 +88,7 @@
 				</li>
 				<li>
 					<h3>Fläche in ha</h3>
-					<input type="text" placeholder="" name="flaeche"
+					<input type="number" placeholder="" name="flaeche"
 						id="flaeche" autocapitalize="off" autocorrect="off"
 						autocomplete="off" />
 				</li>
@@ -101,10 +103,8 @@
 					<select name="bodenbearbeitungTypInput">
 					</select>
 				</li>
-				<li>
-					<input type="submit" class="submit" name="action" value="Speichern" />
-				</li>
 			</ul>
+			<a href="#" class="submit whiteButton" style="margin:0 10px; color: rgba(0,0,0,0.9)">Speichern</a>
 		</form>
 	</div>
 	
