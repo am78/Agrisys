@@ -57,7 +57,7 @@
             
             var defaults = {
                 addGlossToIcon: true,
-                backSelector: '.back, .cancel, .goback',
+                backSelector: '.back, .cancel, .goback, .save',
                 cacheGetRequests: true,
                 cubeSelector: '.cube',
                 dissolveSelector: '.dissolve',

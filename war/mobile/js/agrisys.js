@@ -5,7 +5,10 @@ var currentSchlagErntejahrId;
 
 //init
 function init() {
+	blockUI();
+
 	var url = '/service/stammdaten?media=json';
+
 	//load stammdaten
 	$.ajax({
 		url: url,
@@ -14,16 +17,29 @@ function init() {
 			console.log("stammdaten loaded: " + data);
 			stammdaten = data;
 			
-			//load and display schlag list
-			loadAndDisplaySchlagListData();
-			
 			//perform some post init task after the markup and the initial data has been loaded
 			postInit();
 			
+			unblockUI();
+		},
+		error: function(error) { 
+			unblockUI();
+			alert("Fehler beim Laden der Stammdaten:\n" + error.status + " : " + error.statusText);
 		}
 	});
 	
-	//add tap handlers
+	
+	/* add tap handlers */
+	
+	//listen on main page schlagliste button taps
+	$("#mainBtn a[href|='#schlagliste']").tap(function(event) {		
+		console.log("tapped on #schlagliste link");
+		//load and display schlag list
+		loadAndDisplaySchlagListData();
+	    return true;
+	});
+	
+	//listen on schlagliste item taps
 	$("#schlagliste ul li a").tap(function(event) {
 		var id = $(event.target).attr('entryid');
 		if (id == null) {
@@ -38,6 +54,7 @@ function init() {
 	    return true;
 	}); 
 
+	//listen on actList item taps
 	$("#actList ul li a").tap(function(event) {
 		var id = $(event.target).attr('entryid');
 		if (id == null) {
@@ -48,12 +65,18 @@ function init() {
 	    return true;
 	});
 
+	//listen on form save button tap
 	$('#actInputForm').submit(function() {
-		
 		onSaveNewAktivitaet(this);
-
-	  return false;
+		return false;
 	});
+	
+
+	
+	$('#saveNewAct').click(function(e) {
+        onSaveNewAktivitaet(this);
+        return true;
+    });
 
 	//set current date in dateInput form input
 	var date = getDateString(new Date());
@@ -103,7 +126,7 @@ function onSaveNewAktivitaet(form) {
 		'","bemerkung":"' + remark +'","bodenbearbeitungTyp":"' + bodenbearbeitungTyp + '"}';
 	
 	console.log(data);
-
+	
 	$.ajax({
 		url: '/service/aktivitaet/0?media=json',
 		type:'PUT',
@@ -111,12 +134,11 @@ function onSaveNewAktivitaet(form) {
 		data: data,
 		success : function() { 
 			console.log("Data stored!");
-			//TODO go back to Aktivitaet list and reload entries
+			//reload entries
 			loadAndDisplayAktivitaetListData(schlagErntejahrId);
-			jQT.goTo('#actList', 'back'); 
 		},
-    	error: function(error) { 
-			alert("Error while storing data.\nError " + error.status + " : " + error.statusText); 
+    	error: function(error) {
+			alert("Fehler beim Speichern der Daten:\n" + error.status + " : " + error.statusText); 
 		}
 	});
 }
@@ -156,7 +178,8 @@ function getSchlag(schlagErntejahrId) {
 }
 
 function loadAndDisplayAktivitaetListData(schlagErntejahrId) {
-//	$('body').append('<div id="progress" class="current">Bitte warten...</div>'); 
+	//show busy indicator
+	blockUI();
 	
 	//empty this list
 	$('#actList ul li').hide();
@@ -164,11 +187,17 @@ function loadAndDisplayAktivitaetListData(schlagErntejahrId) {
 	console.log('load and dispaly aktivitaet list data for flurstueck with id ' + schlagErntejahrId + " ...");
 	var url = '/service/aktivitaetList/' + schlagErntejahrId + '?media=json';
 
+	
 	$.ajax({
 		url: url,
 		type: 'GET',
 		success: function(data) {
 			onActListDataLoaded(data, schlagErntejahrId);
+			unblockUI();
+		},
+		error: function(error) { 
+			unblockUI();
+			alert("Fehler beim Laden der Daten:\n" + error.status + " : " + error.statusText); 
 		}
 	});
 }
@@ -176,7 +205,6 @@ function loadAndDisplayAktivitaetListData(schlagErntejahrId) {
 
 function onActListDataLoaded(data, schlagErntejahrId) {
 	actListData = data;
-//	$('#progress').remove();
 	
 	console.log('Load was performed.');
 	console.log(data);
@@ -187,10 +215,14 @@ function onActListDataLoaded(data, schlagErntejahrId) {
 
 	$.each(data, function(akt) {
 		var id = this.id;
-		var datum = this.datum.substring(0, 10);
+		
+		var datum = this.datum;
+		if (this.datum != null && this.datum.length > 9) {
+			datum = this.datum.substring(0, 10);
+		}
+		
 		var flaeche = this.flaeche;
 		var typ = getTypeString(this.type);
-		
 		
 		var newEntryRow = $('#actEntryTemplate').clone();
 		newEntryRow.removeAttr('id');
@@ -251,13 +283,21 @@ function getKulturString(id) {
 
 function loadAndDisplaySchlagListData() {
 	console.log('load and display schlaglist data...');
-	var url = '/service/schlagList?media=json';
+	
+	//show busy indocator
+	blockUI();
 
+	var url = '/service/schlagList?media=json';
 	$.ajax({
 		url: url,
 		type: 'GET',
 		success: function(data) {
 			onSchlagDataLoaded(data);
+			unblockUI();
+		},
+		error: function(error) { 
+			unblockUI();
+			alert("Fehler beim Laden der Daten:\n" + error.status + " : " + error.statusText); 
 		}
 	});
 }
@@ -393,4 +433,28 @@ function loadAndDisplayActEntry(id) {
 	else if (act.type == 3) {
 		//TODO
 	}
+}
+
+
+function blockUI() {
+	$.blockUI({
+		message: '<h1 style="color: white">Bitte Warten...</h1>',
+		css: { 
+			opacity: .75, 
+	        border: 'none', 
+	        padding: '15px', 
+	        '-webkit-border-radius': '10px', 
+	        '-moz-border-radius': '10px', 
+	        color: '#fff',
+	        top: $(window).height() * 0.1 + 'px',  
+	        height: $(window).height() * 0.2 + 'px',
+	        left: '10%', 
+	        width: '80%',
+	        theme: true
+    	} 
+	}); 
+}
+
+function unblockUI() {
+	$.unblockUI();
 }
