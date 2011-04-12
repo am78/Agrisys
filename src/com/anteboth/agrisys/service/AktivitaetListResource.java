@@ -31,11 +31,11 @@ public class AktivitaetListResource extends ServerResource implements IAktivitae
 			}
 		}	
 		
-//		try {
-//			Thread.sleep(1000);
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		
 		return data;
 	}
