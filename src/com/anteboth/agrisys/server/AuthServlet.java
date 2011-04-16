@@ -11,6 +11,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 
@@ -28,6 +29,8 @@ public class AuthServlet implements Filter {
 		UserService userService = UserServiceFactory.getUserService();
 		boolean loggedIn = userService.isUserLoggedIn();
 		
+		loggedIn &= isValidUser(userService.getCurrentUser());
+		
 		if (loggedIn) {
 			chain.doFilter(request, response);
 		} 
@@ -36,6 +39,15 @@ public class AuthServlet implements Filter {
 			((HttpServletResponse) response).sendRedirect(url);
 		}
 		
+	}
+
+	private boolean isValidUser(User user) {
+		if (user != null && user.getEmail() != null) {
+			if (user.getEmail().indexOf("anteboth") > -1) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@Override

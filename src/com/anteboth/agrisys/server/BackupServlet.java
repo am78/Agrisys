@@ -2,11 +2,22 @@ package com.anteboth.agrisys.server;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.io.Writer;
+import java.text.DateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.GenericServlet;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
@@ -48,6 +59,9 @@ public class BackupServlet extends GenericServlet {
 	@Override
 	public void service(ServletRequest request, ServletResponse response) 
 	throws ServletException, IOException {
+		
+		sendMail();
+		
 		//create XML or ZIP file?
 		String media = request.getParameter("media");
 		if (media != null && media.equals("xml")) {
@@ -91,6 +105,36 @@ public class BackupServlet extends GenericServlet {
 			zip.close();
 		}
 		
+	}
+
+	private void sendMail() {
+		Properties props = new Properties();
+        Session session = Session.getDefaultInstance(props, null);
+
+        String date = DateFormat.getDateTimeInstance().format(new Date());
+        
+        String msgBody = "Agriys Backup vom:\n\t" + date;
+
+        try {
+            Message msg = new MimeMessage(session);
+            msg.setFrom(
+            		new InternetAddress("noreply@anteboth.com", "Agrisys Admin"));
+            msg.addRecipient(Message.RecipientType.TO, 
+            		new InternetAddress("anteboth@gmail.com", "Michael Anteboth"));
+            msg.setSubject("Agrisys Backup - " + date);
+            msg.setText(msgBody);
+            Transport.send(msg);
+        } catch (AddressException e) {
+        	handleException(e);
+        } catch (MessagingException e) {
+        	handleException(e);
+        } catch (UnsupportedEncodingException e) {
+			handleException(e);
+		}
+	}
+
+	private void handleException(Exception e) {
+		e.printStackTrace();
 	}
 
 	private void writeXmlData(Writer writer) throws FactoryConfigurationError {
