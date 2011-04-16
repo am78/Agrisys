@@ -43,7 +43,7 @@ public class AuthServlet implements Filter {
 
 	private boolean isValidUser(User user) {
 		if (user != null && user.getEmail() != null) {
-			if (user.getEmail().indexOf("anteboth") > -1) {
+			if (user.getEmail().toLowerCase().indexOf("anteboth") > -1) {
 				return true;
 			}
 		}

@@ -2,7 +2,11 @@ ul.edgetoedge li a {
     background: url(themes/jqt/img/chevron.png) 
     	right center no-repeat, 
     	-webkit-gradient(linear, 0% 0%, 0% 100%, from(#1e1f21), to(#272729));
-} 
+}
+
+.mandatory {
+	color: rgba(0, 0, 1, 0.6);	
+}
 
 
 #progress {

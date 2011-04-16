@@ -1,8 +1,8 @@
 package com.anteboth.agrisys.server;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.text.DateFormat;
 import java.util.Date;
@@ -13,11 +13,14 @@ import java.util.zip.ZipOutputStream;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
+import javax.mail.Multipart;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 import javax.servlet.GenericServlet;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
@@ -60,8 +63,6 @@ public class BackupServlet extends GenericServlet {
 	public void service(ServletRequest request, ServletResponse response) 
 	throws ServletException, IOException {
 		
-		sendMail();
-		
 		//create XML or ZIP file?
 		String media = request.getParameter("media");
 		if (media != null && media.equals("xml")) {
@@ -72,6 +73,7 @@ public class BackupServlet extends GenericServlet {
 		
 		Writer writer = null;
 		ZipOutputStream zip = null;
+		ByteArrayOutputStream baos = null;
 		
 		if (plainXml) {	
 			//set header properties
@@ -84,8 +86,12 @@ public class BackupServlet extends GenericServlet {
 			//set header properties
 			response.setContentType("application/zip");
 			((HttpServletResponse) response).setHeader( "Content-disposition", "attachment; filename=AgrisysBackup.zip");
-			//create zip file output stream
-			zip = new ZipOutputStream(response.getOutputStream());
+//			zip = new ZipOutputStream(response.getOutputStream());
+			
+			//create zip file output stream which redirect into the baos
+			baos = new ByteArrayOutputStream(2048);
+			zip = new ZipOutputStream(baos);
+			
 			//create zip file entry "AgrisysBackup.xml"
 			zip.putNextEntry(new ZipEntry("AgrisysBackup.xml"));
 			//wrap zip output stream with writer (xml will be written to the writer)
@@ -102,38 +108,61 @@ public class BackupServlet extends GenericServlet {
 		} else {
 			writer.flush();
 			writer.close();
-			zip.close();
+//			zip.close();
+			baos.close();
+			
+			byte[] data = baos.toByteArray();
+			sendMail(data);
 		}
 		
 	}
 
-	private void sendMail() {
+	private void sendMail(byte[] attachmentData) {
 		Properties props = new Properties();
         Session session = Session.getDefaultInstance(props, null);
 
         String date = DateFormat.getDateTimeInstance().format(new Date());
-        
         String msgBody = "Agriys Backup vom:\n\t" + date;
-
+        String subject = "Agrisys Backup - " + date;
+        String from = "noreply@anteboth.com";
+        String to = "admins";
+        
         try {
             Message msg = new MimeMessage(session);
-            msg.setFrom(
-            		new InternetAddress("noreply@anteboth.com", "Agrisys Admin"));
-            msg.addRecipient(Message.RecipientType.TO, 
-            		new InternetAddress("anteboth@gmail.com", "Michael Anteboth"));
-            msg.setSubject("Agrisys Backup - " + date);
-            msg.setText(msgBody);
+            msg.setFrom(new InternetAddress(from));
+            msg.addRecipient(Message.RecipientType.TO,new InternetAddress(to));
+            msg.setSubject(subject);
+            
+            //create multipart message
+            Multipart mp = new MimeMultipart();
+
+            //add message body part
+            MimeBodyPart body = new MimeBodyPart();
+            body.setFileName("body");
+            body.setContent(msgBody, "application/text");
+            mp.addBodyPart(body);
+
+            //add message attachment part
+            MimeBodyPart attachment = new MimeBodyPart();
+            attachment.setFileName("agrisys_backup.zip");
+            attachment.setContent(attachmentData, "application/x-zip");
+            mp.addBodyPart(attachment);
+
+            //add multipart to message
+            msg.setContent(mp);
+            
+            //send message
             Transport.send(msg);
         } catch (AddressException e) {
         	handleException(e);
         } catch (MessagingException e) {
         	handleException(e);
-        } catch (UnsupportedEncodingException e) {
+		} catch (Throwable e) {
 			handleException(e);
 		}
 	}
 
-	private void handleException(Exception e) {
+	private void handleException(Throwable e) {
 		e.printStackTrace();
 	}
 

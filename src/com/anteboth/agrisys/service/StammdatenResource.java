@@ -14,12 +14,6 @@ public class StammdatenResource extends ServerResource implements IStammdatenRes
 	public Stammdaten retrieve() {
 		Stammdaten sd = ServiceManager.getInstance().getStammdaten();
 		
-		try {
-			Thread.sleep(1500);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		
 		return sd;
 	}
 	

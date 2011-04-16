@@ -239,6 +239,12 @@ public class ServiceManager {
 		return dto;
 	}
 	
+	public PSMittel getPSMittel(long id) {
+		Objectify ofy = ObjectifyService.begin();
+		PSMittel psm = ofy.find(new Key<PSMittel>(PSMittel.class, id));
+		return psm;
+	}
+	
 	
 	public void delete(PSMittel dto) {
 		if (dto != null) {
@@ -260,6 +266,12 @@ public class ServiceManager {
 		}
 		
 		return result;
+	}
+	
+	public Duengerart getDuengerart(long id) {
+		Objectify ofy = ObjectifyService.begin();
+		Duengerart psm = ofy.find(new Key<Duengerart>(Duengerart.class, id));
+		return psm;
 	}
 	
 	public Duengerart save(Duengerart dto) {

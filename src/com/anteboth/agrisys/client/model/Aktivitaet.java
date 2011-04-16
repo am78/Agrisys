@@ -23,6 +23,8 @@ public abstract class Aktivitaet implements Serializable, IDTO {
 	private boolean synchron = true;
 	private boolean deleted = false;
 	private int type;
+	private Double longitude;
+	private Double latitude;
 	
 	public Aktivitaet() {
 		//set the lastModification date to if creating a new activity entry on server
@@ -88,6 +90,22 @@ public abstract class Aktivitaet implements Serializable, IDTO {
 
 	public void setType(int type) {
 		this.type = type;
+	}
+	
+	public Double getLongitude() {
+		return longitude;
+	}
+	
+	public void setLongitude(Double longitude) {
+		this.longitude = longitude;
+	}
+	
+	public Double getLatitude() {
+		return latitude;
+	}
+	
+	public void setLatitude(Double latitude) {
+		this.latitude = latitude;
 	}
 
 	public abstract void updateType();
