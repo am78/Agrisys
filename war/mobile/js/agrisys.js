@@ -10,8 +10,10 @@ var latitude = -1;
 function init() {
 	blockUI();
 
+	//the stammdaten URL
 	var url = '/service/stammdaten?media=json';
 	
+	//load all schlagdata 
 	loadAndDisplaySchlagListData();
 
 	//load stammdaten
@@ -70,8 +72,31 @@ function init() {
 	    return true;
 	});
 
+	
+	/* we want to refresh the geolocation whenever a new entry form get opened */
+	$("#mainBtn a[href|='#newErnteForm']").tap(function(e) {		
+		refreshGeoPosition();
+		return true;
+	});
+	$("#mainBtn a[href|='#newBodenForm']").tap(function(e) {		
+		refreshGeoPosition();
+		return true;
+	});
+	$("#mainBtn a[href|='#newPflanzenschutzForm']").tap(function(e) {		
+		refreshGeoPosition();
+		return true;
+	});
+	$("#mainBtn a[href|='#newAussaatForm']").tap(function(e) {		
+		refreshGeoPosition();
+		return true;
+	});
+	$("#mainBtn a[href|='#newDuengungForm']").tap(function(e) {		
+		refreshGeoPosition();
+		return true;
+	});
 
-	//listen on form save buttons tap
+	
+	/* listen on form save buttons tap */
 	$('#saveNewBoden').tap(function(e) {
         onSaveNewBodenbearbeitung(this);
         return true;
@@ -101,6 +126,11 @@ function init() {
 	$('#newPflanzenschutzForm #dateInput').attr('value', date);
 	$('#newErnteForm #dateInput').attr('value', date);
 
+	//refresh the geo location
+	refreshGeoPosition();
+}
+
+function refreshGeoPosition() {
 	//get geo location (if feature is available)
 	if (navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(geoSuccess, geoError);		
@@ -112,7 +142,6 @@ function init() {
 function geoSuccess(position) {
 	latitude = position.coords.latitude;
 	longitude = position.coords.longitude;
-	
   	console.log('latitude: '+latitude+' - longitude: '+longitude);
 }
  
@@ -388,28 +417,67 @@ function onActListDataLoaded(data, schlagErntejahrId) {
 	var s = getSchlag(schlagErntejahrId);
 	console.log('Schlag: ' + s);
 	$('#actList h1').text(s.flurstueck.name);
-
+	
+	$('#actList ul').append('<li class="sep">Bodenbearbeitung</li>');
 	$.each(data, function(akt) {
-		var id = this.id;
-		
-		var datum = this.datum;
-		if (this.datum != null && this.datum.length > 9) {
-			datum = this.datum.substring(0, 10);
+		if (this.type == 0){
+			var newEntryRow = createEntry(this);
+			$('#actList ul').append(newEntryRow);
 		}
-		
-		var flaeche = this.flaeche;
-		var typ = getTypeString(this.type);
-		
-		var newEntryRow = $('#actEntryTemplate').clone();
-		newEntryRow.removeAttr('id');
-		newEntryRow.removeAttr('style');
+	});
+	
+	$('#actList ul').append('<li class="sep">Aussaat</li>');
+	$.each(data, function(akt) {
+		if (this.type == 1){
+			var newEntryRow = createEntry(this);
+			$('#actList ul').append(newEntryRow);
+		}
+	});
+	
+	$('#actList ul').append('<li class="sep">Düngung</li>');
+	$.each(data, function(akt) {
+		if (this.type == 2){
+			var newEntryRow = createEntry(this);
+			$('#actList ul').append(newEntryRow);
+		}
+	});
+	
+	$('#actList ul').append('<li class="sep">Pflanzenschutz</li>');
+	$.each(data, function(akt) {
+		if (this.type == 4){
+			var newEntryRow = createEntry(this);
+			$('#actList ul').append(newEntryRow);
+		}
+	});
+	
+	$('#actList ul').append('<li class="sep">Ernte</li>');
+	$.each(data, function(akt) {
+		if (this.type == 3){
+			var newEntryRow = createEntry(this);
+			$('#actList ul').append(newEntryRow);
+		}
+	});
+}
 
-		newEntryRow.data('entryId', id);
-		newEntryRow.appendTo('#actList ul');
-		newEntryRow.find('.label').text(datum);
-		newEntryRow.find('.flaeche').text(flaeche + ' ha - ' + typ);
-		newEntryRow.find('a').attr('id', id);
-	}); 
+function createEntry(data) {
+	var id = data.id;
+	var datum = data.datum;
+	if (data.datum != null && data.datum.length > 9) {
+		datum = data.datum.substring(0, 10);
+	}
+	var flaeche = data.flaeche;
+	var typ = getTypeString(data.type);
+	
+	var newEntryRow = $('#actEntryTemplate').clone();
+	newEntryRow.removeAttr('id');
+	newEntryRow.removeAttr('style');
+
+	newEntryRow.data('entryId', id);
+	newEntryRow.find('.label').text(datum);
+	newEntryRow.find('.flaeche').text(flaeche + ' ha - ' + typ);
+	newEntryRow.find('a').attr('id', id);
+	
+	return newEntryRow;
 }
 
 function getTypeString(type) {
@@ -532,6 +600,7 @@ function loadAndDisplayActEntry(id) {
 	
 	//empty this list
 	$('#actDetails ul li').hide();
+	$('#actDetails ul h1').hide();
 	
 	var datum = act.datum.substring(0, 10);
 	var flaeche = act.flaeche;
@@ -557,14 +626,6 @@ function loadAndDisplayActEntry(id) {
 	row.find('.value').text(flaeche + " ha");
 	row.appendTo('#actDetails ul');
 	
-	//add bemerkung row
-	var row = $('#actDetailsEntryTemplate').clone();
-	row.removeAttr('id');
-	row.removeAttr('style');
-	row.find('.label').text("Bemerkung: ");
-	row.find('.value').text(bem);
-	row.appendTo('#actDetails ul');
-	
 	//bodenbearbeitung
 	if (act.type == 0) {
 		//add bodenbearbeitung typ
@@ -577,7 +638,6 @@ function loadAndDisplayActEntry(id) {
 		row.find('.value').text(typName);
 		row.appendTo('#actDetails ul');
 	}
-	
 	//aussaat
 	else if (act.type == 1) {
 		var kgProHa = act.kgProHa;
@@ -599,20 +659,115 @@ function loadAndDisplayActEntry(id) {
 		row.find('.value').text(beize);
 		row.appendTo('#actDetails ul');
 	}
-	
 	//duengung
 	else if (act.type == 2) {
-		//TODO
+		var kgProHa = act.kgProHa;
+		var ec = act.ec;
+		var duengerart = act.duengerart.name;
+		
+		//duengerart
+		var row = $('#actDetailsEntryTemplate').clone();
+		row.removeAttr('id');
+		row.removeAttr('style');
+		row.find('.label').text("Dünger: ");
+		row.find('.value').text(duengerart);
+		row.appendTo('#actDetails ul');
+		
+		//kg/ha
+		var row = $('#actDetailsEntryTemplate').clone();
+		row.removeAttr('id');
+		row.removeAttr('style');
+		row.find('.label').text("kg/ha: ");
+		row.find('.value').text(kgProHa);
+		row.appendTo('#actDetails ul');
+		
+		//ec
+		var row = $('#actDetailsEntryTemplate').clone();
+		row.removeAttr('id');
+		row.removeAttr('style');
+		row.find('.label').text("EC: ");
+		row.find('.value').text(ec);
+		row.appendTo('#actDetails ul');
 	}
-	
 	//pflanzenschutz
 	else if (act.type == 4) {
-		//TODO
+		var kgProHa = act.kgProHa;
+		var ec = act.ec;
+		var indikation = act.indikation;
+		
+		//kg/ha
+		var row = $('#actDetailsEntryTemplate').clone();
+		row.removeAttr('id');
+		row.removeAttr('style');
+		row.find('.label').text("kg/ha: ");
+		row.find('.value').text(kgProHa);
+		row.appendTo('#actDetails ul');
+		
+		//ec
+		var row = $('#actDetailsEntryTemplate').clone();
+		row.removeAttr('id');
+		row.removeAttr('style');
+		row.find('.label').text("EC: ");
+		row.find('.value').text(ec);
+		row.appendTo('#actDetails ul');
+		
+		//indikation
+		var row = $('#actDetailsEntryTemplate').clone();
+		row.removeAttr('id');
+		row.removeAttr('style');
+		row.find('.label').text("Indikation: ");
+		row.find('.value').text(indikation);
+		row.appendTo('#actDetails ul');
+
 	}
-	
 	//ernte
 	else if (act.type == 3) {
-		//TODO
+		var dtProHa = act.dtProHa;
+		var menge = act.gesamtmenge;
+		var anlieferung = act.anlieferung;
+		
+		//dt/ha
+		var row = $('#actDetailsEntryTemplate').clone();
+		row.removeAttr('id');
+		row.removeAttr('style');
+		row.find('.label').text("dt/ha: ");
+		row.find('.value').text(dtProHa);
+		row.appendTo('#actDetails ul');
+		
+		//gesamtmenge
+		var row = $('#actDetailsEntryTemplate').clone();
+		row.removeAttr('id');
+		row.removeAttr('style');
+		row.find('.label').text("Gesamtmenge: ");
+		row.find('.value').text(menge);
+		row.appendTo('#actDetails ul');
+		
+		//Anlieferung
+		var row = $('#actDetailsEntryTemplate').clone();
+		row.removeAttr('id');
+		row.removeAttr('style');
+		row.find('.label').text("Anlieferung: ");
+		row.find('.value').text(anlieferung);
+		row.appendTo('#actDetails ul');
+	}
+	
+	//add bemerkung row
+	var row = $('#actDetailsEntryTemplate').clone();
+	row.removeAttr('id');
+	row.removeAttr('style');
+	row.find('.label').text("Bemerkung: ");
+	row.find('.value').text(bem);
+	row.appendTo('#actDetails ul');
+	
+	
+	//display link to map (if location for record is set)
+	var longitude = act.longitude;
+	var latitude  = act.latitude;
+	
+	if (longitude > 0 && latitude > 0) {
+		$('#actDetails ul').append(
+				'<h1><a class="grayButton" target="_blank" href="map.html?long=' 
+					+ longitude + '&lat=' + latitude + '">Karte</a></h1>');
 	}
 }
 

@@ -1,7 +1,7 @@
 CACHE MANIFEST
 #rev5
 CACHE:
-_index.html
+/favicon.ico
 style.css
 jqtouch/jqtouch.js
 jqtouch/jqtouch.css
@@ -11,6 +11,7 @@ jqtouch/jqtouch.transitions.js
 js/blockUI.js
 js/jquery-1.4.2.js
 js/agrisys.js
+js/geo.js
 images/aussaat.png
 images/boden.png
 images/duengung.png
@@ -36,3 +37,11 @@ themes/jqt/img/whiteButton.png
 themes/jqt/theme.css
 themes/jqt/theme.min.css
 loading_animated.svg
+
+NETWORK:
+map.html
+index.html
+/mobile/index.html
+/service/stammdaten?media=json
+/service/schlagList?media=json
+/service/aktivitaetList
