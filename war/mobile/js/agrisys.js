@@ -1,3 +1,5 @@
+var baseUrl = 'http://192.168.178.28:8888';
+//var baseUrl = 'http://agri-sys.appspot.com';
 var schlagData;
 var actListData;
 var stammdaten;
@@ -11,17 +13,16 @@ function init() {
 	blockUI();
 
 	//the stammdaten URL
-	var url = '/service/stammdaten?media=json';
+	var url = baseUrl + '/service/stammdaten?media=json';
 	
 	//load all schlagdata 
-	loadAndDisplaySchlagListData();
+	//loadAndDisplaySchlagListData();
 
 	//load stammdaten
 	$.ajax({
 		url: url,
 		type: 'GET',
 		success: function(data) {
-			console.log("stammdaten loaded: " + data);
 			stammdaten = data;
 			
 			//perform some post init task after the markup and the initial data has been loaded
@@ -38,13 +39,13 @@ function init() {
 	
 	/* add tap handlers */
 	
-	//listen on main page schlagliste button taps
-	$("#mainBtn a[href|='#schlagliste']").tap(function(event) {		
-		console.log("tapped on #schlagliste link");
-		//load and display schlag list
-		loadAndDisplaySchlagListData();
-	    return true;
-	});
+//	//listen on main page schlagliste button taps
+//	$("#mainBtn a[href|='#schlagliste']").tap(function(event) {		
+//		console.log("tapped on #schlagliste link");
+//		//load and display schlag list
+//		loadAndDisplaySchlagListData();
+//	    return true;
+//	});
 	
 	//listen on schlagliste item taps
 	$("#schlagliste ul li a").tap(function(event) {
@@ -52,7 +53,6 @@ function init() {
 		if (id == null) {
 			id = this.id;
 		}
-		console.log("tapped on : " + id);
 		//set current schlagerntejahrId
 		currentSchlagErntejahrId = id;
 		//load and display data
@@ -67,7 +67,6 @@ function init() {
 		if (id == null) {
 			id = this.id;
 		}
-		console.log("tapped on : " + id);
 		loadAndDisplayActEntry(id);
 	    return true;
 	});
@@ -95,32 +94,9 @@ function init() {
 		return true;
 	});
 
-	
-	/* listen on form save buttons tap */
-	$('#saveNewBoden').tap(function(e) {
-        onSaveNewBodenbearbeitung(this);
-        return true;
-    });
-	$('#saveNewAussaat').tap(function(e) {
-        onSaveNewAussaat(this);
-        return true;
-    });
-	$('#saveNewDuengung').tap(function(e) {
-        onSaveNewDuengung(this);
-        return true;
-    });
-	$('#saveNewPflanzenschutz').tap(function(e) {
-        onSaveNewPflanzenschutz(this);
-        return true;
-    });
-	$('#saveNewErnte').tap(function(e) {
-        onSaveNewErnte(this);
-        return true;
-    });
-
 	//set current date in dateInput forms input field
 	var date = getDateString(new Date());
-	$('#newBodenForm #dateInput').attr('value', date);
+	$('#dateInput').attr('value', date);
 	$('#newAussaatForm #dateInput').attr('value', date);
 	$('#newDuengungForm #dateInput').attr('value', date);
 	$('#newPflanzenschutzForm #dateInput').attr('value', date);
@@ -135,18 +111,17 @@ function refreshGeoPosition() {
 	if (navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(geoSuccess, geoError);		
 	} else {
-		console.log("Geo location Feature nicht unterstützt!");
+		//console.log("Geo location Feature nicht unterstützt!");
 	}
 }
 
 function geoSuccess(position) {
 	latitude = position.coords.latitude;
 	longitude = position.coords.longitude;
-  	console.log('latitude: '+latitude+' - longitude: '+longitude);
 }
  
 function geoError(msg) {
-	console.log(typeof msg == 'string' ? msg : "error");
+	alert(typeof msg == 'string' ? msg : "error");
 }
 
 //perform some post init tasks after markup and initial data has been loaded
@@ -208,7 +183,6 @@ function getDateString(date) {
 }
 
 function onSaveNewBodenbearbeitung(form) {
-	console.log(form);
 	var type = 0;
 	var fl = $('#newBodenForm input[name=flaeche]').val();
 	var date = $('#newBodenForm input[name=dateInput]').val();
@@ -229,7 +203,6 @@ function onSaveNewBodenbearbeitung(form) {
 }
 
 function onSaveNewDuengung(form) {
-	console.log(form);
 	var type = 2;
 	var fl = $('#newDuengungForm input[name=flaeche]').val();
 	var date = $('#newDuengungForm input[name=dateInput]').val();
@@ -254,7 +227,6 @@ function onSaveNewDuengung(form) {
 }
 
 function onSaveNewAussaat(form) {
-	console.log(form);
 	var type = 1;
 	var fl = $('#newAussaatForm input[name=flaeche]').val();
 	var date = $('#newAussaatForm input[name=dateInput]').val();
@@ -277,7 +249,6 @@ function onSaveNewAussaat(form) {
 }
 
 function onSaveNewPflanzenschutz(form) {
-	console.log(form);
 	var type = 4;
 	var fl = $('#newPflanzenschutzForm input[name=flaeche]').val();
 	var date = $('#newPflanzenschutzForm input[name=dateInput]').val();
@@ -304,7 +275,6 @@ function onSaveNewPflanzenschutz(form) {
 }
 
 function onSaveNewErnte(form) {
-	console.log(form);
 	var type = 3;
 	var fl = $('#newErnteForm input[name=flaeche]').val();
 	var date = $('#newErnteForm input[name=dateInput]').val();
@@ -330,15 +300,12 @@ function onSaveNewErnte(form) {
 
 //saves the ontained data (using server) 
 function save(data) {
-	console.log(data);
-
 	$.ajax({
-		url: '/service/aktivitaet/0?media=json',
+		url: baseUrl + '/service/aktivitaet/0?media=json',
 		type:'PUT',
 		contentType: "application/json",
 		data: data,
 		success : function() { 
-			console.log("Data stored!");
 			//alert("data stored: " + data);
 		},
     	error: function(error) {
@@ -355,15 +322,13 @@ function displayPosition(pos) {
     var alt = (pos.coords.altitude != null ? pos.coords.altitude : 0);
 	var outputStr = "Position: lat:"+ lat + " long:"+ lon + " alt:"+ alt;
 
-	console.log(outputStr);
-		
 	document.getElementById("info").innerHTML=outputStr;;
 	
 }
 
 //log error message
 function error(msg) {
-  console.log(typeof msg == 'string' ? msg : "error");
+  alert(typeof msg == 'string' ? msg : "error");
 }
 
 function getSchlag(schlagErntejahrId) {
@@ -387,10 +352,9 @@ function loadAndDisplayAktivitaetListData(schlagErntejahrId) {
 	blockUI();
 	
 	//empty this list
-	$('#actList ul li').hide();
+	$('#aktivitaetListe ul li').hide();
 
-	console.log('load and dispaly aktivitaet list data for flurstueck with id ' + schlagErntejahrId + " ...");
-	var url = '/service/aktivitaetList/' + schlagErntejahrId + '?media=json';
+	var url = baseUrl + '/service/aktivitaetList/' + schlagErntejahrId + '?media=json';
 
 	
 	$.ajax({
@@ -411,52 +375,51 @@ function loadAndDisplayAktivitaetListData(schlagErntejahrId) {
 function onActListDataLoaded(data, schlagErntejahrId) {
 	actListData = data;
 	
-	console.log('Load was performed.');
-	console.log(data);
-	
 	var s = getSchlag(schlagErntejahrId);
-	console.log('Schlag: ' + s);
-	$('#actList h1').text(s.flurstueck.name);
+	$('#aktivitaetListe h1').text(s.flurstueck.name);
 	
-	$('#actList ul').append('<li class="sep">Bodenbearbeitung</li>');
+	$('#aktivitaetListe ul').append('<li data-role="list-divider">Bodenbearbeitung</li>');
 	$.each(data, function(akt) {
 		if (this.type == 0){
 			var newEntryRow = createEntry(this);
-			$('#actList ul').append(newEntryRow);
+			$('#aktivitaetListe ul').append(newEntryRow);
 		}
 	});
 	
-	$('#actList ul').append('<li class="sep">Aussaat</li>');
+	$('#aktivitaetListe ul').append('<li data-role="list-divider">Aussaat</li>');
 	$.each(data, function(akt) {
 		if (this.type == 1){
 			var newEntryRow = createEntry(this);
-			$('#actList ul').append(newEntryRow);
+			$('#aktivitaetListe ul').append(newEntryRow);
 		}
 	});
 	
-	$('#actList ul').append('<li class="sep">Düngung</li>');
+	$('#aktivitaetListe ul').append('<li data-role="list-divider">Düngung</li>');
 	$.each(data, function(akt) {
 		if (this.type == 2){
 			var newEntryRow = createEntry(this);
-			$('#actList ul').append(newEntryRow);
+			$('#aktivitaetListe ul').append(newEntryRow);
 		}
 	});
 	
-	$('#actList ul').append('<li class="sep">Pflanzenschutz</li>');
+	$('#aktivitaetListe ul').append('<li data-role="list-divider">Pflanzenschutz</li>');
 	$.each(data, function(akt) {
 		if (this.type == 4){
 			var newEntryRow = createEntry(this);
-			$('#actList ul').append(newEntryRow);
+			$('#aktivitaetListe ul').append(newEntryRow);
 		}
 	});
 	
-	$('#actList ul').append('<li class="sep">Ernte</li>');
+	$('#aktivitaetListe ul').append('<li data-role="list-divider">Ernte</li>');
 	$.each(data, function(akt) {
 		if (this.type == 3){
 			var newEntryRow = createEntry(this);
-			$('#actList ul').append(newEntryRow);
+			$('#aktivitaetListe ul').append(newEntryRow);
 		}
 	});
+	
+	//refresh the list
+	$('#aktivitaetListe ul').listview('refresh');
 }
 
 function createEntry(data) {
@@ -466,7 +429,7 @@ function createEntry(data) {
 		datum = data.datum.substring(0, 10);
 	}
 	var flaeche = data.flaeche;
-	var typ = getTypeString(data.type);
+	//var typ = getTypeString(data.type);
 	
 	var newEntryRow = $('#actEntryTemplate').clone();
 	newEntryRow.removeAttr('id');
@@ -474,7 +437,7 @@ function createEntry(data) {
 
 	newEntryRow.data('entryId', id);
 	newEntryRow.find('.label').text(datum);
-	newEntryRow.find('.flaeche').text(flaeche + ' ha - ' + typ);
+	newEntryRow.find('.flaeche').text(flaeche + ' ha');
 	newEntryRow.find('a').attr('id', id);
 	
 	return newEntryRow;
@@ -530,12 +493,10 @@ function loadAndDisplaySchlagListData() {
 		return;
 	}
 	
-	console.log('load and display schlaglist data...');
-	
 	//show busy indocator
 	blockUI();
 
-	var url = '/service/schlagList?media=json';
+	var url = baseUrl + '/service/schlagList?media=json';
 	$.ajax({
 		url: url,
 		type: 'GET',
@@ -552,9 +513,6 @@ function loadAndDisplaySchlagListData() {
 }
 
 function onSchlagDataLoaded(data) {
-	console.log('Load was performed.');
-	console.log(data);
-	
 	schlagData = data;
 
 	$.each(data, function(schlag) {
@@ -565,8 +523,6 @@ function onSchlagDataLoaded(data) {
 		var kultur = getKulturString(this.schlagErntejahr.anbauKultur.id);
 		var sorte = getSorteString(this.schlagErntejahr.anbauSorte.id);
 		
-		console.log(id);
-
 		var newEntryRow = $('#schlagEntryTemplate').clone();
 		newEntryRow.removeAttr('id');
 		newEntryRow.removeAttr('style');
@@ -583,6 +539,8 @@ function onSchlagDataLoaded(data) {
 	});
 }
 
+
+//load activitaet details entry data
 function loadAndDisplayActEntry(id) {
 	var act = null;
 	for (var i=0; i<actListData.length; i++) {
@@ -595,8 +553,6 @@ function loadAndDisplayActEntry(id) {
 	if (act == null) {
 		return;
 	}
-	
-	console.log("display entry: " + act.id);
 	
 	//empty this list
 	$('#actDetails ul li').hide();
@@ -765,32 +721,17 @@ function loadAndDisplayActEntry(id) {
 	var latitude  = act.latitude;
 	
 	if (longitude > 0 && latitude > 0) {
-		$('#actDetails ul').append(
-				'<h1><a class="grayButton" target="_blank" href="map.html?long=' 
-					+ longitude + '&lat=' + latitude + '">Karte</a></h1>');
+		$('#actDetails ul').append('<li><a target="_blank" href="map.html?long=' 
+				+ longitude + '&lat=' + latitude + '">Karte</a></li>');
 	}
+	
+	//don't forget to refresh the list
+	$('#actDetails ul').listview('refresh');
 }
 
 
 function blockUI() {
-	$.blockUI({
-		message: '<h1 style="color: white">Bitte Warten...</h1>',
-		css: { 
-			opacity: .75, 
-	        border: 'none', 
-	        padding: '15px', 
-	        '-webkit-border-radius': '10px', 
-	        '-moz-border-radius': '10px', 
-	        color: '#fff',
-	        top: $(window).height() * 0.1 + 'px',  
-	        height: $(window).height() * 0.2 + 'px',
-	        left: '10%', 
-	        width: '80%',
-	        theme: true
-    	} 
-	}); 
 }
 
 function unblockUI() {
-	$.unblockUI();
 }

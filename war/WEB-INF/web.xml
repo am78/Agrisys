@@ -30,6 +30,10 @@
 		<filter-name>AuthFilter</filter-name>
 		<url-pattern>/mobile/*</url-pattern>
 	</filter-mapping>
+	<filter-mapping>
+		<filter-name>AuthFilter</filter-name>
+		<url-pattern>/jqm/*</url-pattern>
+	</filter-mapping>
 
 	<!-- Servlets -->
 	<servlet>
@@ -106,7 +110,8 @@
     		<url-pattern>/report/*</url-pattern>
 		    <url-pattern>/service/*</url-pattern> 
     		<url-pattern>/backup/*</url-pattern>
-    		<url-pattern>/mobile/*</url-pattern>  
+    		<url-pattern>/mobile/*</url-pattern>
+    		<url-pattern>/jqm/*</url-pattern>    
 		<!-- 	
     		--> 
 		</web-resource-collection>
