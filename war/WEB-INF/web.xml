@@ -21,7 +21,12 @@
 	<filter-mapping>
 		<filter-name>AuthFilter</filter-name>
 		<url-pattern>/backup/*</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>AuthFilter</filter-name>
+		<url-pattern>/backupMail/*</url-pattern>
 	</filter-mapping>	
+		
 	<filter-mapping>
 		<filter-name>AuthFilter</filter-name>
 		<url-pattern>/report/*</url-pattern>
@@ -29,10 +34,6 @@
 	<filter-mapping>
 		<filter-name>AuthFilter</filter-name>
 		<url-pattern>/mobile/*</url-pattern>
-	</filter-mapping>
-	<filter-mapping>
-		<filter-name>AuthFilter</filter-name>
-		<url-pattern>/jqm/*</url-pattern>
 	</filter-mapping>
 
 	<!-- Servlets -->
@@ -80,6 +81,16 @@
 		<url-pattern>/backup/*</url-pattern>
 	</servlet-mapping>
 	
+	<!-- BackupMail Servlet -->
+	<servlet>
+		<servlet-name>backupMailServlet</servlet-name>
+		<servlet-class>com.anteboth.agrisys.server.BackupMailServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>backupMailServlet</servlet-name>
+		<url-pattern>/backupMail/*</url-pattern>
+	</servlet-mapping>
+	
 	<!-- ReportServlet -->
 	<servlet>
 		<servlet-name>reportServlet</servlet-name>
@@ -110,8 +121,8 @@
     		<url-pattern>/report/*</url-pattern>
 		    <url-pattern>/service/*</url-pattern> 
     		<url-pattern>/backup/*</url-pattern>
+    		<url-pattern>/backupMail/*</url-pattern>    
     		<url-pattern>/mobile/*</url-pattern>
-    		<url-pattern>/jqm/*</url-pattern>    
 		<!-- 	
     		--> 
 		</web-resource-collection>

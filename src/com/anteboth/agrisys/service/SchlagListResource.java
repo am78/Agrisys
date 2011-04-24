@@ -10,6 +10,7 @@ import com.anteboth.agrisys.client.model.Schlag;
 import com.anteboth.agrisys.client.model.res.ISchlagListResource;
 import com.anteboth.agrisys.server.ServiceManager;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 /**
  * Resource for a list of Schlag items.
@@ -42,7 +43,10 @@ public class SchlagListResource extends ServerResource implements ISchlagListRes
 	public String retrieveJson() {
 		Schlag[] data = retrieve();
 		
-		Gson gson = new Gson();
+		GsonBuilder gb = new GsonBuilder();
+		gb.setDateFormat("dd.MM.yyyy");
+		gb.setPrettyPrinting();
+		Gson gson = gb.create();
 		String s = gson.toJson(data);
 		
 		return s;

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cronentries>
+  <cron>
+    <url>/backupMail</url>
+    <description>Mail out a weekly backup</description>
+    <schedule>every monday 08:30</schedule>
+    <timezone>Europe/Berlin</timezone>
+  </cron>
+</cronentries>

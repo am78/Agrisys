@@ -1,5 +1,6 @@
-var baseUrl = 'http://192.168.178.28:8888';
 //var baseUrl = 'http://agri-sys.appspot.com';
+//var baseUrl = 'http://192.168.178.26:8888';
+var baseUrl = '';
 var schlagData;
 var actListData;
 var stammdaten;
@@ -11,12 +12,90 @@ var latitude = -1;
 //init
 function init() {
 	blockUI();
+	//load stammdaten
+	loadStammdaten();
 
+	loadAndDisplaySchlagListData();
+	
+	/* add tap handlers */
+	
+	//called when Schlagliste is about to open
+	$('#schlagliste').live('pagebeforeshow',function(event, ui){
+		loadAndDisplaySchlagListData();
+	});		
+
+	//listener for tap/click on schlagliste item 
+	$('#schlagliste li a').live('tap',function(event, ui){
+		loadAndDisplayAktivitaetListData($(this).attr('id'));
+	});
+	$('#schlagliste li a').live('click',function(event, ui){
+		loadAndDisplayAktivitaetListData($(this).attr('id'));
+	});
+
+	//listener for tap/click on aktivitaet liste item 
+	$('#aktivitaetListe li a').live('tap',function(event, ui){
+		loadAndDisplayActEntry($(this).attr('id'));
+	});
+	$('#aktivitaetListe li a').live('click',function(event, ui){
+		loadAndDisplayActEntry($(this).attr('id'));
+	});
+
+
+	//add save button handlers
+	$('#saveNewBoden').live('tap',function(event, ui){			
+		onSaveNewBodenbearbeitung($('#newBodenForm'));
+	});
+	$('#saveNewBoden').live('click',function(event, ui){
+		onSaveNewBodenbearbeitung($('#newBodenForm'));
+	});
+
+	$('#saveNewAussaat').live('tap',function(event, ui){			
+		onSaveNewAussaat($('#newAussaatForm'));
+	});
+	$('#saveNewAussaat').live('click',function(event, ui){
+		onSaveNewAussaat($('#newAussaatForm'));
+	});
+
+	$('#saveNewDuengung').live('tap',function(event, ui){			
+		onSaveNewDuengung($('#newDuengungForm'));
+	});
+	$('#saveNewDuengung').live('click',function(event, ui){
+		onSaveNewDuengung($('#newDuengungForm'));
+	});
+
+	$('#saveNewPflanzenschutz').live('tap',function(event, ui){			
+		onSaveNewPflanzenschutz($('#newPflanzenschutzForm'));
+	});
+	$('#saveNewPflanzenschutz').live('click',function(event, ui){
+		onSaveNewPflanzenschutz($('#newPflanzenschutzForm'));
+	});
+
+	$('#saveNewErnte').live('tap',function(event, ui){			
+		onSaveNewErnte($('#newErnteForm'));
+	});
+	$('#saveNewErnte').live('click',function(event, ui){
+		onSaveNewErnte($('#newErnteForm'));
+	});
+	
+	$('#mainBtn a').live('click',function(event, ui){
+		refreshGeoPosition();
+	});
+	
+
+	//refresh the geo location
+	refreshGeoPosition();
+	
+	unblockUI();
+}
+
+function loadStammdaten() {
 	//the stammdaten URL
 	var url = baseUrl + '/service/stammdaten?media=json';
 	
 	//load all schlagdata 
 	//loadAndDisplaySchlagListData();
+	
+	blockUI();
 
 	//load stammdaten
 	$.ajax({
@@ -24,104 +103,34 @@ function init() {
 		type: 'GET',
 		success: function(data) {
 			stammdaten = data;
-			
+			unblockUI();
 			//perform some post init task after the markup and the initial data has been loaded
 			postInit();
-			
-			unblockUI();
 		},
 		error: function(error) { 
 			unblockUI();
 			alert("Fehler beim Laden der Stammdaten:\n" + error.status + " : " + error.statusText);
 		}
 	});
-	
-	
-	/* add tap handlers */
-	
-//	//listen on main page schlagliste button taps
-//	$("#mainBtn a[href|='#schlagliste']").tap(function(event) {		
-//		console.log("tapped on #schlagliste link");
-//		//load and display schlag list
-//		loadAndDisplaySchlagListData();
-//	    return true;
-//	});
-	
-	//listen on schlagliste item taps
-	$("#schlagliste ul li a").tap(function(event) {
-		var id = $(event.target).attr('entryid');
-		if (id == null) {
-			id = this.id;
-		}
-		//set current schlagerntejahrId
-		currentSchlagErntejahrId = id;
-		//load and display data
-		loadAndDisplayAktivitaetListData(id);
-		
-	    return true;
-	}); 
-
-	//listen on actList item taps
-	$("#actList ul li a").tap(function(event) {
-		var id = $(event.target).attr('entryid');
-		if (id == null) {
-			id = this.id;
-		}
-		loadAndDisplayActEntry(id);
-	    return true;
-	});
-
-	
-	/* we want to refresh the geolocation whenever a new entry form get opened */
-	$("#mainBtn a[href|='#newErnteForm']").tap(function(e) {		
-		refreshGeoPosition();
-		return true;
-	});
-	$("#mainBtn a[href|='#newBodenForm']").tap(function(e) {		
-		refreshGeoPosition();
-		return true;
-	});
-	$("#mainBtn a[href|='#newPflanzenschutzForm']").tap(function(e) {		
-		refreshGeoPosition();
-		return true;
-	});
-	$("#mainBtn a[href|='#newAussaatForm']").tap(function(e) {		
-		refreshGeoPosition();
-		return true;
-	});
-	$("#mainBtn a[href|='#newDuengungForm']").tap(function(e) {		
-		refreshGeoPosition();
-		return true;
-	});
-
-	//set current date in dateInput forms input field
-	var date = getDateString(new Date());
-	$('#dateInput').attr('value', date);
-	$('#newAussaatForm #dateInput').attr('value', date);
-	$('#newDuengungForm #dateInput').attr('value', date);
-	$('#newPflanzenschutzForm #dateInput').attr('value', date);
-	$('#newErnteForm #dateInput').attr('value', date);
-
-	//refresh the geo location
-	refreshGeoPosition();
 }
 
 function refreshGeoPosition() {
 	//get geo location (if feature is available)
 	if (navigator.geolocation) {
-		navigator.geolocation.getCurrentPosition(geoSuccess, geoError);		
+		navigator.geolocation.getCurrentPosition(geoSuccess, geoError, { enableHighAccuracy: true });
 	} else {
-		//console.log("Geo location Feature nicht unterstützt!");
+		//console.log("Geo location Feature nicht unterst√ºtzt!");
 	}
 }
 
 function geoSuccess(position) {
 	latitude = position.coords.latitude;
 	longitude = position.coords.longitude;
+	//alert(position);
 }
  
 function geoError(msg) {
-	alert(typeof msg == 'string' ? msg : "error");
+	//alert(typeof msg == 'string' ? msg : "error");
 }
 
 //perform some post init tasks after markup and initial data has been loaded
@@ -165,7 +174,7 @@ function postInit2() {
 	if (!initialized && schlagData != null) {
 		initialized = true;
 		
-		//add schlag items to all Aktivität input forms
+		//add schlag items to all Aktivit√§t input forms
 		for (var i=0; i<schlagData.length; i++) {
 			var id = schlagData[i].schlagErntejahr.id;
 			var name = schlagData[i].flurstueck.name;
@@ -182,11 +191,18 @@ function getDateString(date) {
 	return day + '.' + month + '.' + year;
 }
 
+function getDouble(value) {
+	if (value != null) {
+		return value.replace(",", ".");
+	}
+	return value;
+}
+
 function onSaveNewBodenbearbeitung(form) {
 	var type = 0;
-	var fl = $('#newBodenForm input[name=flaeche]').val();
+	var fl = getDouble($('#newBodenForm input[name=flaeche]').val());
 	var date = $('#newBodenForm input[name=dateInput]').val();
-	var remark = $('#newBodenForm input[name=remark]').val();
+	var remark = $('#newBodenForm textarea[name=remark]').val();
 	var bodenbearbeitungTyp = $('#newBodenForm select[name=bodenbearbeitungTypInput]').val();
 	var schlagErntejahrId = $('#newBodenForm select[name=schlagInput]').val();;
 	
@@ -204,13 +220,13 @@ function onSaveNewBodenbearbeitung(form) {
 
 function onSaveNewDuengung(form) {
 	var type = 2;
-	var fl = $('#newDuengungForm input[name=flaeche]').val();
+	var fl = getDouble($('#newDuengungForm input[name=flaeche]').val());
 	var date = $('#newDuengungForm input[name=dateInput]').val();
-	var remark = $('#newDuengungForm input[name=remark]').val();
+	var remark = $('#newBodenForm textarea[name=remark]').val();
 	var duengerart = $('#newDuengungForm select[name=duengerartInput]').val();
 	var schlagErntejahrId = $('#newDuengungForm select[name=schlagInput]').val();
-	var kgProHa = $('#newDuengungForm input[name=kgProHa]').val();
-	var ec = $('#newDuengungForm input[name=ec]').val();
+	var kgProHa = getDouble($('#newDuengungForm input[name=kgProHa]').val());
+	var ec = getDouble($('#newDuengungForm input[name=ec]').val());
 	
 	var data = '{"datum":"' + date + 
 		'","type":"' + type + 
@@ -228,11 +244,11 @@ function onSaveNewDuengung(form) {
 
 function onSaveNewAussaat(form) {
 	var type = 1;
-	var fl = $('#newAussaatForm input[name=flaeche]').val();
+	var fl = getDouble($('#newAussaatForm input[name=flaeche]').val());
 	var date = $('#newAussaatForm input[name=dateInput]').val();
-	var remark = $('#newAussaatForm input[name=remark]').val();
+	var remark = $('#newBodenForm textarea[name=remark]').val();
 	var schlagErntejahrId = $('#newAussaatForm select[name=schlagInput]').val();
-	var kgProHa = $('#newAussaatForm input[name=kgProHa]').val();
+	var kgProHa = getDouble($('#newAussaatForm input[name=kgProHa]').val());
 	var beize = $('#newAussaatForm input[name=beize]').val();
 	
 	var data = '{"datum":"' + date + 
@@ -250,13 +266,13 @@ function onSaveNewAussaat(form) {
 
 function onSaveNewPflanzenschutz(form) {
 	var type = 4;
-	var fl = $('#newPflanzenschutzForm input[name=flaeche]').val();
+	var fl = getDouble($('#newPflanzenschutzForm input[name=flaeche]').val());
 	var date = $('#newPflanzenschutzForm input[name=dateInput]').val();
-	var remark = $('#newPflanzenschutzForm input[name=remark]').val();
+	var remark = $('#newBodenForm textarea[name=remark]').val();
 	var psMittel = $('#newPflanzenschutzForm select[name=psMittelInput]').val();
 	var schlagErntejahrId = $('#newPflanzenschutzForm select[name=schlagInput]').val();
-	var kgProHa = $('#newPflanzenschutzForm input[name=kgProHa]').val();
-	var ec = $('#newPflanzenschutzForm input[name=ec]').val();
+	var kgProHa = getDouble($('#newPflanzenschutzForm input[name=kgProHa]').val());
+	var ec = getDouble($('#newPflanzenschutzForm input[name=ec]').val());
 	var indikation = $('#newPflanzenschutzForm input[name=indikation]').val();
 	
 	var data = '{"datum":"' + date + 
@@ -276,12 +292,12 @@ function onSaveNewPflanzenschutz(form) {
 
 function onSaveNewErnte(form) {
 	var type = 3;
-	var fl = $('#newErnteForm input[name=flaeche]').val();
+	var fl = getDouble($('#newErnteForm input[name=flaeche]').val());
 	var date = $('#newErnteForm input[name=dateInput]').val();
-	var remark = $('#newErnteForm input[name=remark]').val();
+	var remark = $('#newBodenForm textarea[name=remark]').val();
 	var schlagErntejahrId = $('#newErnteForm select[name=schlagInput]').val();
-	var dtProHa = $('#newErnteForm input[name=dtProHa]').val();
-	var gesamtmenge = $('#newErnteForm input[name=gesamtmenge]').val();
+	var dtProHa = getDouble($('#newErnteForm input[name=dtProHa]').val());
+	var gesamtmenge = getDouble($('#newErnteForm input[name=gesamtmenge]').val());
 	var anlieferung = $('#newErnteForm input[name=anlieferung]').val();
 	
 	var data = '{"datum":"' + date + 
@@ -300,17 +316,19 @@ function onSaveNewErnte(form) {
 
 //saves the ontained data (using server) 
 function save(data) {
+	blockUI();
 	$.ajax({
 		url: baseUrl + '/service/aktivitaet/0?media=json',
 		type:'PUT',
 		contentType: "application/json",
 		data: data,
 		success : function() { 
-			//alert("data stored: " + data);
+			alert("Daten gespeichert!");
+			unblockUI();
 		},
     	error: function(error) {
+			unblockUI();
 			alert("Fehler beim Speichern der Daten:\n" + error.status + " : " + error.statusText);
-			//TODO bessere Error handling
 		}
 	});
 }
@@ -394,7 +412,7 @@ function onActListDataLoaded(data, schlagErntejahrId) {
 		}
 	});
 	
-	$('#aktivitaetListe ul').append('<li data-role="list-divider">Düngung</li>');
+	$('#aktivitaetListe ul').append('<li data-role="list-divider">D√ºngung</li>');
 	$.each(data, function(akt) {
 		if (this.type == 2){
 			var newEntryRow = createEntry(this);
@@ -450,7 +468,7 @@ function getTypeString(type) {
 	} else if (type == 1) {
 		t = 'Aussaat';
 	} else if (type == 2) {
-		t = 'Düngung';
+		t = 'D√ºngung';
 	} else if (type == 3) {
 		t = 'Ernte';
 	} else if (type == 4) {
@@ -518,7 +536,7 @@ function onSchlagDataLoaded(data) {
 	$.each(data, function(schlag) {
 		var fs = this.flurstueck;
 		var name = fs.name;
-		var flaeche = fs.flaeche;
+		var flaeche = this.schlagErntejahr.flaeche; 
 		var id = this.schlagErntejahr.id;
 		var kultur = getKulturString(this.schlagErntejahr.anbauKultur.id);
 		var sorte = getSorteString(this.schlagErntejahr.anbauSorte.id);
@@ -578,7 +596,7 @@ function loadAndDisplayActEntry(id) {
 	var row = $('#actDetailsEntryTemplate').clone();
 	row.removeAttr('id');
 	row.removeAttr('style');
-	row.find('.label').text("Fläche: ");
+	row.find('.label').text("Fl√§che: ");
 	row.find('.value').text(flaeche + " ha");
 	row.appendTo('#actDetails ul');
 	
@@ -625,7 +643,7 @@ function loadAndDisplayActEntry(id) {
 		var row = $('#actDetailsEntryTemplate').clone();
 		row.removeAttr('id');
 		row.removeAttr('style');
-		row.find('.label').text("Dünger: ");
+		row.find('.label').text("D√ºnger: ");
 		row.find('.value').text(duengerart);
 		row.appendTo('#actDetails ul');
 		
@@ -731,7 +749,9 @@ function loadAndDisplayActEntry(id) {
 
 
 function blockUI() {
+//	window.AGRISYS.showBusyIndicator();	
 }
 
 function unblockUI() {
+//	window.AGRISYS.hideBusyIndicator();	
 }

@@ -7,7 +7,8 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
+<title>Agrisys Mobile</title>
+<script type="text/javascript" src="js/phonegap.0.9.4.js"></script>
 </head>
 <body>
 
@@ -30,7 +31,7 @@ else {
 	<h1>not logged in</h1>
 	
 	<script type="text/javascript">
-		window.AGRISYS.loginStatus("logged_oud");
+		window.AGRISYS.loginStatus("logged_out");
 	</script>	
 <%
 }

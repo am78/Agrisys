@@ -1,5 +1,5 @@
 <!DOCTYPE html>  
-<html manifest="_agrisys.manifest">
+<html manifest="agrisys.manifest">
 
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -7,81 +7,24 @@
 	<title>Agrisys mobile</title>
     
     <link rel="stylesheet" href="style.css" />
-	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.0a4.1/jquery.mobile-1.0a4.1.min.css" />
+	<link rel="stylesheet" href="jquery.mobile/jquery.mobile-1.0a4.1.min.css" />
     	
+	<script src="js/jquery-1.5.min.js"></script>
 	<script type="text/javascript" src="js/agrisys.js"></script>
-	<script src="http://code.jquery.com/jquery-1.5.min.js"></script>
-	<script src="http://code.jquery.com/mobile/1.0a4.1/jquery.mobile-1.0a4.1.min.js"></script>	
+	<script src="jquery.mobile/jquery.mobile-1.0a4.1.min.js"></script>
 	
 	<script type="text/javascript">
 		//do some initializations
 		init();
 
-		//called when Schlagliste is about to open
-		$('#schlagliste').live('pagebeforeshow',function(event, ui){
-			loadAndDisplaySchlagListData();
-		});		
-
-		//listener for tap/click on schlagliste item 
-		$('#schlagliste li a').live('tap',function(event, ui){
-			loadAndDisplayAktivitaetListData($(this).attr('id'));
-		});
-		$('#schlagliste li a').live('click',function(event, ui){
-			loadAndDisplayAktivitaetListData($(this).attr('id'));
-		});
-
-		//listener for tap/click on aktivitaet liste item 
-		$('#aktivitaetListe li a').live('tap',function(event, ui){
-			loadAndDisplayActEntry($(this).attr('id'));
-		});
-		$('#aktivitaetListe li a').live('click',function(event, ui){
-			loadAndDisplayActEntry($(this).attr('id'));
-		});
-
-
-		//add save button handlers
-		$('#saveNewBoden').live('tap',function(event, ui){			
-			onSaveNewBodenbearbeitung($('#newBodenForm'));
-		});
-		$('#saveNewBoden').live('click',function(event, ui){
-			onSaveNewBodenbearbeitung($('#newBodenForm'));
-		});
-
-		$('#saveNewAussaat').live('tap',function(event, ui){			
-			onSaveNewAussaat($('#newAussaatForm'));
-		});
-		$('#saveNewAussaat').live('click',function(event, ui){
-			onSaveNewAussaat($('#newAussaatForm'));
-		});
-
-		$('#saveNewDuengung').live('tap',function(event, ui){			
-			onSaveNewDuengung($('#newDuengungForm'));
-		});
-		$('#saveNewDuengung').live('click',function(event, ui){
-			onSaveNewDuengung($('#newDuengungForm'));
-		});
-
-		$('#saveNewPflanzenschutz').live('tap',function(event, ui){			
-			onSaveNewPflanzenschutz($('#newPflanzenschutzForm'));
-		});
-		$('#saveNewPflanzenschutz').live('click',function(event, ui){
-			onSaveNewPflanzenschutz($('#newPflanzenschutzForm'));
-		});
-
-		$('#saveNewErnte').live('tap',function(event, ui){			
-			onSaveNewErnte($('#newErnteForm'));
-		});
-		$('#saveNewErnte').live('click',function(event, ui){
-			onSaveNewErnte($('#newErnteForm'));
-		});
-		
-
 		$.mobile.page.prototype.options.backBtnText = "Zur&uuml;ck";
 		
-	</script>
+	</script>		
+	
 </head>
 <body>
 
+	
 <!-- MAIN PAGE -->
 <div data-role="page" id="main">
 	<div data-role="header">
@@ -90,34 +33,34 @@
 	<div data-role="content">			
 		<div id="wrapper">
 			<div id="leftcol" align="center">
-				<div id="mainBtn" class="forceSlide">
+				<div id="mainBtn">
 					<a href="#schlagliste">
 						<img src="images/list_icon.png" height="100"/>
 					</a>
 				</div>
-				<div id="mainBtn" class="forceSlide">
+				<div id="mainBtn">
 					<a href="#newBodenForm">
 						<img src="images/boden.png" height="100"/>
 					</a>
 				</div>
-				<div id="mainBtn" class="forceSlide">
+				<div id="mainBtn">
 					<a href="#newPflanzenschutzForm">
 						<img src="images/pflanzenschutz.png" height="100"/>
 					</a>
 				</div>
 			</div>
 			<div id="rightcol" align="center">
-				<div id="mainBtn" class="forceSlide">
+				<div id="mainBtn">
 					<a href="#newAussaatForm">
 						<img src="images/aussaat.png" height="100"/>
 					</a>
 				</div>
-				<div id="mainBtn" class="forceSlide">
+				<div id="mainBtn">
 					<a href="#newDuengungForm">
 						<img src="images/duengung.png" height="100"/>
 					</a>
 				</div>
-				<div id="mainBtn" class="forceSlide">
+				<div id="mainBtn">
 					<a href="#newErnteForm">
 						<img src="images/ernte.png" height="100"/>
 					</a>
@@ -138,6 +81,9 @@
          		<a href="#aktivitaetListe" id="-1">
          			<div class="label">Schlag 1</div>
 					<div class="flaeche" style="font-size: 9pt;">45 ha</div>
+					
+					<span class="kultur" style="font-size: 9pt;">Kultur</span> - 
+					<span class="sorte" style="font-size: 9pt;">Sorte</span>
          		</a>
 	        </li>            
         </ul>		
@@ -202,7 +148,7 @@
 				<input type="date" name="dateInput" id="dateInput" value=""/>
 			</div>
 			<div>
-				<label class="mandatory" for="flaeche">Fläche in ha</label>
+				<label class="mandatory" for="flaeche"><strong>Fläche in ha</strong></label>
 				<input type="number" name="flaeche" id="flaeche"/>
 			</div>
 			<div>
@@ -212,7 +158,11 @@
 		</form>        	
 	</div><!-- /content -->
 </div><!-- /page -->
-	
+
+<script type="text/javascript">
+	var date = getDateString(new Date());
+	$('#newBodenForm #dateInput').attr('value', date);
+</script>
 
 	
 <!-- Eingabeformular für Aussaat-Aktivität -->
@@ -233,11 +183,11 @@
 				<input type="date" name="dateInput" id="dateInput"/>
 			</div>
 			<div>
-				<label class="mandatory" for="flaeche">Fl&auml;che in ha</label>
+				<label class="mandatory" for="flaeche"><strong>Fl&auml;che in ha</strong></label>
 				<input type="number" name="flaeche" id="flaeche" />
 			</div>
 			<div>
-				<label class="mandatory" for="kgProHa">kg/ha</label>
+				<label class="mandatory" for="kgProHa"><strong>kg/ha</strong></label>
 				<input type="number" name="kgProHa" id="kgProHa" />
 			</div>
 			<div>
@@ -251,6 +201,11 @@
 		</form>
 	</div>
 </div>
+<script type="text/javascript">
+	var date = getDateString(new Date());
+	$('#newAussaatForm #dateInput').attr('value', date);
+</script>
+
 	
 <!-- Eingabeformular für Duengung-Aktivität -->
 <div data-role="page" id="newDuengungForm">
@@ -274,11 +229,11 @@
 				<input type="date" name="dateInput" id="dateInput"   />
 			</div>
 			<div>
-				<label class="mandatory" for="flaeche">Fl&auml;che in ha</label>
+				<label class="mandatory" for="flaeche"><strong>Fl&auml;che in ha</strong></label>
 				<input type="number" name="flaeche" id="flaeche" />
 			</div>
 			<div>
-				<label class="mandatory" for="kgProHa">kg/ha</label>
+				<label class="mandatory" for="kgProHa"><strong>kg/ha</strong></label>
 				<input type="number" name="kgProHa" id="kgProHa" />
 			</div>
 			<div>
@@ -292,6 +247,11 @@
 		</form>
 	</div>
 </div>
+<script type="text/javascript">
+	var date = getDateString(new Date());
+	$('#newDuengungForm #dateInput').attr('value', date);
+</script>
+
 	
 <!-- Eingabeformular für Pflanzenschutz-Aktivität -->
 <div data-role="page" id="newPflanzenschutzForm">
@@ -315,11 +275,11 @@
 				<input type="date" name="dateInput" id="dateInput"   />
 			</div>
 			<div>
-				<label class="mandatory" for="flaeche">Fl&auml;che in ha</label>
+				<label class="mandatory" for="flaeche"><strong>Fl&auml;che in ha</strong></label>
 				<input type="number" name="flaeche" id="flaeche" />
 			</div>
 			<div>
-				<label class="mandatory" for="kgProHa">kg/ha</label>
+				<label class="mandatory" for="kgProHa"><strong>kg/ha</strong></label>
 				<input type="number" name="kgProHa" id="kgProHa" />
 			</div>
 			<div>
@@ -337,6 +297,11 @@
 		</form>
 	</div>
 </div>
+<script type="text/javascript">
+	var date = getDateString(new Date());
+	$('#newPflanzenschutzForm #dateInput').attr('value', date);
+</script>
+
 	
 <!-- Eingabeformular für Ernte-Aktivität -->
 <div data-role="page" id="newErnteForm">
@@ -356,15 +321,15 @@
 				<input type="date" name="dateInput" id="dateInput"/>
 			</div>
 			<div>
-				<label class="mandatory" for="flaeche">Fl&auml;che in ha</label>
+				<label class="mandatory" for="flaeche"><strong>Fl&auml;che in ha</strong></label>
 				<input type="number" name="flaeche" id="flaeche" />
 			</div>
 			<div>
-				<label class="mandatory" for="dtProHa">dt/ha</label>
+				<label class="mandatory" for="dtProHa"><strong>dt/ha</strong></label>
 				<input type="number" name="dtProHa" id="dtProHa"/>
 			</div>
 			<div>
-				<label class="mandatory" for="gesamtmenge">Gesamtmenge</label>
+				<label class="mandatory" for="gesamtmenge"><strong>Gesamtmenge</strong></label>
 				<input type="number" name="gesamtmenge" id="gesamtmenge"/>
 			</div>
 			<div>
@@ -378,6 +343,11 @@
 		</form>
 	</div>
 </div>
+<script type="text/javascript">
+	var date = getDateString(new Date());
+	$('#newErnteForm #dateInput').attr('value', date);
+</script>
+
 
 </body>
 </html>

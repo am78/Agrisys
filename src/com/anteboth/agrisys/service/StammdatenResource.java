@@ -7,6 +7,7 @@ import com.anteboth.agrisys.client.model.res.IStammdatenResource;
 import com.anteboth.agrisys.client.model.stammdaten.Stammdaten;
 import com.anteboth.agrisys.server.ServiceManager;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 public class StammdatenResource extends ServerResource implements IStammdatenResource {
 
@@ -20,7 +21,10 @@ public class StammdatenResource extends ServerResource implements IStammdatenRes
 	@Get("json")
 	public String retrieveJson() {
 		Stammdaten sd = retrieve();
-		Gson gson = new Gson();
+		GsonBuilder gb = new GsonBuilder();
+		gb.setDateFormat("dd.MM.yyyy");
+		gb.setPrettyPrinting();
+		Gson gson = gb.create();
 		String s = gson.toJson(sd);
 		return s;
 	}

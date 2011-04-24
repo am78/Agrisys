@@ -46,7 +46,7 @@ function initialize_map()
 	map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
 }
 function initialize() {
-	if(geo_position_js.init()) {
+	/*if(geo_position_js.init()) {
 		document.getElementById('current').innerHTML="Receiving...";
 		geo_position_js.getCurrentPosition(
 			show_position, 
@@ -56,7 +56,9 @@ function initialize() {
 	} 
 	else {
 		document.getElementById('current').innerHTML="Functionality not available";
-	}
+	}*/
+
+	show_position(null);
 }
  
 function show_position(p) {

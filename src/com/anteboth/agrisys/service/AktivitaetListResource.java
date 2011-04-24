@@ -8,6 +8,7 @@ import com.anteboth.agrisys.client.model.Aktivitaet;
 import com.anteboth.agrisys.client.model.res.IAktivitaetListResource;
 import com.anteboth.agrisys.server.ServiceManager;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 /**
  * Resource for a list of {@link Aktivitaet} items.
@@ -30,15 +31,18 @@ public class AktivitaetListResource extends ServerResource implements IAktivitae
 				data = l.toArray(new Aktivitaet[l.size()]);
 			}
 		}	
-		
+		System.out.println("Aktivitätliste geladen.");
 		return data;
 	}
 	
 	@Get("json") 
 	public String retrieveJson() {
 		Aktivitaet[] data = retrieve();
+		GsonBuilder gb = new GsonBuilder();
+		gb.setDateFormat("dd.MM.yyyy");
+		gb.setPrettyPrinting();
+		Gson gson = gb.create();
 		
-		Gson gson = new Gson();
 		String s = gson.toJson(data);
 		
 		return s;

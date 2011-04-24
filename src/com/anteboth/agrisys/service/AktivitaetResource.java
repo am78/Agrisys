@@ -21,6 +21,7 @@ import com.anteboth.agrisys.client.model.stammdaten.Duengerart;
 import com.anteboth.agrisys.client.model.stammdaten.PSMittel;
 import com.anteboth.agrisys.server.ServiceManager;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.googlecode.objectify.Key;
 
 /**
@@ -44,7 +45,10 @@ public class AktivitaetResource extends ServerResource implements IAktivitaetRes
 	public String retrieveJson() {
 		Aktivitaet data = retrieve();
 		
-		Gson gson = new Gson();
+		GsonBuilder gb = new GsonBuilder();
+		gb.setDateFormat("dd.MM.yyyy");
+		gb.setPrettyPrinting();
+		Gson gson = gb.create();
 		String s = gson.toJson(data);
 		
 		return s;

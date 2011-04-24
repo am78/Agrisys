@@ -7,6 +7,7 @@ import com.anteboth.agrisys.client.model.SchlagErntejahr;
 import com.anteboth.agrisys.client.model.res.ISchlagResource;
 import com.anteboth.agrisys.server.ServiceManager;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 /**
  * 
@@ -27,7 +28,10 @@ public class SchlagResource extends ServerResource implements ISchlagResource {
 	@Get("json") 
 	public String retrieveJson() {
 		Schlag se = retrieve();
-		Gson gson = new Gson();
+		GsonBuilder gb = new GsonBuilder();
+		gb.setDateFormat("dd.MM.yyyy");
+		gb.setPrettyPrinting();
+		Gson gson = gb.create();
 		String s = gson.toJson(se);
 		return s;
 	}
