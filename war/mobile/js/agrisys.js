@@ -668,6 +668,15 @@ function loadAndDisplayActEntry(id) {
 		var kgProHa = act.kgProHa;
 		var ec = act.ec;
 		var indikation = act.indikation;
+		var psMittel = act.psMittel.name;
+		
+		//PS-Mittel
+		var row = $('#actDetailsEntryTemplate').clone();
+		row.removeAttr('id');
+		row.removeAttr('style');
+		row.find('.label').text("PS-Mittel: ");
+		row.find('.value').text(psMittel);
+		row.appendTo('#actDetails ul');
 		
 		//kg/ha
 		var row = $('#actDetailsEntryTemplate').clone();

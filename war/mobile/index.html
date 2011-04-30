@@ -1,5 +1,5 @@
 <!DOCTYPE html>  
-<html manifest="agrisys.manifest">
+<html manifest="_agrisys.manifest">
 
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -15,8 +15,6 @@
 	
 	<script type="text/javascript">
 		//do some initializations
-		init();
-
 		$.mobile.page.prototype.options.backBtnText = "Zur&uuml;ck";
 		
 	</script>		
@@ -129,9 +127,9 @@
 <!-- Bodenbearbeitungform PAGE -->
 <div data-role="page" id="newBodenForm">
 	<div data-role="header" data-position="inline">
-		<a href="index.html" data-icon="delete">Abbrechen</a>
+		<a href="#main" data-icon="delete">Abbrechen</a>
 		<h1>Agrisys</h1>
-		<a href="index.html" id="saveNewBoden" data-icon="check" data-theme="b">Speichern</a>
+		<a href="#main" id="saveNewBoden" data-icon="check" data-theme="b">Speichern</a>
 	</div><!-- /header -->
 	<div data-role="content">					
 		<form method="post" id="newBodenForm">
@@ -168,9 +166,9 @@
 <!-- Eingabeformular für Aussaat-Aktivität -->
 <div data-role="page" id="newAussaatForm">
 	<div data-role="header" data-position="inline">
-		<a href="index.html" data-icon="delete">Abbrechen</a>
+		<a href="#main" data-icon="delete">Abbrechen</a>
 		<h1>Agrisys</h1>
-		<a href="index.html" id="saveNewAussaat" data-icon="check" data-theme="b">Speichern</a>
+		<a href="#main" id="saveNewAussaat" data-icon="check" data-theme="b">Speichern</a>
 	</div><!-- /header -->
 	<div data-role="content">					
 		<form method="post" id="newAussaatForm">
@@ -210,9 +208,9 @@
 <!-- Eingabeformular für Duengung-Aktivität -->
 <div data-role="page" id="newDuengungForm">
 	<div data-role="header" data-position="inline">
-		<a href="index.html" data-icon="delete">Abbrechen</a>
+		<a href="#main" data-icon="delete">Abbrechen</a>
 		<h1>Agrisys</h1>
-		<a href="index.html" id="saveNewDuengung" data-icon="check" data-theme="b">Speichern</a>
+		<a href="#main" id="saveNewDuengung" data-icon="check" data-theme="b">Speichern</a>
 	</div><!-- /header -->
 	<div data-role="content">	
 		<form method="post" id="newDuengungForm">
@@ -256,9 +254,9 @@
 <!-- Eingabeformular für Pflanzenschutz-Aktivität -->
 <div data-role="page" id="newPflanzenschutzForm">
 	<div data-role="header" data-position="inline">
-		<a href="index.html" data-icon="delete">Abbrechen</a>
+		<a href="#main" data-icon="delete">Abbrechen</a>
 		<h1>Agrisys</h1>
-		<a href="index.html" id="saveNewPflanzenschutz" data-icon="check" data-theme="b">Speichern</a>
+		<a href="#main" id="saveNewPflanzenschutz" data-icon="check" data-theme="b">Speichern</a>
 	</div><!-- /header -->
 	<div data-role="content">	
 		<form method="post" id="newPflanzenschutzForm">
@@ -306,9 +304,9 @@
 <!-- Eingabeformular für Ernte-Aktivität -->
 <div data-role="page" id="newErnteForm">
 	<div data-role="header" data-position="inline">
-		<a href="index.html" data-icon="delete">Abbrechen</a>
+		<a href="#main" data-icon="delete">Abbrechen</a>
 		<h1>Agrisys</h1>
-		<a href="index.html" id="saveNewErnte" data-icon="check" data-theme="b">Speichern</a>
+		<a href="#main" id="saveNewErnte" data-icon="check" data-theme="b">Speichern</a>
 	</div><!-- /header -->
 	<div data-role="content">	
 		<form method="post" id="newErnteForm">
@@ -339,15 +337,26 @@
 			<div>
 				<label for="remark">Bemerkung</label>
 				<textarea cols="40" rows="4" name="remark" id="remark"></textarea>
+			</div>
+			<div>
+				<a href="#fotoList" data-role="button">Fotos</a>
 			</div>				
 		</form>
 	</div>
 </div>
+
+<div data-role="page" id="fotoList">
+	<div data-role="header" data-position="inline">
+		<h1>Agrisys</h1>
+	</div><!-- /header -->
+	<div data-role="content" if="takeFoto">
+		<a href="" data-role="button">Foto aufnehmen</a>	
+	</div>
+</div>
+
 <script type="text/javascript">
-	var date = getDateString(new Date());
-	$('#newErnteForm #dateInput').attr('value', date);
+	//do some initialization
+	init();
 </script>
-
-
 </body>
 </html>

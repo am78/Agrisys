@@ -18,14 +18,14 @@
 		<filter-name>AuthFilter</filter-name>
 		<url-pattern>/service/*</url-pattern>
 	</filter-mapping>
-	<filter-mapping>
+	<!-- filter-mapping>
 		<filter-name>AuthFilter</filter-name>
 		<url-pattern>/backup/*</url-pattern>
 	</filter-mapping>
 	<filter-mapping>
 		<filter-name>AuthFilter</filter-name>
 		<url-pattern>/backupMail/*</url-pattern>
-	</filter-mapping>	
+	</filter-mapping-->	
 		
 	<filter-mapping>
 		<filter-name>AuthFilter</filter-name>
@@ -120,10 +120,10 @@
 			<url-pattern>/agrisys/*</url-pattern>
     		<url-pattern>/report/*</url-pattern>
 		    <url-pattern>/service/*</url-pattern> 
-    		<url-pattern>/backup/*</url-pattern>
-    		<url-pattern>/backupMail/*</url-pattern>    
     		<url-pattern>/mobile/*</url-pattern>
 		<!-- 	
+    		<url-pattern>/backup/*</url-pattern>
+    		<url-pattern>/backupMail/*</url-pattern>    
     		--> 
 		</web-resource-collection>
 		<auth-constraint>
