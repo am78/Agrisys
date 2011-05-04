@@ -26,6 +26,8 @@ public class BodenbearbeitungRecord extends ListRecord<Bodenbearbeitung> {
     	setAttribute("typ", (getDTO() != null && getDTO().getBodenbearbeitungTyp() != null) ? getDTO().getBodenbearbeitungTyp() : "");
     	setAttribute("flaeche", getDTO() != null ? getDTO().getFlaeche(): "");
     	setAttribute("bemerkung", getDTO() != null ? getDTO().getBemerkung() : "");
+    	
+    	setAttribute(ATTACHMENTS, "...");
     }
     
     @Override

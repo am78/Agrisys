@@ -94,6 +94,7 @@ public class Agrisys implements EntryPoint, UncaughtExceptionHandler {
 				System.err.println(caught.getLocalizedMessage());
 			}
 		});
+		
 	}
 	
 	public static UserDataTO getUserData() {

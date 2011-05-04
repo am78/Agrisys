@@ -2,6 +2,7 @@ package com.anteboth.agrisys.client;
 
 import java.util.List;
 
+import com.anteboth.agrisys.client.model.Aktivitaet;
 import com.anteboth.agrisys.client.model.Aussaat;
 import com.anteboth.agrisys.client.model.Betrieb;
 import com.anteboth.agrisys.client.model.Bodenbearbeitung;
@@ -304,5 +305,28 @@ public interface AgrisysService extends RemoteService {
 	 * @return a list of {@link Duengung}
 	 */
 	List<Pflanzenschutz> loadPflanzenschutzData(SchlagErntejahr schlagErntejahr);
+	
+	/* Resources Management */
+	
+	/**
+	 * Deletes the specified resource which is assigned to the specified element.
+	 *  
+	 * @param id the id of the 'master' element which holds the resource.
+	 * @param picKey the key of the resource to remove
+	 */
+	void deleteResource(Long id, String resKey);
+	
+	/**
+	 * Loads the aktivitaet entry for the specified id.
+	 * @param id the aktivitaet id
+	 * @return the found item or null if it could not be loaded
+	 */
+	Aktivitaet loadAktivitaet(Long id);
+	
+	/**
+	 * Returns the blobstore upload url.
+	 * @return blobstore upload url
+	 */
+	public String getBlobstoreUploadUrl();
 	
 }

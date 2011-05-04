@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.anteboth.agrisys.client.ISchlagErntejahrSelectionListener;
 import com.anteboth.agrisys.client.grid.data.DataManager;
+import com.anteboth.agrisys.client.grid.data.ErnteRecord;
 import com.anteboth.agrisys.client.grid.data.PflanzenschutzRecord;
 import com.anteboth.agrisys.client.model.Pflanzenschutz;
 import com.anteboth.agrisys.client.model.SchlagErntejahr;
@@ -92,8 +93,10 @@ extends AbstractListGrid<PflanzenschutzRecord> implements ISchlagErntejahrSelect
 				PflanzenschutzRecord.KG_PRO_HA, "kg/ha");
 		ListGridField indikationField = new ListGridField(
 				PflanzenschutzRecord.INDIKATION, "Indikation");
+		ListGridField attachmentsField = new ListGridField(ErnteRecord.ATTACHMENTS, "IMG", 30);
 		
-		setFields(datumField, psMittelField, flaecheField, kgProHaField, ecField, indikationField, bemField);
+		setFields(datumField, psMittelField, flaecheField, kgProHaField, ecField, 
+				indikationField, bemField, attachmentsField);
 	}
 
 	@Override

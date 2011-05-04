@@ -34,6 +34,8 @@ public class AussaatRecord extends ListRecord<Aussaat> {
     	setAttribute(BEIZE, getDTO() != null ? getDTO().getBeize() : "");
     	setAttribute(FLAECHE, getDTO() != null ? getDTO().getFlaeche(): "");
     	setAttribute(BEMERKUNG, getDTO() != null ? getDTO().getBemerkung() : "");
+    	
+    	setAttribute(ATTACHMENTS, "...");
     }
     
     @Override

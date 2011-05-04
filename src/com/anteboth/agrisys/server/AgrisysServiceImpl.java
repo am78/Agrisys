@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.anteboth.agrisys.client.AgrisysService;
 import com.anteboth.agrisys.client.model.Account;
+import com.anteboth.agrisys.client.model.Aktivitaet;
 import com.anteboth.agrisys.client.model.Aussaat;
 import com.anteboth.agrisys.client.model.Betrieb;
 import com.anteboth.agrisys.client.model.Bodenbearbeitung;
@@ -19,6 +20,8 @@ import com.anteboth.agrisys.client.model.stammdaten.Duengerart;
 import com.anteboth.agrisys.client.model.stammdaten.Kultur;
 import com.anteboth.agrisys.client.model.stammdaten.PSMittel;
 import com.anteboth.agrisys.client.model.stammdaten.Sorte;
+import com.google.appengine.api.blobstore.BlobstoreService;
+import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
@@ -360,4 +363,19 @@ public class AgrisysServiceImpl extends RemoteServiceServlet implements AgrisysS
 		this.serviceManager.delete(ps);
 	}
 	
+	@Override
+	public void deleteResource(Long id, String resKey) {
+		this.serviceManager.deleteResource(id, resKey);
+	}
+	
+	@Override
+	public Aktivitaet loadAktivitaet(Long id) {
+		return this.serviceManager.getAktivitaet(id);
+	}
+
+	@Override
+	public String getBlobstoreUploadUrl() {
+		BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
+		return blobstoreService.createUploadUrl("/upload");
+	}
 }

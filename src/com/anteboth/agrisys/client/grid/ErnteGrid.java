@@ -62,6 +62,7 @@ extends AbstractListGrid<ErnteRecord> implements ISchlagErntejahrSelectionListen
 		return schlagErntejahr;
 	}
 	
+	
 	@Override
 	protected void initGridFields() {
 		final DateTimeFormat dateFormatter = DateTimeFormat.getFormat("dd.MM.yyyyy");  
@@ -89,7 +90,10 @@ extends AbstractListGrid<ErnteRecord> implements ISchlagErntejahrSelectionListen
 		ListGridField anlieferungField = new ListGridField(ErnteRecord.ANLIEFERUNG, "Anlieferung");
 		ListGridField gesamtmengeField = new ListGridField(ErnteRecord.GESAMTMENGE, "Gesamtmenge");
 		
-		setFields(datumField, kulturField, sorteField, flaecheField, dtProHaField, anlieferungField, gesamtmengeField, bemField);
+		ListGridField attachmentsField = new ListGridField(ErnteRecord.ATTACHMENTS, "IMG", 30);
+		
+		setFields(datumField, kulturField, sorteField, flaecheField, dtProHaField, 
+				anlieferungField, gesamtmengeField, bemField, attachmentsField);
 	}
 
 	@Override

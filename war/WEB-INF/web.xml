@@ -26,7 +26,10 @@
 		<filter-name>AuthFilter</filter-name>
 		<url-pattern>/backupMail/*</url-pattern>
 	</filter-mapping-->	
-		
+	<filter-mapping>
+		<filter-name>AuthFilter</filter-name>
+		<url-pattern>/upload/*</url-pattern>
+	</filter-mapping>
 	<filter-mapping>
 		<filter-name>AuthFilter</filter-name>
 		<url-pattern>/report/*</url-pattern>
@@ -101,6 +104,24 @@
 		<url-pattern>/report/*</url-pattern>
 	</servlet-mapping>
 	
+	<!-- UploadServlet -->
+	<servlet>
+		<servlet-name>uploadServlet</servlet-name>
+		<servlet-class>com.anteboth.agrisys.server.FileUpload</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>uploadServlet</servlet-name>
+		<url-pattern>/upload/*</url-pattern>
+	</servlet-mapping>
+		
+	<servlet>
+		<servlet-name>serve</servlet-name>
+		<servlet-class>com.anteboth.agrisys.server.Serve</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>serve</servlet-name>
+		<url-pattern>/upload/serve</url-pattern>
+	</servlet-mapping>
 
 	<!-- mime type mapping -->
 	<mime-mapping>

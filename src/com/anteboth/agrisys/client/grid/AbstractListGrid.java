@@ -3,12 +3,18 @@ package com.anteboth.agrisys.client.grid;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.anteboth.agrisys.client.ImagesDialog;
+import com.anteboth.agrisys.client.model.Aktivitaet;
 import com.anteboth.agrisys.client.model.IDTO;
 import com.anteboth.agrisys.client.model.ListRecord;
 import com.smartgwt.client.data.Record;
 import com.smartgwt.client.types.ListGridEditEvent;
 import com.smartgwt.client.util.BooleanCallback;
 import com.smartgwt.client.util.SC;
+import com.smartgwt.client.widgets.Canvas;
+import com.smartgwt.client.widgets.IButton;
+import com.smartgwt.client.widgets.events.ClickEvent;
+import com.smartgwt.client.widgets.events.ClickHandler;
 import com.smartgwt.client.widgets.grid.ListGrid;
 import com.smartgwt.client.widgets.grid.ListGridRecord;
 import com.smartgwt.client.widgets.grid.events.EditCompleteEvent;
@@ -29,6 +35,7 @@ public abstract class AbstractListGrid<RECORD extends ListRecord<? extends IDTO>
 	public AbstractListGrid() {		
 		initialize();
 		initUI();
+
 	}
 
 
@@ -51,6 +58,9 @@ public abstract class AbstractListGrid<RECORD extends ListRecord<? extends IDTO>
 	 * Initializes the grid.
 	 */
 	private void initUI() {
+		setShowRecordComponents(true);          
+        setShowRecordComponentsByCell(true); 
+        
 		//initialized the grid fields
 		initGridFields();
 		
@@ -148,6 +158,40 @@ public abstract class AbstractListGrid<RECORD extends ListRecord<? extends IDTO>
 			records.add((RECORD) sel[i]);
 		}
 		deleteRecords(records);
+	}
+	
+	protected void displayImagesDialog(Aktivitaet akt) {
+		ImagesDialog d = new ImagesDialog(akt);
+		d.setIsModal(true);
+		d.setShowModalMask(true);
+		d.setSize("800", "600");
+		d.setCanDragResize(true);
+		d.setCanDrag(true);
+		d.centerInPage();
+		d.show();
+	}
+	
+	@Override
+	protected Canvas createRecordComponent(ListGridRecord record, Integer colNum) {
+		String fieldName = this.getFieldName(colNum);
+		if (fieldName.equals(ListRecord.ATTACHMENTS)) {
+			//get the attachment value
+			//it's not nil if the record has assigned attachments
+			final Aktivitaet dto = (Aktivitaet) ((ListRecord) record).getDTO();
+			
+			IButton button = new IButton();  
+			button.setHeight(18);  
+			button.setWidth(25);                      
+			button.setTitle("...");  
+			button.addClickHandler(new ClickHandler() {
+				public void onClick(ClickEvent event) {
+					displayImagesDialog(dto);  
+				}  
+			});
+	        return button;
+		} else {
+			return super.createRecordComponent(record, colNum);
+		}
 	}
 
 	/**

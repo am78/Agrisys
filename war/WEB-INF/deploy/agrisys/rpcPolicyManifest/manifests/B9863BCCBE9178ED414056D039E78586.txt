@@ -1,2 +1,2 @@
 serviceClass: com.anteboth.agrisys.client.AgrisysService
-path: 0430DC91AA00BAC5058BAEBE4942729E.gwt.rpc
+path: 530DEC6B22BB7FF44FC9FFCCD382B821.gwt.rpc

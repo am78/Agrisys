@@ -36,6 +36,8 @@ public class ErnteRecord extends ListRecord<Ernte> {
     	setAttribute(GESAMTMENGE, getDTO() != null ? getDTO().getGesamtMenge() : "");
     	setAttribute(FLAECHE, getDTO() != null ? getDTO().getFlaeche(): "");
     	setAttribute(BEMERKUNG, getDTO() != null ? getDTO().getBemerkung() : "");
+    	
+    	setAttribute(ATTACHMENTS, "...");
     }
     
     @Override

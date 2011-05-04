@@ -2,6 +2,7 @@ package com.anteboth.agrisys.client;
 
 import java.util.List;
 
+import com.anteboth.agrisys.client.model.Aktivitaet;
 import com.anteboth.agrisys.client.model.Aussaat;
 import com.anteboth.agrisys.client.model.Betrieb;
 import com.anteboth.agrisys.client.model.Bodenbearbeitung;
@@ -80,4 +81,7 @@ public interface AgrisysServiceAsync {
 	void delete(Pflanzenschutz d, AsyncCallback<Void> callback);
 	void loadPflanzenschutzData(SchlagErntejahr schlagErntejahr,
 			AsyncCallback<List<Pflanzenschutz>> callback);
+	void deleteResource(Long id, String resKey, AsyncCallback<Void> callback);
+	void loadAktivitaet(Long id, AsyncCallback<Aktivitaet> callback);
+	void getBlobstoreUploadUrl(AsyncCallback<String> callback);
 }

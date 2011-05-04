@@ -1,7 +1,11 @@
 package com.anteboth.agrisys.client.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
+import javax.persistence.Embedded;
 
 import com.googlecode.objectify.Key;
 
@@ -26,9 +30,15 @@ public abstract class Aktivitaet implements Serializable, IDTO {
 	private Double longitude;
 	private Double latitude;
 	
+	@Embedded
+	private List<ImageResource> attachments;
+	
 	public Aktivitaet() {
 		//set the lastModification date to if creating a new activity entry on server
 		this.lastModification = new Date();
+		if (this.attachments == null) {
+			this.attachments = new ArrayList<ImageResource>();
+		}
 	}
 	
 	public Date getDatum() {
@@ -106,6 +116,18 @@ public abstract class Aktivitaet implements Serializable, IDTO {
 	
 	public void setLatitude(Double latitude) {
 		this.latitude = latitude;
+	}
+	
+
+	public List<ImageResource> getAttachments() {
+		if (attachments == null) {
+			attachments = new ArrayList<ImageResource>();
+		}
+		return attachments;
+	}
+	
+	public void setAttachments(List<ImageResource> attachments) {
+		this.attachments = attachments;
 	}
 
 	public abstract void updateType();

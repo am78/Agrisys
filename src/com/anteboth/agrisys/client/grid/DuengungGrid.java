@@ -7,6 +7,7 @@ import java.util.Map;
 import com.anteboth.agrisys.client.ISchlagErntejahrSelectionListener;
 import com.anteboth.agrisys.client.grid.data.DataManager;
 import com.anteboth.agrisys.client.grid.data.DuengungRecord;
+import com.anteboth.agrisys.client.grid.data.ErnteRecord;
 import com.anteboth.agrisys.client.model.Duengung;
 import com.anteboth.agrisys.client.model.SchlagErntejahr;
 import com.anteboth.agrisys.client.ui.DuengungDetailsWindow;
@@ -90,8 +91,9 @@ extends AbstractListGrid<DuengungRecord> implements ISchlagErntejahrSelectionLis
 				DuengungRecord.EC, "EC");
 		ListGridField kgProHaField = new ListGridField(
 				DuengungRecord.KG_PRO_HA, "kg/ha");
+		ListGridField attachmentsField = new ListGridField(ErnteRecord.ATTACHMENTS, "IMG", 30);
 		
-		setFields(datumField, duengerartField, flaecheField, kgProHaField, ecField, bemField);
+		setFields(datumField, duengerartField, flaecheField, kgProHaField, ecField, bemField, attachmentsField);
 	}
 
 	@Override

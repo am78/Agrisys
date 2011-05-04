@@ -34,6 +34,8 @@ public class DuengungRecord extends ListRecord<Duengung> {
     	setAttribute(BEMERKUNG, getDTO() != null ? getDTO().getBemerkung() : "");
     	setAttribute(KG_PRO_HA, getDTO() != null ? getDTO().getKgProHa() : "");
     	setAttribute(EC, 		getDTO() != null ? getDTO().getEc() : "");
+    	
+    	setAttribute(ATTACHMENTS, "...");
     }
     
     @Override

@@ -13,6 +13,8 @@ import com.smartgwt.client.widgets.grid.ListGridRecord;
  */
 public class ListRecord <T extends IDTO> extends ListGridRecord {
 	
+	public static final String ATTACHMENTS = "attachments";
+	
 	private T dto;
 	
 	public ListRecord() {

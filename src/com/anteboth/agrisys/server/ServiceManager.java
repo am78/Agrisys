@@ -15,6 +15,7 @@ import com.anteboth.agrisys.client.model.Duengung;
 import com.anteboth.agrisys.client.model.Ernte;
 import com.anteboth.agrisys.client.model.Erntejahr;
 import com.anteboth.agrisys.client.model.Flurstueck;
+import com.anteboth.agrisys.client.model.ImageResource;
 import com.anteboth.agrisys.client.model.Pflanzenschutz;
 import com.anteboth.agrisys.client.model.Schlag;
 import com.anteboth.agrisys.client.model.SchlagErntejahr;
@@ -782,9 +783,31 @@ public class ServiceManager {
 
 	public Aktivitaet getAktivitaet(Long id) {
 		Objectify ofy = ObjectifyService.begin();
-		//TODO use concrete Aktivitaet type
-		Key<Aktivitaet> key = new Key<Aktivitaet>(Aktivitaet.class, id);
-		return ofy.find(key);
+		
+		//unfortunately we need to request the concrete aktivitaet subtype to get it loaded
+		//so load the particular subtypes till we found the entry 
+		
+		Key<Aussaat> keya = new Key<Aussaat>(Aussaat.class, id);
+		Aktivitaet akt = ofy.find(keya);
+		if (akt != null) return akt;
+		
+		Key<Bodenbearbeitung> keyb = new Key<Bodenbearbeitung>(Bodenbearbeitung.class, id);
+		akt = ofy.find(keyb);
+		if (akt != null) return akt;
+		
+		Key<Duengung> keyd = new Key<Duengung>(Duengung.class, id);
+		akt = ofy.find(keyd);
+		if (akt != null) return akt;
+		
+		Key<Pflanzenschutz> keyp = new Key<Pflanzenschutz>(Pflanzenschutz.class, id);
+		akt = ofy.find(keyp);
+		if (akt != null) return akt;
+		
+		Key<Ernte> keye = new Key<Ernte>(Ernte.class, id);
+		akt = ofy.find(keye);
+		if (akt != null) return akt;
+		
+		return null;
 	}
 
 
@@ -806,12 +829,13 @@ public class ServiceManager {
 	 */
 	public void store(Aktivitaet aktivitaet) {
 		System.out.println("store aktivitaet entry:" + aktivitaet);
-		// TODO Auto-generated method stub
-		
+
+		// TODO sync mechanismus umsetzen fallse benötigt
+		//momentan ist verhalten so dass das letzte update gewinnt
 		//if ID is set (entry already exists) ensure that the modification date of the 
 		//changed item is newer than the last modification date of the persisted entry
 		
-		if (aktivitaet.getId() == null) {
+//		if (aktivitaet.getId() == null) {
 			if (aktivitaet instanceof Bodenbearbeitung) {
 				save((Bodenbearbeitung) aktivitaet);
 			}
@@ -827,7 +851,60 @@ public class ServiceManager {
 			else if (aktivitaet instanceof Pflanzenschutz) {
 				save((Pflanzenschutz) aktivitaet);
 			}
+//		} 
+	}
+
+
+	/**
+	 * Assignes the specified blobKey to the given refid.
+	 * Multiple blob keys can be assigned to one reference id.
+	 * 
+	 * @param refId the reference id, must not be null
+	 * @param blobKey the blob key, must not be null
+	 */
+	public void assignBlob(String refId, String blobKey) {
+		if (refId == null || blobKey == null) {
+			return;
 		}
 		
+		//get aktivitaet entry for the reference id
+		Aktivitaet a = getAktivitaet(Long.parseLong(refId));
+		//add the blob key
+		String desc = "";
+		a.getAttachments().add(new ImageResource(blobKey, new Date(), desc));
+		//save aktivitaet entry
+		store(a);
+	}
+
+
+	/**
+	 * Deletes the resource for the specified key which is 
+	 * assigned to the aktivitaet with the specified id.
+	 *  
+	 * @param id if of aktivitaet entry
+	 * @param resKey resource key
+	 */
+	public void deleteResource(Long id, String resKey) {
+		if (id != null && resKey != null) {
+			//get aktivitaet entry for the reference id
+			Aktivitaet a = getAktivitaet(id);
+			
+			//now find the resource item and remove it from list
+			List<ImageResource> atts = a.getAttachments();
+			ImageResource toRemove = null;
+			for (ImageResource att : atts) {
+				if (att != null && resKey.equals(att.getBlobKey())) {
+					toRemove = att;
+					break;
+				}
+			}
+			if (toRemove != null) {
+				//remove the found attachment
+				a.getAttachments().remove(toRemove);
+				
+				//save aktivitaet entry
+				store(a);
+			}
+		}
 	}
 }

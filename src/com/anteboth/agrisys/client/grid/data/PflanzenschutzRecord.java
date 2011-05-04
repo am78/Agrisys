@@ -36,6 +36,8 @@ public class PflanzenschutzRecord extends ListRecord<Pflanzenschutz> {
     	setAttribute(KG_PRO_HA, getDTO() != null ? getDTO().getKgProHa() : "");
     	setAttribute(EC, 		getDTO() != null ? getDTO().getEc() : "");
     	setAttribute(INDIKATION,getDTO() != null ? getDTO().getIndikation() : "");
+    	
+    	setAttribute(ATTACHMENTS, "...");
     }
     
     @Override

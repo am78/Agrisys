@@ -7,6 +7,7 @@ import java.util.Map;
 import com.anteboth.agrisys.client.ISchlagErntejahrSelectionListener;
 import com.anteboth.agrisys.client.grid.data.AussaatRecord;
 import com.anteboth.agrisys.client.grid.data.DataManager;
+import com.anteboth.agrisys.client.grid.data.ErnteRecord;
 import com.anteboth.agrisys.client.model.Aussaat;
 import com.anteboth.agrisys.client.model.SchlagErntejahr;
 import com.anteboth.agrisys.client.ui.AussaatDetailsWindow;
@@ -88,7 +89,10 @@ extends AbstractListGrid<AussaatRecord> implements ISchlagErntejahrSelectionList
 		ListGridField kgProHaField = new ListGridField(AussaatRecord.KG_PRO_HA, "kg/ha");
 		ListGridField beizeField = new ListGridField(AussaatRecord.BEIZE, "Beize");
 		
-		setFields(datumField, kulturField, sorteField, flaecheField, kgProHaField, beizeField, bemField);
+		ListGridField attachmentsField = new ListGridField(ErnteRecord.ATTACHMENTS, "IMG", 30);
+		
+		setFields(datumField, kulturField, sorteField, flaecheField, 
+				kgProHaField, beizeField, bemField, attachmentsField);
 	}
 
 	@Override
