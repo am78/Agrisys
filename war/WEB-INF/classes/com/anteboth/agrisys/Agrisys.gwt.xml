@@ -17,6 +17,9 @@
   <!-- Other module inherits                                      -->
   <inherits name="com.smartgwt.SmartGwt"/>
   <inherits name="com.googlecode.objectify.Objectify" />
+
+  <!-- Google Maps module -->
+  <inherits name='com.google.gwt.maps.GoogleMaps' />
   
   <!-- Specify the app entry point class.                         -->
   <entry-point class='com.anteboth.agrisys.client.Agrisys'/>

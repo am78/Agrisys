@@ -7,6 +7,7 @@ import com.anteboth.agrisys.client.ISchlagErntejahrSelectionListener;
 import com.anteboth.agrisys.client.grid.data.DataManager;
 import com.anteboth.agrisys.client.grid.data.ErnteRecord;
 import com.anteboth.agrisys.client.model.Ernte;
+import com.anteboth.agrisys.client.model.ListRecord;
 import com.anteboth.agrisys.client.model.SchlagErntejahr;
 import com.anteboth.agrisys.client.ui.ErnteDetailsWindow;
 import com.googlecode.objectify.Key;
@@ -78,10 +79,12 @@ extends AbstractListGrid<ErnteRecord> implements ISchlagErntejahrSelectionListen
 		ListGridField gesamtmengeField = ListGridFieldFactory.createFloatField(
 				ErnteRecord.GESAMTMENGE, "Gesamtmenge");
 		ListGridField attachmentsField = ListGridFieldFactory.createStringField(
-				ErnteRecord.ATTACHMENTS, "IMG", 30);
+				ListRecord.ATTACHMENTS, "FOTO", 35);
+		ListGridField geoField = ListGridFieldFactory.createStringField(
+				ListRecord.GEO_LOCATION, "GEO", 35);
 		
 		setFields(datumField, kulturField, sorteField, flaecheField, dtProHaField, 
-				anlieferungField, gesamtmengeField, bemField, attachmentsField);
+				anlieferungField, gesamtmengeField, bemField, attachmentsField, geoField);
 	}
 
 	@Override

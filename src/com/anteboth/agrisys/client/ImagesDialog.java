@@ -213,19 +213,4 @@ public class ImagesDialog extends Window {
 		//open the image in new window
 		com.google.gwt.user.client.Window.open(url, title, features);
 	}
-
-
-	/**
-	 * Displays the image upload page and closes image dialog.
-	 */
-	protected void onUploadFileClicked() {
-		String url = IMG_UPLOAD_URL + "?refId=" + aktivitaet.getId();
-		String title = "Foto upload...";
-		String features = "menubar=no,location=no,resizable=yes,scrollbars=yes,status=yes";
-
-		//open the image in new window
-		com.google.gwt.user.client.Window.open(url, title, features);
-
-		destroy();
-	}
 }

@@ -7,6 +7,7 @@ import com.anteboth.agrisys.client.ImagesDialog;
 import com.anteboth.agrisys.client.model.Aktivitaet;
 import com.anteboth.agrisys.client.model.IDTO;
 import com.anteboth.agrisys.client.model.ListRecord;
+import com.google.gwt.user.client.Window;
 import com.smartgwt.client.data.Record;
 import com.smartgwt.client.types.ListGridEditEvent;
 import com.smartgwt.client.util.BooleanCallback;
@@ -175,25 +176,48 @@ public abstract class AbstractListGrid<RECORD extends ListRecord<? extends IDTO>
 	protected Canvas createRecordComponent(ListGridRecord record, Integer colNum) {
 		String fieldName = this.getFieldName(colNum);
 		if (fieldName.equals(ListRecord.ATTACHMENTS)) {
-			//get the attachment value
-			//it's not nil if the record has assigned attachments
 			final Aktivitaet dto = (Aktivitaet) ((ListRecord) record).getDTO();
 			
 			IButton button = new IButton();  
 			button.setHeight(18);  
 			button.setWidth(25);                      
-			button.setTitle("...");  
+			button.setTitle("");
+			button.setIcon("/img/camera3.png");
 			button.addClickHandler(new ClickHandler() {
 				public void onClick(ClickEvent event) {
 					displayImagesDialog(dto);  
 				}  
 			});
 	        return button;
+		} else if (fieldName.equals(ListRecord.GEO_LOCATION)) {
+			final Aktivitaet dto = (Aktivitaet) ((ListRecord) record).getDTO();
+			
+			IButton button = new IButton();  
+			button.setHeight(18);  
+			button.setWidth(25);                      
+			button.setTitle("");  
+			button.setIcon("/img/geolocation.png");
+			button.addClickHandler(new ClickHandler() {
+				public void onClick(ClickEvent event) {
+					displayGeoDialog(dto);  
+				}  
+			});
+			boolean geoLocationPresent = dto.getLatitude() != null && dto.getLatitude() > 0;
+			button.setDisabled(!geoLocationPresent);			
+	        return button;
 		} else {
 			return super.createRecordComponent(record, colNum);
 		}
 	}
 
+	protected void displayGeoDialog(Aktivitaet dto) {
+		double lat = dto.getLatitude().doubleValue();
+		double lon = dto.getLongitude().doubleValue();
+		String url = "/map.html?lat=" + lat + "&long=" + lon;
+		String features = "menubar=no,location=no,resizable=yes,scrollbars=yes,status=yes";
+		Window.open(url, "GEO-Position", features);
+	}
+	
 	/**
 	 * Delete the records.
 	 * @param records records to delete

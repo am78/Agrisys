@@ -36,6 +36,7 @@ public class AussaatRecord extends ListRecord<Aussaat> {
     	setAttribute(BEMERKUNG, getDTO() != null ? getDTO().getBemerkung() : "");
     	
     	setAttribute(ATTACHMENTS, "...");
+    	setAttribute(GEO_LOCATION, "...");
     }
     
     @Override

@@ -38,6 +38,7 @@ public class PflanzenschutzRecord extends ListRecord<Pflanzenschutz> {
     	setAttribute(INDIKATION,getDTO() != null ? getDTO().getIndikation() : "");
     	
     	setAttribute(ATTACHMENTS, "...");
+    	setAttribute(GEO_LOCATION, "...");
     }
     
     @Override

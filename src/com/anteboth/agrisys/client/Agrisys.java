@@ -16,6 +16,7 @@ import com.anteboth.agrisys.client.model.UserDataTO;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.GWT.UncaughtExceptionHandler;
+import com.google.gwt.maps.client.Maps;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -62,20 +63,36 @@ public class Agrisys implements EntryPoint, UncaughtExceptionHandler {
 	private PflanzenschutzGrid pflanzenschutzGrid;
 	private AussaatGrid aussaatGrid;
 	private ErnteGrid ernteGrid;
-	
-	
+
+
 	@Override
 	public void onUncaughtException(Throwable e) {
 		e.printStackTrace();
 		SC.warn(e.getLocalizedMessage());
 	}
-	
+
 	/**
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad() {
 		GWT.setUncaughtExceptionHandler(this); 
-		
+
+		/*
+		 * Asynchronously loads the Maps API.
+		 *
+		 * The first parameter should be a valid Maps API Key to deploy this
+		 * application on a public server, but a blank key will work for an
+		 * application served from localhost.
+		 */
+		String apiKey = "";
+		//"BQIAAAAWC3arzoRHb2hqhFgPw4LFRQZV8fD85RK7KWaR-Anp3MtkiEAqBRbYStNJOA2z6Na_UvE8RfJTrvpRg";
+		Maps.loadMapsApi(apiKey, "2.x", false, new Runnable() {
+			public void run() {
+				GWT.log("Maps API loaded");
+			}
+		});
+
+
 		//ensure that the user is authenticated
 		agrisysService.isUserAuthenticated(new AsyncCallback<UserDataTO>() {
 			@Override
@@ -88,19 +105,19 @@ public class Agrisys implements EntryPoint, UncaughtExceptionHandler {
 					//TODO
 				}
 			}
-			
+
 			@Override
 			public void onFailure(Throwable caught) {
 				System.err.println(caught.getLocalizedMessage());
 			}
 		});
-		
+
 	}
-	
+
 	public static UserDataTO getUserData() {
 		return userData;
 	}
-	
+
 	public static AgrisysServiceAsync getAgrisysservice() {
 		return agrisysService;
 	}
@@ -136,17 +153,17 @@ public class Agrisys implements EntryPoint, UncaughtExceptionHandler {
 
 		//add contents to the HTML container name "mainPanel"
 		RootPanel.get("mainPanel").add(mainLayout);	
-		
+
 		//create the user label
 		String user = 	 userData.getAccount().getUsername();
 		String betrieb = userData.getBetrieb().getName();
 		int erntejahr =  userData.getErntejahr().getErntejahr();
 		Label userLabel = new Label(
-			"Benutzer: " + user + " | Betrieb: " + betrieb + " | Erntejahr: " + erntejahr);
+				"Benutzer: " + user + " | Betrieb: " + betrieb + " | Erntejahr: " + erntejahr);
 		userLabel.setWidth("300");
-		
+
 		RootPanel.get("userInfoPanel").add(userLabel);		
-		
+
 		//create the stammdaten button
 		Anchor stammdatenLink = new Anchor("Stammdaten");
 		stammdatenLink.addClickHandler(new com.google.gwt.event.dom.client.ClickHandler() {
@@ -156,10 +173,10 @@ public class Agrisys implements EntryPoint, UncaughtExceptionHandler {
 			}
 		});
 		RootPanel.get("buttonStammdatenPanel").add(stammdatenLink);
-		
+
 	}
-	
-	
+
+
 
 	/**
 	 * Creates the right panel and it's subpanels.
@@ -168,56 +185,56 @@ public class Agrisys implements EntryPoint, UncaughtExceptionHandler {
 	private VLayout createRightPanel() {
 		this.bodenbearbeitungGrid = new BodenbearbeitungGrid();
 		this.bodenbearbeitungGrid.setHeight("100%");
-		
+
 		this.currentRightGrid = this.bodenbearbeitungGrid;
-		
+
 		this.duengungGrid = new DuengungGrid();
 		this.duengungGrid.setHeight("100%");
-		
+
 		this.pflanzenschutzGrid = new PflanzenschutzGrid();
 		this.pflanzenschutzGrid.setHeight("100%");
 
 		this.aussaatGrid = new AussaatGrid();
 		this.aussaatGrid.setHeight("100%");
-		
+
 		this.ernteGrid = new ErnteGrid();
 		this.ernteGrid.setHeight("100%");
 
 		final TabSet tabSet = new TabSet();  
-        tabSet.setTabBarPosition(Side.TOP);  
-        tabSet.setTabBarAlign(Side.LEFT);
-        tabSet.setBackgroundColor("#996633");
-  
-        Tab tabBoden = new Tab("Bodenbearbeitung");  
-        tabBoden.setPane(this.bodenbearbeitungGrid);
-        tabBoden.setIcon("[APP]/img/boden_16x16.png");
-        
-        Tab tabAussaat = new Tab("Aussaat");
-        tabAussaat.setPane(this.aussaatGrid);
-        tabAussaat.setIcon("[APP]/img/aussaat_16x16.png");
-        	
-        Tab tabDuengung = new Tab("D&uuml;ngung");
-        tabDuengung.setPane(this.duengungGrid);
-        tabDuengung.setIcon("[APP]/img/duengung_16x16.png");
-        
-        Tab tabPflanzenschutz = new Tab("Pflanzenschutz");
-        tabPflanzenschutz.setPane(this.pflanzenschutzGrid);
-        tabPflanzenschutz.setIcon("[APP]/img/pflanzenschutz_16x16.png");
-        
-        Tab tabErnte = new Tab("Ernte");
-        tabErnte.setPane(this.ernteGrid);
-        tabErnte.setIcon("[APP]/img/ernte_16x16.png");
-        
-  
-        tabSet.addTab(tabBoden);
-        tabSet.addTab(tabAussaat);
-        tabSet.addTab(tabDuengung);
-        tabSet.addTab(tabPflanzenschutz);
-        tabSet.addTab(tabErnte);
-        
-        tabSet.setSelectedTab(0);
+		tabSet.setTabBarPosition(Side.TOP);  
+		tabSet.setTabBarAlign(Side.LEFT);
+		tabSet.setBackgroundColor("#996633");
 
-        tabSet.addTabSelectedHandler(new TabSelectedHandler() {
+		Tab tabBoden = new Tab("Bodenbearbeitung");  
+		tabBoden.setPane(this.bodenbearbeitungGrid);
+		tabBoden.setIcon("[APP]/img/boden_16x16.png");
+
+		Tab tabAussaat = new Tab("Aussaat");
+		tabAussaat.setPane(this.aussaatGrid);
+		tabAussaat.setIcon("[APP]/img/aussaat_16x16.png");
+
+		Tab tabDuengung = new Tab("D&uuml;ngung");
+		tabDuengung.setPane(this.duengungGrid);
+		tabDuengung.setIcon("[APP]/img/duengung_16x16.png");
+
+		Tab tabPflanzenschutz = new Tab("Pflanzenschutz");
+		tabPflanzenschutz.setPane(this.pflanzenschutzGrid);
+		tabPflanzenschutz.setIcon("[APP]/img/pflanzenschutz_16x16.png");
+
+		Tab tabErnte = new Tab("Ernte");
+		tabErnte.setPane(this.ernteGrid);
+		tabErnte.setIcon("[APP]/img/ernte_16x16.png");
+
+
+		tabSet.addTab(tabBoden);
+		tabSet.addTab(tabAussaat);
+		tabSet.addTab(tabDuengung);
+		tabSet.addTab(tabPflanzenschutz);
+		tabSet.addTab(tabErnte);
+
+		tabSet.setSelectedTab(0);
+
+		tabSet.addTabSelectedHandler(new TabSelectedHandler() {
 			@Override
 			public void onTabSelected(TabSelectedEvent event) {
 				Canvas pane = event.getTab().getPane();
@@ -237,10 +254,10 @@ public class Agrisys implements EntryPoint, UncaughtExceptionHandler {
 				} else if (selTab == 4) {
 					tabSet.setBackgroundColor("#ffcc00");
 				}
-				
+
 			}
 		});
-		
+
 		//add ISchlagErntejahrSelectionListener
 		this.addSchlagErntejahrSelectionListener(bodenbearbeitungGrid);
 		this.addSchlagErntejahrSelectionListener(duengungGrid);
@@ -285,12 +302,12 @@ public class Agrisys implements EntryPoint, UncaughtExceptionHandler {
 		//create layout holding the grid and the toolstrip
 		this.rightLayout = new VLayout();
 		this.rightLayout.addMember(tabSet);
-		
+
 		this.rightLayout.addMember(this.rightToolStrip);
 
 		return this.rightLayout;
 	}
-	
+
 
 
 	protected void editRightEntry() {
@@ -325,7 +342,7 @@ public class Agrisys implements EntryPoint, UncaughtExceptionHandler {
 		//create the gridview
 		final ListGrid schlaglisteGrid = new SchlaglisteGrid();
 		schlaglisteGrid.setWidth(180);
-		
+
 		schlaglisteGrid.addRecordClickHandler(new RecordClickHandler() {
 			@Override
 			public void onRecordClick(RecordClickEvent event) {
@@ -389,11 +406,11 @@ public class Agrisys implements EntryPoint, UncaughtExceptionHandler {
 			l.onSchlagErntejahrSelectionChanged(se);
 		}
 	}
-	
+
 	public void addSchlagErntejahrSelectionListener(ISchlagErntejahrSelectionListener l) {
 		this.schlagErntejahrListeners.add(l);
 	}
-	
+
 	public void removeSchlagErntejahrSelectionListener(ISchlagErntejahrSelectionListener l) {
 		this.schlagErntejahrListeners.remove(l);
 	}

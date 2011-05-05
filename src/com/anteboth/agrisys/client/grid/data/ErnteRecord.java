@@ -38,6 +38,7 @@ public class ErnteRecord extends ListRecord<Ernte> {
     	setAttribute(BEMERKUNG, getDTO() != null ? getDTO().getBemerkung() : "");
     	
     	setAttribute(ATTACHMENTS, "...");
+    	setAttribute(GEO_LOCATION, "...");
     }
     
     @Override

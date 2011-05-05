@@ -36,6 +36,7 @@ public class DuengungRecord extends ListRecord<Duengung> {
     	setAttribute(EC, 		getDTO() != null ? getDTO().getEc() : "");
     	
     	setAttribute(ATTACHMENTS, "...");
+    	setAttribute(GEO_LOCATION, "...");
     }
     
     @Override

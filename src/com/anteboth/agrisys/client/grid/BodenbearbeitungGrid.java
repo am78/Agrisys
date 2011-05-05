@@ -6,8 +6,8 @@ import java.util.Map;
 import com.anteboth.agrisys.client.ISchlagErntejahrSelectionListener;
 import com.anteboth.agrisys.client.grid.data.BodenbearbeitungRecord;
 import com.anteboth.agrisys.client.grid.data.DataManager;
-import com.anteboth.agrisys.client.grid.data.ErnteRecord;
 import com.anteboth.agrisys.client.model.Bodenbearbeitung;
+import com.anteboth.agrisys.client.model.ListRecord;
 import com.anteboth.agrisys.client.model.SchlagErntejahr;
 import com.anteboth.agrisys.client.ui.BodenbearbeitungDetailsWindow;
 import com.googlecode.objectify.Key;
@@ -69,9 +69,11 @@ extends AbstractListGrid<BodenbearbeitungRecord> implements ISchlagErntejahrSele
 		ListGridField typField = ListGridFieldFactory.createStringField( 
 				BodenbearbeitungRecord.TYP, "Typ");
 		ListGridField attachmentsField = ListGridFieldFactory.createStringField(
-				ErnteRecord.ATTACHMENTS, "IMG", 30);
+				ListRecord.ATTACHMENTS, "FOTO", 35);
+		ListGridField geoField = ListGridFieldFactory.createStringField(
+				ListRecord.GEO_LOCATION, "GEO", 35);
 		
-		setFields(datumField, typField, flaecheField, bemField, attachmentsField);
+		setFields(datumField, typField, flaecheField, bemField, attachmentsField, geoField);
 	}
 
 	@Override
