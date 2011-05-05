@@ -1,6 +1,5 @@
 package com.anteboth.agrisys.client.grid;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -11,12 +10,9 @@ import com.anteboth.agrisys.client.grid.data.ErnteRecord;
 import com.anteboth.agrisys.client.model.Aussaat;
 import com.anteboth.agrisys.client.model.SchlagErntejahr;
 import com.anteboth.agrisys.client.ui.AussaatDetailsWindow;
-import com.google.gwt.i18n.client.DateTimeFormat;
 import com.googlecode.objectify.Key;
 import com.smartgwt.client.types.ListGridEditEvent;
-import com.smartgwt.client.widgets.grid.CellFormatter;
 import com.smartgwt.client.widgets.grid.ListGridField;
-import com.smartgwt.client.widgets.grid.ListGridRecord;
 import com.smartgwt.client.widgets.grid.events.EditCompleteEvent;
 import com.smartgwt.client.widgets.grid.events.RecordDoubleClickEvent;
 import com.smartgwt.client.widgets.grid.events.RecordDoubleClickHandler;
@@ -65,31 +61,23 @@ extends AbstractListGrid<AussaatRecord> implements ISchlagErntejahrSelectionList
 	
 	@Override
 	protected void initGridFields() {
-		final DateTimeFormat dateFormatter = DateTimeFormat.getFormat("dd.MM.yyyyy");  
-		ListGridField datumField = new ListGridField(AussaatRecord.DATUM, "Datum");
-		datumField.setCellFormatter(new CellFormatter() {
-            public String format(Object value, ListGridRecord record, int rowNum, int colNum) {  
-                if (value != null) {  
-                    try {  
-                        Date dateValue = (Date) value;  
-                        return dateFormatter.format(dateValue);  
-                    } catch (Exception e) {  
-                        return value.toString();  
-                    }  
-                } else {  
-                    return "";  
-                }  
-            }  
-        }); 
-		
-		ListGridField flaecheField = new ListGridField(AussaatRecord.FLAECHE, "Fl&auml;che");
-		ListGridField bemField = new ListGridField(AussaatRecord.BEMERKUNG, "Bemerkung");
-		ListGridField sorteField = new ListGridField(AussaatRecord.SORTE, "Sorte");
-		ListGridField kulturField = new ListGridField(AussaatRecord.KULTUR, "Kultur");
-		ListGridField kgProHaField = new ListGridField(AussaatRecord.KG_PRO_HA, "kg/ha");
-		ListGridField beizeField = new ListGridField(AussaatRecord.BEIZE, "Beize");
-		
-		ListGridField attachmentsField = new ListGridField(ErnteRecord.ATTACHMENTS, "IMG", 30);
+		  
+		ListGridField datumField = ListGridFieldFactory.createDateField(
+				AussaatRecord.DATUM, "Datum");
+		ListGridField flaecheField = ListGridFieldFactory.createFloatField(
+				AussaatRecord.FLAECHE, "Fl&auml;che");
+		ListGridField bemField = ListGridFieldFactory.createStringField(
+				AussaatRecord.BEMERKUNG, "Bemerkung");
+		ListGridField sorteField = ListGridFieldFactory.createStringField(
+				AussaatRecord.SORTE, "Sorte");
+		ListGridField kulturField = ListGridFieldFactory.createStringField(
+				AussaatRecord.KULTUR, "Kultur");
+		ListGridField kgProHaField = ListGridFieldFactory.createFloatField(
+				AussaatRecord.KG_PRO_HA, "kg/ha");
+		ListGridField beizeField = ListGridFieldFactory.createStringField(
+				AussaatRecord.BEIZE, "Beize");
+		ListGridField attachmentsField = ListGridFieldFactory.createStringField(
+				ErnteRecord.ATTACHMENTS, "IMG", 30);
 		
 		setFields(datumField, kulturField, sorteField, flaecheField, 
 				kgProHaField, beizeField, bemField, attachmentsField);

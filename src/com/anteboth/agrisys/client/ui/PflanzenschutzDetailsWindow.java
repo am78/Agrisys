@@ -48,30 +48,18 @@ public class PflanzenschutzDetailsWindow extends Window {
         setAutoCenter(true);
         
 		/* create the form */
-		FloatItem flaecheItem = new FloatItem();
-		flaecheItem.setName(PflanzenschutzRecord.FLAECHE);
-		flaecheItem.setTitle("Fl&auml;che");
-		flaecheItem.setRequired(true);
-		
-		DateItem datumItem = new DateItem(
-				PflanzenschutzRecord.DATUM, "Datum");
-		datumItem.setRequired(true);
-		
-		FloatItem kgProHaItem = new FloatItem();
-		kgProHaItem.setName(PflanzenschutzRecord.KG_PRO_HA);
-		kgProHaItem.setTitle("kg/ha");
-		kgProHaItem.setRequired(false);
-		
-		FloatItem ecItem = new FloatItem();
-		ecItem.setName(PflanzenschutzRecord.EC);
-		ecItem.setTitle("EC");
-		ecItem.setRequired(false);
-        
-		TextItem indItem = new TextItem(
-        		PflanzenschutzRecord.INDIKATION, "Indikation");
-		
-        TextAreaItem bemItem = new TextAreaItem(
-        		PflanzenschutzRecord.BEMERKUNG, "Bemerkung");
+		FloatItem flaecheItem = FormItemFactory.createFloatItem(
+				PflanzenschutzRecord.FLAECHE, "Fl&auml;che", true);
+		DateItem datumItem = FormItemFactory.createDateItem(
+				PflanzenschutzRecord.DATUM, "Datum", true);
+		FloatItem kgProHaItem = FormItemFactory.createFloatItem(
+				PflanzenschutzRecord.KG_PRO_HA, "kg/ha", false);
+		FloatItem ecItem = FormItemFactory.createFloatItem(
+				PflanzenschutzRecord.EC, "EC", false);
+		TextItem indItem = FormItemFactory.createTextItem(
+        		PflanzenschutzRecord.INDIKATION, "Indikation", false);
+        TextAreaItem bemItem = FormItemFactory.createTextAreaItem(
+        		PflanzenschutzRecord.BEMERKUNG, "Bemerkung", false);
 
         final DynamicForm form = new DynamicForm();
         form.setItems(datumItem, pflanzenschutzItem, flaecheItem, kgProHaItem, ecItem, indItem, bemItem);

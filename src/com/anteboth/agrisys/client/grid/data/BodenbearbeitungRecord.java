@@ -11,6 +11,11 @@ import com.googlecode.objectify.Key;
 
 public class BodenbearbeitungRecord extends ListRecord<Bodenbearbeitung> {
 
+	public static final String DATUM = "datum";
+	public static final String TYP = "typ";
+	public static final String FLAECHE = "flaeche";
+	public static final String BEMERKUNG = "bemerkung";
+
 	
     public BodenbearbeitungRecord(Bodenbearbeitung b) {
     	super(b);
@@ -22,10 +27,10 @@ public class BodenbearbeitungRecord extends ListRecord<Bodenbearbeitung> {
     
     @Override
     public void updateAttributes() {
-    	setAttribute("datum", getDTO() != null ? getDTO().getDatum() : "");
-    	setAttribute("typ", (getDTO() != null && getDTO().getBodenbearbeitungTyp() != null) ? getDTO().getBodenbearbeitungTyp() : "");
-    	setAttribute("flaeche", getDTO() != null ? getDTO().getFlaeche(): "");
-    	setAttribute("bemerkung", getDTO() != null ? getDTO().getBemerkung() : "");
+    	setAttribute(DATUM, getDTO() != null ? getDTO().getDatum() : "");
+    	setAttribute(TYP, (getDTO() != null && getDTO().getBodenbearbeitungTyp() != null) ? getDTO().getBodenbearbeitungTyp() : "");
+    	setAttribute(FLAECHE, getDTO() != null ? getDTO().getFlaeche(): "");
+    	setAttribute(BEMERKUNG, getDTO() != null ? getDTO().getBemerkung() : "");
     	
     	setAttribute(ATTACHMENTS, "...");
     }
@@ -42,20 +47,20 @@ public class BodenbearbeitungRecord extends ListRecord<Bodenbearbeitung> {
 				GWT.log("Warning, value is null");
 			}
 			
-			if (att.equals("flaeche")) {
+			if (att.equals(FLAECHE)) {
 				if (val != null) {
 					dto.setFlaeche(Double.parseDouble(val.toString()));
 				} else {
 					dto.setFlaeche(-1);
 				}
 			} 
-			else if (att.equals("bemerkung")) {
+			else if (att.equals(BEMERKUNG)) {
 				dto.setBemerkung((String) val);
 			}
-			else if (att.equals("datum")) {
+			else if (att.equals(DATUM)) {
 				dto.setDatum((java.util.Date) val);
 			}
-			else if (att.equals("typ")) {
+			else if (att.equals(TYP)) {
 				if (val != null) {
 					Key<BodenbearbeitungTyp> key = new Key<BodenbearbeitungTyp>(
 							BodenbearbeitungTyp.class, Long.parseLong((String) val));

@@ -25,6 +25,8 @@ import com.anteboth.agrisys.client.model.stammdaten.Kultur;
 import com.anteboth.agrisys.client.model.stammdaten.PSMittel;
 import com.anteboth.agrisys.client.model.stammdaten.Sorte;
 import com.anteboth.agrisys.client.model.stammdaten.Stammdaten;
+import com.google.appengine.api.blobstore.BlobKey;
+import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
@@ -904,7 +906,11 @@ public class ServiceManager {
 				
 				//save aktivitaet entry
 				store(a);
-			}
+				
+				//finally remove the blob
+				BlobKey blobKey = new BlobKey(resKey);
+				BlobstoreServiceFactory.getBlobstoreService().delete(blobKey);
+			}			
 		}
 	}
 }

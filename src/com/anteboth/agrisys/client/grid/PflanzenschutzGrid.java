@@ -1,6 +1,5 @@
 package com.anteboth.agrisys.client.grid;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -11,12 +10,9 @@ import com.anteboth.agrisys.client.grid.data.PflanzenschutzRecord;
 import com.anteboth.agrisys.client.model.Pflanzenschutz;
 import com.anteboth.agrisys.client.model.SchlagErntejahr;
 import com.anteboth.agrisys.client.ui.PflanzenschutzDetailsWindow;
-import com.google.gwt.i18n.client.DateTimeFormat;
 import com.googlecode.objectify.Key;
 import com.smartgwt.client.types.ListGridEditEvent;
-import com.smartgwt.client.widgets.grid.CellFormatter;
 import com.smartgwt.client.widgets.grid.ListGridField;
-import com.smartgwt.client.widgets.grid.ListGridRecord;
 import com.smartgwt.client.widgets.grid.events.EditCompleteEvent;
 import com.smartgwt.client.widgets.grid.events.RecordDoubleClickEvent;
 import com.smartgwt.client.widgets.grid.events.RecordDoubleClickHandler;
@@ -64,36 +60,22 @@ extends AbstractListGrid<PflanzenschutzRecord> implements ISchlagErntejahrSelect
 	
 	@Override
 	protected void initGridFields() {
-		final DateTimeFormat dateFormatter = DateTimeFormat.getFormat("dd.MM.yyyyy");  
-		ListGridField datumField = new ListGridField(PflanzenschutzRecord.DATUM, "Datum");
-		datumField.setCellFormatter(new CellFormatter() {
-            public String format(Object value, ListGridRecord record, int rowNum, int colNum) {  
-                if (value != null) {  
-                    try {  
-                        Date dateValue = (Date) value;  
-                        return dateFormatter.format(dateValue);  
-                    } catch (Exception e) {  
-                        return value.toString();  
-                    }  
-                } else {  
-                    return "";  
-                }  
-            }  
-        }); 
-		
-		ListGridField flaecheField = new ListGridField(
+		ListGridField datumField = ListGridFieldFactory.createDateField(
+				PflanzenschutzRecord.DATUM, "Datum");
+		ListGridField flaecheField = ListGridFieldFactory.createFloatField(
 				PflanzenschutzRecord.FLAECHE, "Fl&auml;che");
-		ListGridField bemField = new ListGridField(
+		ListGridField bemField = ListGridFieldFactory.createStringField(
 				PflanzenschutzRecord.BEMERKUNG, "Bemerkung");
-		ListGridField psMittelField = new ListGridField(
+		ListGridField psMittelField = ListGridFieldFactory.createStringField(
 				PflanzenschutzRecord.PS_MITTEL, "Pflanzenschutzmittel");
-		ListGridField ecField = new ListGridField(
-				PflanzenschutzRecord.EC, "EC");
-		ListGridField kgProHaField = new ListGridField(
+		ListGridField ecField = ListGridFieldFactory.createFloatField(
+				PflanzenschutzRecord.EC, "EC", 40);
+		ListGridField kgProHaField = ListGridFieldFactory.createFloatField(
 				PflanzenschutzRecord.KG_PRO_HA, "kg/ha");
-		ListGridField indikationField = new ListGridField(
+		ListGridField indikationField = ListGridFieldFactory.createStringField(
 				PflanzenschutzRecord.INDIKATION, "Indikation");
-		ListGridField attachmentsField = new ListGridField(ErnteRecord.ATTACHMENTS, "IMG", 30);
+		ListGridField attachmentsField = ListGridFieldFactory.createStringField(
+				ErnteRecord.ATTACHMENTS, "IMG", 30);
 		
 		setFields(datumField, psMittelField, flaecheField, kgProHaField, ecField, 
 				indikationField, bemField, attachmentsField);

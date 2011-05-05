@@ -1,6 +1,5 @@
 package com.anteboth.agrisys.client.grid;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -11,12 +10,9 @@ import com.anteboth.agrisys.client.grid.data.ErnteRecord;
 import com.anteboth.agrisys.client.model.Duengung;
 import com.anteboth.agrisys.client.model.SchlagErntejahr;
 import com.anteboth.agrisys.client.ui.DuengungDetailsWindow;
-import com.google.gwt.i18n.client.DateTimeFormat;
 import com.googlecode.objectify.Key;
 import com.smartgwt.client.types.ListGridEditEvent;
-import com.smartgwt.client.widgets.grid.CellFormatter;
 import com.smartgwt.client.widgets.grid.ListGridField;
-import com.smartgwt.client.widgets.grid.ListGridRecord;
 import com.smartgwt.client.widgets.grid.events.EditCompleteEvent;
 import com.smartgwt.client.widgets.grid.events.RecordDoubleClickEvent;
 import com.smartgwt.client.widgets.grid.events.RecordDoubleClickHandler;
@@ -64,34 +60,20 @@ extends AbstractListGrid<DuengungRecord> implements ISchlagErntejahrSelectionLis
 	
 	@Override
 	protected void initGridFields() {
-		final DateTimeFormat dateFormatter = DateTimeFormat.getFormat("dd.MM.yyyyy");  
-		ListGridField datumField = new ListGridField(DuengungRecord.DATUM, "Datum");
-		datumField.setCellFormatter(new CellFormatter() {
-            public String format(Object value, ListGridRecord record, int rowNum, int colNum) {  
-                if (value != null) {  
-                    try {  
-                        Date dateValue = (Date) value;  
-                        return dateFormatter.format(dateValue);  
-                    } catch (Exception e) {  
-                        return value.toString();  
-                    }  
-                } else {  
-                    return "";  
-                }  
-            }  
-        }); 
-		
-		ListGridField flaecheField = new ListGridField(
+		ListGridField datumField = ListGridFieldFactory.createDateField(
+				DuengungRecord.DATUM, "Datum");
+		ListGridField flaecheField = ListGridFieldFactory.createFloatField(
 				DuengungRecord.FLAECHE, "Fl&auml;che");
-		ListGridField bemField = new ListGridField(
+		ListGridField bemField = ListGridFieldFactory.createStringField(
 				DuengungRecord.BEMERKUNG, "Bemerkung");
-		ListGridField duengerartField = new ListGridField(
+		ListGridField duengerartField = ListGridFieldFactory.createStringField(
 				DuengungRecord.DUENGERART, "D&uuml;ngerart");
-		ListGridField ecField = new ListGridField(
-				DuengungRecord.EC, "EC");
-		ListGridField kgProHaField = new ListGridField(
+		ListGridField ecField = ListGridFieldFactory.createFloatField(
+				DuengungRecord.EC, "EC", 40);
+		ListGridField kgProHaField = ListGridFieldFactory.createFloatField(
 				DuengungRecord.KG_PRO_HA, "kg/ha");
-		ListGridField attachmentsField = new ListGridField(ErnteRecord.ATTACHMENTS, "IMG", 30);
+		ListGridField attachmentsField = ListGridFieldFactory.createStringField(
+				ErnteRecord.ATTACHMENTS, "IMG", 30);
 		
 		setFields(datumField, duengerartField, flaecheField, kgProHaField, ecField, bemField, attachmentsField);
 	}

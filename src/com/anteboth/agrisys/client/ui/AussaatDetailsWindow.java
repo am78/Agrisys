@@ -44,21 +44,16 @@ public class AussaatDetailsWindow extends Window {
         setAutoCenter(true);
         
 		/* create the form */
-		FloatItem flaecheItem = new FloatItem();
-		flaecheItem.setName(AussaatRecord.FLAECHE);
-		flaecheItem.setTitle("Fl&auml;che");
-		flaecheItem.setRequired(true);
-		
-		FloatItem kgProHaItem = new FloatItem();
-		kgProHaItem.setName(AussaatRecord.KG_PRO_HA);
-		kgProHaItem.setTitle("kg/ha");
-		kgProHaItem.setRequired(true);
-		
-		DateItem datumItem = new DateItem(AussaatRecord.DATUM, "Datum");
-		datumItem.setRequired(true);
-		
-		TextItem beizeItem = new TextItem(AussaatRecord.BEIZE, "Beize");
-        TextAreaItem bemItem = new TextAreaItem(AussaatRecord.BEMERKUNG, "Bemerkung");
+		FloatItem flaecheItem = FormItemFactory.createFloatItem(
+				AussaatRecord.FLAECHE, "Fl&auml;che", true);
+		FloatItem kgProHaItem = FormItemFactory.createFloatItem(
+				AussaatRecord.KG_PRO_HA, "kg/ha", true);
+		DateItem datumItem = FormItemFactory.createDateItem(
+				AussaatRecord.DATUM, "Datum", true);
+		TextItem beizeItem = FormItemFactory.createTextItem(
+				AussaatRecord.BEIZE, "Beize", false);
+        TextAreaItem bemItem = FormItemFactory.createTextAreaItem(
+        		AussaatRecord.BEMERKUNG, "Bemerkung", false);
 
         final DynamicForm form = new DynamicForm();
         form.setItems(datumItem, flaecheItem, kgProHaItem, beizeItem, bemItem);

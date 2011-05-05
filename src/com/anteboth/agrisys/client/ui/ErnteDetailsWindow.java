@@ -42,26 +42,18 @@ public class ErnteDetailsWindow extends Window {
         setAutoCenter(true);
         
 		/* create the form */
-		FloatItem flaecheItem = new FloatItem();
-		flaecheItem.setName(ErnteRecord.FLAECHE);
-		flaecheItem.setTitle("Fl&auml;che");
-		flaecheItem.setRequired(true);
-		
-		FloatItem dtProHaItem = new FloatItem();
-		dtProHaItem.setName(ErnteRecord.DT_PRO_HA);
-		dtProHaItem.setTitle("dt/ha");
-		dtProHaItem.setRequired(true);
-		
-		FloatItem gesamtmengeItem = new FloatItem();
-		gesamtmengeItem.setName(ErnteRecord.GESAMTMENGE);
-		gesamtmengeItem.setTitle("Gesamtmenge");
-		gesamtmengeItem.setRequired(true);
-		
-		DateItem datumItem = new DateItem(ErnteRecord.DATUM, "Datum");
-		datumItem.setRequired(true);
-		
-		TextItem anlieferungItem = new TextItem(ErnteRecord.ANLIEFERUNG, "Anlieferung");
-        TextAreaItem bemItem = new TextAreaItem(ErnteRecord.BEMERKUNG, "Bemerkung");
+		FloatItem flaecheItem = FormItemFactory.createFloatItem(
+				ErnteRecord.FLAECHE, "Fl&auml;che", true);
+		FloatItem dtProHaItem = FormItemFactory.createFloatItem(
+				ErnteRecord.DT_PRO_HA,"dt/ha", true);
+		FloatItem gesamtmengeItem = FormItemFactory.createFloatItem(
+				ErnteRecord.GESAMTMENGE, "Gesamtmenge", true);
+		DateItem datumItem = FormItemFactory.createDateItem( 
+				ErnteRecord.DATUM, "Datum", true);
+		TextItem anlieferungItem = FormItemFactory.createTextItem(
+				ErnteRecord.ANLIEFERUNG, "Anlieferung", false);
+        TextAreaItem bemItem = FormItemFactory.createTextAreaItem(
+        		ErnteRecord.BEMERKUNG, "Bemerkung", false);
 
         final DynamicForm form = new DynamicForm();
         form.setItems(datumItem, flaecheItem, dtProHaItem, gesamtmengeItem, anlieferungItem, bemItem);

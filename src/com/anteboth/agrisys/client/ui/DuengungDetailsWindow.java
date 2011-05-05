@@ -11,10 +11,14 @@ import com.anteboth.agrisys.client.model.DuengerartDataSource;
 import com.anteboth.agrisys.client.model.Duengung;
 import com.smartgwt.client.widgets.Window;
 import com.smartgwt.client.widgets.form.DynamicForm;
+import com.smartgwt.client.widgets.form.FormItemValueParser;
 import com.smartgwt.client.widgets.form.fields.DateItem;
 import com.smartgwt.client.widgets.form.fields.FloatItem;
+import com.smartgwt.client.widgets.form.fields.FormItem;
 import com.smartgwt.client.widgets.form.fields.SelectItem;
 import com.smartgwt.client.widgets.form.fields.TextAreaItem;
+import com.smartgwt.client.widgets.form.fields.events.ChangedEvent;
+import com.smartgwt.client.widgets.form.fields.events.ChangedHandler;
 import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.VLayout;
 
@@ -48,27 +52,16 @@ public class DuengungDetailsWindow extends Window {
         setAutoCenter(true);
         
 		/* create the form */
-		FloatItem flaecheItem = new FloatItem();
-		flaecheItem.setName(DuengungRecord.FLAECHE);
-		flaecheItem.setTitle("Fl&auml;che");
-		flaecheItem.setRequired(true);
-		
-		DateItem datumItem = new DateItem(
-				DuengungRecord.DATUM, "Datum");
-		datumItem.setRequired(true);
-		
-		FloatItem kgProHaItem = new FloatItem();
-		kgProHaItem.setName(DuengungRecord.KG_PRO_HA);
-		kgProHaItem.setTitle("kg/ha");
-		kgProHaItem.setRequired(false);
-		
-		FloatItem ecItem = new FloatItem();
-		ecItem.setName(DuengungRecord.EC);
-		ecItem.setTitle("EC");
-		ecItem.setRequired(false);
-        
-        TextAreaItem bemItem = new TextAreaItem(
-        		DuengungRecord.BEMERKUNG, "Bemerkung");
+		FloatItem flaecheItem = FormItemFactory.createFloatItem(
+				DuengungRecord.FLAECHE, "Fl&auml;che", true);
+		DateItem datumItem = FormItemFactory.createDateItem(
+				DuengungRecord.DATUM, "Datum", true);
+		FloatItem kgProHaItem = FormItemFactory.createFloatItem(
+				DuengungRecord.KG_PRO_HA, "kg/ha", false);
+		FloatItem ecItem = FormItemFactory.createFloatItem(
+				DuengungRecord.EC, "EC", false);
+        TextAreaItem bemItem = FormItemFactory.createTextAreaItem(
+        		DuengungRecord.BEMERKUNG, "Bemerkung", false);
 
         final DynamicForm form = new DynamicForm();
         form.setItems(datumItem, duengerartItem, flaecheItem, kgProHaItem, ecItem, bemItem);

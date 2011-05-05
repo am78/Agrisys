@@ -1,6 +1,5 @@
 package com.anteboth.agrisys.client.grid;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -10,12 +9,9 @@ import com.anteboth.agrisys.client.grid.data.ErnteRecord;
 import com.anteboth.agrisys.client.model.Ernte;
 import com.anteboth.agrisys.client.model.SchlagErntejahr;
 import com.anteboth.agrisys.client.ui.ErnteDetailsWindow;
-import com.google.gwt.i18n.client.DateTimeFormat;
 import com.googlecode.objectify.Key;
 import com.smartgwt.client.types.ListGridEditEvent;
-import com.smartgwt.client.widgets.grid.CellFormatter;
 import com.smartgwt.client.widgets.grid.ListGridField;
-import com.smartgwt.client.widgets.grid.ListGridRecord;
 import com.smartgwt.client.widgets.grid.events.EditCompleteEvent;
 import com.smartgwt.client.widgets.grid.events.RecordDoubleClickEvent;
 import com.smartgwt.client.widgets.grid.events.RecordDoubleClickHandler;
@@ -65,32 +61,24 @@ extends AbstractListGrid<ErnteRecord> implements ISchlagErntejahrSelectionListen
 	
 	@Override
 	protected void initGridFields() {
-		final DateTimeFormat dateFormatter = DateTimeFormat.getFormat("dd.MM.yyyyy");  
-		ListGridField datumField = new ListGridField(ErnteRecord.DATUM, "Datum");
-		datumField.setCellFormatter(new CellFormatter() {
-            public String format(Object value, ListGridRecord record, int rowNum, int colNum) {  
-                if (value != null) {  
-                    try {  
-                        Date dateValue = (Date) value;  
-                        return dateFormatter.format(dateValue);  
-                    } catch (Exception e) {  
-                        return value.toString();  
-                    }  
-                } else {  
-                    return "";  
-                }  
-            }  
-        }); 
-		
-		ListGridField flaecheField = new ListGridField(ErnteRecord.FLAECHE, "Fl&auml;che");
-		ListGridField bemField = new ListGridField(ErnteRecord.BEMERKUNG, "Bemerkung");
-		ListGridField sorteField = new ListGridField(ErnteRecord.SORTE, "Sorte");
-		ListGridField kulturField = new ListGridField(ErnteRecord.KULTUR, "Kultur");
-		ListGridField dtProHaField = new ListGridField(ErnteRecord.DT_PRO_HA, "kg/ha");
-		ListGridField anlieferungField = new ListGridField(ErnteRecord.ANLIEFERUNG, "Anlieferung");
-		ListGridField gesamtmengeField = new ListGridField(ErnteRecord.GESAMTMENGE, "Gesamtmenge");
-		
-		ListGridField attachmentsField = new ListGridField(ErnteRecord.ATTACHMENTS, "IMG", 30);
+		ListGridField datumField = ListGridFieldFactory.createDateField(
+				ErnteRecord.DATUM, "Datum");
+		ListGridField flaecheField = ListGridFieldFactory.createFloatField( 
+				ErnteRecord.FLAECHE, "Fl&auml;che");
+		ListGridField bemField = ListGridFieldFactory.createStringField(
+				ErnteRecord.BEMERKUNG, "Bemerkung");
+		ListGridField sorteField = ListGridFieldFactory.createStringField(
+				ErnteRecord.SORTE, "Sorte");
+		ListGridField kulturField = ListGridFieldFactory.createStringField(
+				ErnteRecord.KULTUR, "Kultur");
+		ListGridField dtProHaField = ListGridFieldFactory.createFloatField(
+				ErnteRecord.DT_PRO_HA, "kg/ha");
+		ListGridField anlieferungField = ListGridFieldFactory.createStringField(
+				ErnteRecord.ANLIEFERUNG, "Anlieferung");
+		ListGridField gesamtmengeField = ListGridFieldFactory.createFloatField(
+				ErnteRecord.GESAMTMENGE, "Gesamtmenge");
+		ListGridField attachmentsField = ListGridFieldFactory.createStringField(
+				ErnteRecord.ATTACHMENTS, "IMG", 30);
 		
 		setFields(datumField, kulturField, sorteField, flaecheField, dtProHaField, 
 				anlieferungField, gesamtmengeField, bemField, attachmentsField);

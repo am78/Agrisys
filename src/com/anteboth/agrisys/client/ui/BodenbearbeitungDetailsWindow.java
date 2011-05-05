@@ -46,16 +46,12 @@ public class BodenbearbeitungDetailsWindow extends Window {
         setAutoCenter(true);
         
 		/* create the form */
-		FloatItem flaecheItem = new FloatItem();
-		flaecheItem.setName("flaeche");
-		flaecheItem.setTitle("Fl&auml;che");
-		flaecheItem.setRequired(true);
-		
-		DateItem datumItem = new DateItem("datum", "Datum");
-		datumItem.setRequired(true);
-		
-        
-        TextAreaItem bemItem = new TextAreaItem("bemerkung", "Bemerkung");
+		FloatItem flaecheItem = FormItemFactory.createFloatItem(
+				BodenbearbeitungRecord.FLAECHE, "Fl&auml;che", true);
+		DateItem datumItem = FormItemFactory.createDateItem(
+				BodenbearbeitungRecord.DATUM, "Datum", true);
+        TextAreaItem bemItem = FormItemFactory.createTextAreaItem(
+        		BodenbearbeitungRecord.BEMERKUNG, "Bemerkung", false);
 
         final DynamicForm form = new DynamicForm();
         form.setItems(datumItem, typItem, flaecheItem, bemItem);
