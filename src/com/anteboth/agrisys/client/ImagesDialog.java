@@ -30,7 +30,6 @@ public class ImagesDialog extends Window {
 
 	private static final String IMG_PREVIEW_URL_PREFIX = "/upload/serve?qual=preview&blob-key=";
 	private static final String IMG_URL_PREFIX = "/upload/serve?qual=full&blob-key=";
-	private static final String IMG_UPLOAD_URL = "/upload.jsp";
 
 	private ImageTileRecord[] data;
 	private Aktivitaet aktivitaet;

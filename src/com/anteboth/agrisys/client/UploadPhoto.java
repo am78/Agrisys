@@ -16,6 +16,7 @@ import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.Hidden;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteEvent;
+import com.smartgwt.client.util.SC;
 
 /**
  * Image uploader.
@@ -98,7 +99,8 @@ public class UploadPhoto extends Composite implements HasHandlers {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
+				SC.say("Fehler beim initialisieren des Image-Uploaders: " + 
+						caught.getLocalizedMessage());
 			}
 		});
 	}

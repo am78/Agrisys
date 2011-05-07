@@ -84,8 +84,7 @@ public class Agrisys implements EntryPoint, UncaughtExceptionHandler {
 		 * application on a public server, but a blank key will work for an
 		 * application served from localhost.
 		 */
-		String apiKey = "";
-		//"BQIAAAAWC3arzoRHb2hqhFgPw4LFRQZV8fD85RK7KWaR-Anp3MtkiEAqBRbYStNJOA2z6Na_UvE8RfJTrvpRg";
+		String apiKey = "BQIAAAAWC3arzoRHb2hqhFgPw4LFRQZV8fD85RK7KWaR-Anp3MtkiEAqBRbYStNJOA2z6Na_UvE8RfJTrvpRg";
 		Maps.loadMapsApi(apiKey, "2.x", false, new Runnable() {
 			public void run() {
 				GWT.log("Maps API loaded");
