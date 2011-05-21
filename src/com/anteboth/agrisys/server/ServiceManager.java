@@ -180,17 +180,11 @@ public class ServiceManager {
 	}
 
 	public List<BodenbearbeitungTyp> loadBodenbearbeitungTypen() {
-		
-		List<BodenbearbeitungTyp> result = new ArrayList<BodenbearbeitungTyp>();
+
 		//load the data
 		Objectify ofy = ObjectifyService.begin();
-		Query<BodenbearbeitungTyp> query = ofy.query(BodenbearbeitungTyp.class);
-		
-		//add loaded data to result
-		for (BodenbearbeitungTyp t : query) {
-			result.add(t); 
-		}
-		
+		List<BodenbearbeitungTyp> result = ofy.query(BodenbearbeitungTyp.class).order("name").list();
+
 		return result;
 	}
 	
@@ -219,17 +213,9 @@ public class ServiceManager {
 	
 	
 	public List<PSMittel> loadPSMittel() {
-		
-		List<PSMittel> result = new ArrayList<PSMittel>();
 		//load the data
 		Objectify ofy = ObjectifyService.begin();
-		Query<PSMittel> query = ofy.query(PSMittel.class);
-		
-		//add loaded data to result
-		for (PSMittel dto : query) {
-			result.add(dto); 
-		}
-		
+		List<PSMittel> result = ofy.query(PSMittel.class).order("name").list();
 		return result;
 	}
 	
@@ -257,17 +243,9 @@ public class ServiceManager {
 	}
 	
 	public List<Duengerart> loadDuengerart() {
-		
-		List<Duengerart> result = new ArrayList<Duengerart>();
 		//load the data
 		Objectify ofy = ObjectifyService.begin();
-		Query<Duengerart> query = ofy.query(Duengerart.class);
-		
-		//add loaded data to result
-		for (Duengerart dto : query) {
-			result.add(dto); 
-		}
-		
+		List<Duengerart> result = ofy.query(Duengerart.class).order("name").list();
 		return result;
 	}
 	
@@ -524,7 +502,7 @@ public class ServiceManager {
 	public List<Bodenbearbeitung> loadBodenbearbeitungData(SchlagErntejahr schlagErntejahr) {
 		Objectify ofy = ObjectifyService.begin();
 		List<Bodenbearbeitung> data = 
-			ofy.query(Bodenbearbeitung.class).filter("schlagErntejahr", schlagErntejahr).list();
+			ofy.query(Bodenbearbeitung.class).filter("schlagErntejahr", schlagErntejahr).order("datum").list();
 		
 		for (Bodenbearbeitung bodenbearbeitung : data) {
 			Key<BodenbearbeitungTyp> k = bodenbearbeitung.getTypKey();
@@ -559,7 +537,7 @@ public class ServiceManager {
 	public List<Duengung> loadDuengungData(SchlagErntejahr schlagErntejahr) {
 		Objectify ofy = ObjectifyService.begin();
 		List<Duengung> data = 
-			ofy.query(Duengung.class).filter("schlagErntejahr", schlagErntejahr).list();
+			ofy.query(Duengung.class).filter("schlagErntejahr", schlagErntejahr).order("datum").list();
 		
 		for (Duengung duengung : data) {
 			Key<Duengerart> k = duengung.getDuengerartKey();
@@ -593,7 +571,7 @@ public class ServiceManager {
 	public List<Pflanzenschutz> loadPflanzenschutzData(SchlagErntejahr schlagErntejahr) {
 		Objectify ofy = ObjectifyService.begin();
 		List<Pflanzenschutz> data = 
-			ofy.query(Pflanzenschutz.class).filter("schlagErntejahr", schlagErntejahr).list();
+			ofy.query(Pflanzenschutz.class).filter("schlagErntejahr", schlagErntejahr).order("datum").list();
 		
 		for (Pflanzenschutz ps : data) {
 			Key<PSMittel> k = ps.getPsMittelKey();
@@ -626,7 +604,7 @@ public class ServiceManager {
 	
 	public List<Kultur> loadKulturData() {
 		Objectify ofy = ObjectifyService.begin();
-		List<Kultur> data =	ofy.query(Kultur.class).list();
+		List<Kultur> data =	ofy.query(Kultur.class).order("name").list();
 		return data;
 	}
 	
@@ -647,7 +625,7 @@ public class ServiceManager {
 	
 	public List<Sorte> loadSorten() {
 		Objectify ofy = ObjectifyService.begin();
-		List<Sorte> result = ofy.query(Sorte.class).list();
+		List<Sorte> result = ofy.query(Sorte.class).order("name").list();
 		return result;
 	}
 	
@@ -679,7 +657,7 @@ public class ServiceManager {
 	public List<Aussaat> loadAussaatData(SchlagErntejahr schlagErntejahr) {
 		Objectify ofy = ObjectifyService.begin();
 		List<Aussaat> data = 
-			ofy.query(Aussaat.class).filter("schlagErntejahr", schlagErntejahr).list();
+			ofy.query(Aussaat.class).filter("schlagErntejahr", schlagErntejahr).order("datum").list();
 		if (schlagErntejahr != null) {
 			Key<Sorte> sk = schlagErntejahr.getAnbauSorte();
 			Sorte sorte = ofy.find(sk);
@@ -727,7 +705,7 @@ public class ServiceManager {
 	public List<Ernte> loadErnteData(SchlagErntejahr schlagErntejahr) {
 		Objectify ofy = ObjectifyService.begin();
 		List<Ernte> data = 
-			ofy.query(Ernte.class).filter("schlagErntejahr", schlagErntejahr).list();
+			ofy.query(Ernte.class).filter("schlagErntejahr", schlagErntejahr).order("datum").list();
 		
 		if (schlagErntejahr != null) {
 			Key<Sorte> sk = schlagErntejahr.getAnbauSorte();

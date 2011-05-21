@@ -1,5 +1,4 @@
 //var baseUrl = 'http://agri-sys.appspot.com';
-//var baseUrl = 'http://192.168.178.26:8888';
 var baseUrl = '';
 var schlagData;
 var actListData;
@@ -8,6 +7,7 @@ var currentSchlagErntejahrId;
 var initialized = false;
 var longitude = -1;
 var latitude = -1;
+var currentActivity;
 
 //init
 function init() {
@@ -22,7 +22,11 @@ function init() {
 	//called when Schlagliste is about to open
 	$('#schlagliste').live('pagebeforeshow',function(event, ui){
 		loadAndDisplaySchlagListData();
-	});		
+	});
+	
+	$('#fotoList').live('pagebeforeshow',function(event, ui){
+		loadAndDisplayFotoListData();
+	});
 
 	//listener for tap/click on schlagliste item 
 	$('#schlagliste li a').live('tap',function(event, ui){
@@ -76,9 +80,21 @@ function init() {
 	$('#saveNewErnte').live('click',function(event, ui){
 		onSaveNewErnte($('#newErnteForm'));
 	});
-	
+
+	$('#mainBtn a').live('tap',function(event, ui){
+		refreshGeoPosition();
+	});	
 	$('#mainBtn a').live('click',function(event, ui){
 		refreshGeoPosition();
+	});
+	
+	$('#takeFoto a').live('tap',function(event, ui){
+		var id = $(this).attr('id');
+		takeFoto(id);
+	});	
+	$('#takeFoto a').live('click',function(event, ui){
+		var id = $(this).attr('id');
+		takeFoto(id);
 	});
 	
 
@@ -86,6 +102,11 @@ function init() {
 	refreshGeoPosition();
 	
 	unblockUI();
+}
+
+function takeFoto(id) {
+	alert("take foto: " + id);
+	//window.AGRISYS.takePicture(id, imageUploadUrl);
 }
 
 function loadStammdaten() {
@@ -106,6 +127,7 @@ function loadStammdaten() {
 			unblockUI();
 			//perform some post init task after the markup and the initial data has been loaded
 			postInit();
+			alert('Stammdaten geladen');
 		},
 		error: function(error) { 
 			unblockUI();
@@ -119,18 +141,17 @@ function refreshGeoPosition() {
 	if (navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(geoSuccess, geoError, { enableHighAccuracy: true });
 	} else {
-		//console.log("Geo location Feature nicht unterst√ºtzt!");
+		//console.log("Geo location Feature nicht unterstützt!");
 	}
 }
 
 function geoSuccess(position) {
 	latitude = position.coords.latitude;
 	longitude = position.coords.longitude;
-	//alert(position);
 }
  
 function geoError(msg) {
-	//alert(typeof msg == 'string' ? msg : "error");
+	alert(typeof msg == 'string' ? msg : "error");
 }
 
 //perform some post init tasks after markup and initial data has been loaded
@@ -174,7 +195,7 @@ function postInit2() {
 	if (!initialized && schlagData != null) {
 		initialized = true;
 		
-		//add schlag items to all Aktivit√§t input forms
+		//add schlag items to all Aktivität input forms
 		for (var i=0; i<schlagData.length; i++) {
 			var id = schlagData[i].schlagErntejahr.id;
 			var name = schlagData[i].flurstueck.name;
@@ -182,6 +203,10 @@ function postInit2() {
 			$('select[name=schlagInput]').append(option);
 		}
 	}
+}
+
+function getDateString2(date) {
+	return date.substring(0, 10);
 }
 
 function getDateString(date) {
@@ -412,7 +437,7 @@ function onActListDataLoaded(data, schlagErntejahrId) {
 		}
 	});
 	
-	$('#aktivitaetListe ul').append('<li data-role="list-divider">D√ºngung</li>');
+	$('#aktivitaetListe ul').append('<li data-role="list-divider">Düngung</li>');
 	$.each(data, function(akt) {
 		if (this.type == 2){
 			var newEntryRow = createEntry(this);
@@ -444,7 +469,7 @@ function createEntry(data) {
 	var id = data.id;
 	var datum = data.datum;
 	if (data.datum != null && data.datum.length > 9) {
-		datum = data.datum.substring(0, 10);
+		datum = getDateString2(data.datum);
 	}
 	var flaeche = data.flaeche;
 	//var typ = getTypeString(data.type);
@@ -468,7 +493,7 @@ function getTypeString(type) {
 	} else if (type == 1) {
 		t = 'Aussaat';
 	} else if (type == 2) {
-		t = 'D√ºngung';
+		t = 'Düngung';
 	} else if (type == 3) {
 		t = 'Ernte';
 	} else if (type == 4) {
@@ -506,6 +531,32 @@ function getKulturString(id) {
 	return kultur;
 }
 
+function loadAndDisplayFotoListData() {
+	var atts = currentActivity.attachments;
+	$('#fotoList ul li').hide();
+	
+	if (atts != null) {
+		for (var i=0; i<atts.length; i++) {
+			var blobKey = atts[i].blobKey;
+			var imageUrl = baseUrl + '/upload/serve?blob-key=' + blobKey;
+			var previewUrl = imageUrl + '&qual=preview';
+			var datum = getDateString2(atts[i].date);
+			
+			var newEntryRow = $('#imagePreviewTemplate').clone();
+			newEntryRow.removeAttr('id');
+			newEntryRow.removeAttr('style');
+
+			newEntryRow.find('.date').text(date);
+			newEntryRow.find('.preview').text('');
+			newEntryRow.find('.preview').append(
+				'<a target="image" href="' + imageUrl + '"><img src="' + previewUrl + '" alt="preview image" /> </a>');
+
+			newEntryRow.appendTo('#fotoList ul');
+
+		}
+	}
+}
+
 function loadAndDisplaySchlagListData() {
 	if (initialized) {
 		return;
@@ -532,6 +583,8 @@ function loadAndDisplaySchlagListData() {
 
 function onSchlagDataLoaded(data) {
 	schlagData = data;
+	
+	$('#schlagliste ul li').hide();
 
 	$.each(data, function(schlag) {
 		var fs = this.flurstueck;
@@ -553,7 +606,6 @@ function onSchlagDataLoaded(data) {
 		newEntryRow.find('.sorte').text(sorte);
 
 		newEntryRow.appendTo('#schlagliste ul');
-
 	});
 }
 
@@ -568,15 +620,17 @@ function loadAndDisplayActEntry(id) {
 		}
 	}
 	
+	currentActivity = act;
+	
 	if (act == null) {
 		return;
 	}
 	
 	//empty this list
 	$('#actDetails ul li').hide();
-	$('#actDetails ul h1').hide();
+	//$('#actDetails ul h1').hide();
 	
-	var datum = act.datum.substring(0, 10);
+	var datum = getDateString2(act.datum);
 	var flaeche = act.flaeche;
 	var typ = getTypeString(act.type);
 	var bem = act.bemerkung;
@@ -596,7 +650,7 @@ function loadAndDisplayActEntry(id) {
 	var row = $('#actDetailsEntryTemplate').clone();
 	row.removeAttr('id');
 	row.removeAttr('style');
-	row.find('.label').text("Fl√§che: ");
+	row.find('.label').text("Fläche: ");
 	row.find('.value').text(flaeche + " ha");
 	row.appendTo('#actDetails ul');
 	
@@ -643,7 +697,7 @@ function loadAndDisplayActEntry(id) {
 		var row = $('#actDetailsEntryTemplate').clone();
 		row.removeAttr('id');
 		row.removeAttr('style');
-		row.find('.label').text("D√ºnger: ");
+		row.find('.label').text("Dünger: ");
 		row.find('.value').text(duengerart);
 		row.appendTo('#actDetails ul');
 		
@@ -741,7 +795,7 @@ function loadAndDisplayActEntry(id) {
 	row.find('.label').text("Bemerkung: ");
 	row.find('.value').text(bem);
 	row.appendTo('#actDetails ul');
-	
+
 	
 	//display link to map (if location for record is set)
 	var longitude = act.longitude;
@@ -752,15 +806,21 @@ function loadAndDisplayActEntry(id) {
 				+ longitude + '&lat=' + latitude + '">Karte</a></li>');
 	}
 	
+	//display foto list link
+	$('#actDetails ul').append('<li><a href="#fotoList" data-role="button">Fotos</a></li>');
+
+	//display new foto link
+	$('#actDetails ul').append('<li id="takeFoto"> <a id="' + id + '" data-role="button" href="">Foto aufnehmen</a> </li>');
+	
 	//don't forget to refresh the list
 	$('#actDetails ul').listview('refresh');
 }
 
 
 function blockUI() {
-//	window.AGRISYS.showBusyIndicator();	
+	window.AGRISYS.showBusyIndicator();	
 }
 
 function unblockUI() {
-//	window.AGRISYS.hideBusyIndicator();	
+	window.AGRISYS.hideBusyIndicator();	
 }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>  
-<html manifest="_agrisys.manifest">
+<html>
 
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -112,14 +112,13 @@
 	<div data-role="header">
 		<h1>Agrisys</h1>
 	</div><!-- /header -->
-	<div data-role="content">			
+	<div data-role="content">	
 		<ul data-role="listview" data-inset="false" data-theme="a" data-dividertheme="d">
 	        <li id="actDetailsEntryTemplate" style="display: none">
 				<span class="label">Label</span>
 				<span class="value">value</span>
 			</li>
         </ul>	
-        	
 	</div><!-- /content -->
 </div><!-- /page -->
 
@@ -337,20 +336,23 @@
 			<div>
 				<label for="remark">Bemerkung</label>
 				<textarea cols="40" rows="4" name="remark" id="remark"></textarea>
-			</div>
-			<div>
-				<a href="#fotoList" data-role="button">Fotos</a>
 			</div>				
 		</form>
 	</div>
 </div>
 
+
 <div data-role="page" id="fotoList">
 	<div data-role="header" data-position="inline">
 		<h1>Agrisys</h1>
 	</div><!-- /header -->
-	<div data-role="content" if="takeFoto">
-		<a href="" data-role="button">Foto aufnehmen</a>	
+	<div data-role="content">
+		<ul data-role="listview" data-inset="false" data-theme="a" data-dividertheme="d">
+	        <li id="imagePreviewTemplate" style="display: none">
+				<span class="preview">PREVIEW-IMAGE</span><br/>
+				<span class="dateLabel">Datum: </span><span class="date">10.10.2010</span>
+			</li>
+        </ul>
 	</div>
 </div>
 

@@ -20,6 +20,7 @@ public class AgrisysRestApplication extends Application {
         router.attach("/stammdaten", StammdatenResource.class);
         router.attach("/aktivitaetList/{id}", AktivitaetListResource.class);
         router.attach("/aktivitaet/{id}", AktivitaetResource.class);
+        router.attach("/imageUploadUrl", ImageUploadUrlResource.class);
 
         return router;
     }
