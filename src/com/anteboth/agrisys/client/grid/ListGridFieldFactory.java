@@ -51,7 +51,7 @@ public class ListGridFieldFactory {
 		return field;
 	}
 
-	private static final DateTimeFormat dateFormatter = DateTimeFormat.getFormat("dd.MM.yyyyy");
+	private static final DateTimeFormat dateFormatter = DateTimeFormat.getFormat("dd.MM.yyyy");
 
 	public static ListGridField createDateField(String name, String title) {
 		ListGridField field = new ListGridField(name, title);
