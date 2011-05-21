@@ -18,6 +18,7 @@ import javax.servlet.ServletResponse;
  */
 public class AuthenticationServlet implements Filter {
 
+	@SuppressWarnings("unused")
 	private FilterConfig filterConfig = null;
 	
 	

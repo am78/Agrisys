@@ -13,6 +13,7 @@ import com.google.appengine.api.images.ImagesService;
 import com.google.appengine.api.images.ImagesServiceFactory;
 import com.google.appengine.api.images.Transform;
 
+@SuppressWarnings("serial")
 public class Serve extends HttpServlet {
 	
 	private static final String PREVIEW_KEY = "preview";
@@ -26,19 +27,15 @@ public class Serve extends HttpServlet {
 		
 		if (PREVIEW_KEY.equals(req.getParameter("qual"))) {
 			ImagesService imagesService = ImagesServiceFactory.getImagesService();
-			
 			Image oldImage = ImagesServiceFactory.makeImageFromBlob(blobKey);
-			
 			Transform resize = ImagesServiceFactory.makeResize(previewSize, previewSize);
-			
 			Image newImage = imagesService.applyTransform(resize, oldImage);
-			
 			byte[] newImageData = newImage.getImageData();
-			
 			res.getOutputStream().write(newImageData);
 			res.getOutputStream().close();
 		}
 		else {
+			res.setContentType("image/JPEG");
 			blobstoreService.serve(blobKey, res);
 		}
 	}

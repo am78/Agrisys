@@ -47,7 +47,8 @@ public class Agrisys implements EntryPoint, UncaughtExceptionHandler {
 	/** Create a remote service proxy to talk to the server-side Agrisys service. */
 	private static final AgrisysServiceAsync agrisysService = GWT.create(AgrisysService.class);
 	
-	private static final String GMAPS_API_KEY = "ABQIAAAAWC3arzoRHb2hqhFgPw4LFRRZqWVwSTTTXom-tbmOfUpmqC1aXxS6CJk8g0uEiU5KetN6H-pILijfbw";
+	private static final String GMAPS_API_KEY =
+		"ABQIAAAAWC3arzoRHb2hqhFgPw4LFRSKwRWBh4_jgCHnSWb1H5hWS6ls3xSTlazbfd5L57jW7e2Ylc_kTOOzug";
 
 	/** Holds the user data of the current user. */
 	private static UserDataTO userData;

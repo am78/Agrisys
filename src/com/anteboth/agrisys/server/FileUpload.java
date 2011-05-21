@@ -17,10 +17,21 @@ import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
  * 
  * @author michael
  */
+@SuppressWarnings("serial")
 public class FileUpload extends HttpServlet {
 
 	private BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
+	
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) 
+	throws ServletException, IOException {
+		//on GET request return the Upload URL
+		String uploadUrl = blobstoreService.createUploadUrl("/upload");
+		resp.getWriter().write(uploadUrl);
+		
+	}
 
+	@Override
 	public void doPost(HttpServletRequest req, HttpServletResponse res)
 	throws ServletException, IOException {
 		
@@ -35,18 +46,18 @@ public class FileUpload extends HttpServlet {
 			
 			//if something went wrong set returns message to error msg
 			if (blobKey == null) {
-				//res.sendRedirect("/upload.jsp?refId=" + refId + "&success=false");
+				res.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, 
+						"Error: blobKey is null");
 			} 
 			//uploaded successfully, set return message to upload successfull
 			else {
 				//now assign the blobKey to the referenceID
 				ServiceManager.getInstance().assignBlob(refId, blobKey.getKeyString());
-
-				//res.sendRedirect("/upload.jsp?refId=" + refId + "&success=true");
-				//res.sendRedirect("/upload/serve?blob-key=" + blobKey.getKeyString());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			res.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, 
+				"Error: " + e.getLocalizedMessage());
 		}
 	}
 }

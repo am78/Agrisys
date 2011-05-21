@@ -10,7 +10,6 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
-import javax.swing.text.DateFormatter;
 
 import com.anteboth.agrisys.client.model.Account;
 import com.anteboth.agrisys.client.model.Aktivitaet;
@@ -47,7 +46,7 @@ public class ReportServlet extends GenericServlet {
 		
 		try {
 			Document document = new Document();
-			PdfWriter writer = PdfWriter.getInstance(document, response.getOutputStream());
+			PdfWriter.getInstance(document, response.getOutputStream());
 			document.open();
 			
 			document.addTitle("Schlagliste");
