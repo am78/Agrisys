@@ -247,7 +247,7 @@ function onSaveNewDuengung(form) {
 	var type = 2;
 	var fl = getDouble($('#newDuengungForm input[name=flaeche]').val());
 	var date = $('#newDuengungForm input[name=dateInput]').val();
-	var remark = $('#newBodenForm textarea[name=remark]').val();
+	var remark = $('#newDuengungForm textarea[name=remark]').val();
 	var duengerart = $('#newDuengungForm select[name=duengerartInput]').val();
 	var schlagErntejahrId = $('#newDuengungForm select[name=schlagInput]').val();
 	var kgProHa = getDouble($('#newDuengungForm input[name=kgProHa]').val());
@@ -271,7 +271,7 @@ function onSaveNewAussaat(form) {
 	var type = 1;
 	var fl = getDouble($('#newAussaatForm input[name=flaeche]').val());
 	var date = $('#newAussaatForm input[name=dateInput]').val();
-	var remark = $('#newBodenForm textarea[name=remark]').val();
+	var remark = $('#newAussaatForm textarea[name=remark]').val();
 	var schlagErntejahrId = $('#newAussaatForm select[name=schlagInput]').val();
 	var kgProHa = getDouble($('#newAussaatForm input[name=kgProHa]').val());
 	var beize = $('#newAussaatForm input[name=beize]').val();
@@ -293,7 +293,7 @@ function onSaveNewPflanzenschutz(form) {
 	var type = 4;
 	var fl = getDouble($('#newPflanzenschutzForm input[name=flaeche]').val());
 	var date = $('#newPflanzenschutzForm input[name=dateInput]').val();
-	var remark = $('#newBodenForm textarea[name=remark]').val();
+	var remark = $('#newPflanzenschutzForm textarea[name=remark]').val();
 	var psMittel = $('#newPflanzenschutzForm select[name=psMittelInput]').val();
 	var schlagErntejahrId = $('#newPflanzenschutzForm select[name=schlagInput]').val();
 	var kgProHa = getDouble($('#newPflanzenschutzForm input[name=kgProHa]').val());
@@ -319,7 +319,7 @@ function onSaveNewErnte(form) {
 	var type = 3;
 	var fl = getDouble($('#newErnteForm input[name=flaeche]').val());
 	var date = $('#newErnteForm input[name=dateInput]').val();
-	var remark = $('#newBodenForm textarea[name=remark]').val();
+	var remark = $('#newErnteForm textarea[name=remark]').val();
 	var schlagErntejahrId = $('#newErnteForm select[name=schlagInput]').val();
 	var dtProHa = getDouble($('#newErnteForm input[name=dtProHa]').val());
 	var gesamtmenge = getDouble($('#newErnteForm input[name=gesamtmenge]').val());
@@ -818,9 +818,9 @@ function loadAndDisplayActEntry(id) {
 
 
 function blockUI() {
-	window.AGRISYS.showBusyIndicator();	
+//	window.AGRISYS.showBusyIndicator();	
 }
 
 function unblockUI() {
-	window.AGRISYS.hideBusyIndicator();	
+//	window.AGRISYS.hideBusyIndicator();	
 }
