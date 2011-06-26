@@ -84,4 +84,6 @@ public interface AgrisysServiceAsync {
 	void deleteResource(Long id, String resKey, AsyncCallback<Void> callback);
 	void loadAktivitaet(Long id, AsyncCallback<Aktivitaet> callback);
 	void getBlobstoreUploadUrl(AsyncCallback<String> callback);
+	
+	void selectCurrentErntejahr(int erntejahr, AsyncCallback<Void> callback);
 }

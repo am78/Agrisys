@@ -6,13 +6,15 @@ import javax.persistence.Id;
 
 @SuppressWarnings("serial")
 public class Account implements Serializable, IDTO {
-
 	
+	private static final int DEFAULT_ERNTEJAHR = 2011;
+
 	@Id Long id;
 
 	private String username;
 	private String password;
 	private String email;
+	private int currentErntejahr;
 	
 	public Account() {
 	}
@@ -46,5 +48,15 @@ public class Account implements Serializable, IDTO {
 	public Long getId() {
 		return id;
 	}
-
+	
+	public int getCurrentErntejahr() {
+		if (this.currentErntejahr < 1900) {
+			this.currentErntejahr = DEFAULT_ERNTEJAHR;
+		}
+		return this.currentErntejahr;
+	}
+	
+	public void setCurrentErntejahr(int currentErntejahr) {
+		this.currentErntejahr = currentErntejahr;
+	}
 }

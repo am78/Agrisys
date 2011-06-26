@@ -116,6 +116,12 @@ public interface AgrisysService extends RemoteService {
 	 */
 	List<Erntejahr> loadErntejahrData();
 	
+	/**
+	 * Changes the current erntejahr to the specified value.
+	 * @param erntejahr the new erntejahr value
+	 */
+	void selectCurrentErntejahr(int erntejahr);
+	
 	/* Schlagverwaltung */
 	
 	/**

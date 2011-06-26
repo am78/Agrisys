@@ -37,7 +37,7 @@ import com.googlecode.objectify.Query;
 
 public class ServiceManager {
 	
-	private static final int ACT_ERNTEJAHR = 2011;
+//	private static final int ACT_ERNTEJAHR = 2011;
 	private static ServiceManager instance;
 	
 	
@@ -79,7 +79,15 @@ public class ServiceManager {
 	 * @return
 	 */
 	public int getCurrentErntejahr() {
-		return ACT_ERNTEJAHR;
+		//get selected current Erntejahr of current user
+		Account currentUser = getCurrentUserAccount();
+		if (currentUser != null) {
+			return currentUser.getCurrentErntejahr();
+		}
+		else {
+			throw new RuntimeException("Error: The current logged in user must not be null.");
+		}
+		
 	}
 
 	/**
@@ -104,6 +112,8 @@ public class ServiceManager {
 	
 	/**
 	 * Retrieves/Creates an account item in datastore if the email is not yet existing.
+	 * Creates a Betrieb item as well for new accounts.
+	 * 
 	 * @param name the account user name
 	 * @param pass the account password
 	 * @param email the email address, must not be null, is unique for each user
@@ -129,6 +139,21 @@ public class ServiceManager {
 		}
 		
 		return a;
+	}
+	
+	/**
+	 * Updates (persisting) the existing account value.
+	 * @param account the account value to store
+	 */
+	public void save(Account account) {
+		if (account == null) {
+			return;
+		}
+		
+		//store data
+		Objectify ofy = ObjectifyService.begin();
+		ofy.put(account);
+		
 	}
 
 
@@ -889,6 +914,52 @@ public class ServiceManager {
 				BlobKey blobKey = new BlobKey(resKey);
 				BlobstoreServiceFactory.getBlobstoreService().delete(blobKey);
 			}			
+		}
+	}
+
+
+	/**
+	 * Sets the current Erntejahr of the current logged in user to the specified value.
+	 * 
+	 * @param erntejahr the new current erntejahr
+	 */
+	public void selectCurrentErntejahr(int erntejahr) {
+		Account user = getCurrentUserAccount();
+		if (user != null) {
+			int oldEJ = user.getCurrentErntejahr();
+			//update erntejahr value
+			user.setCurrentErntejahr(erntejahr);
+			//and persist changes
+			save(user);
+			
+			//only if new erntejahr == current erntejahr+1
+			//for convinience copy the schlag entries (whithout any activity payload of course)
+			//from the previous erntejahr. But only if the new current erntejahr do not contain any schlag entries.
+			if (erntejahr == oldEJ+1) {
+				Betrieb betrieb = getBetriebForAccount(user);
+				Erntejahr ej = getErntejahr(erntejahr);
+				List<Schlag> schlagData = loadSchlagData(ej, betrieb);
+				if (schlagData == null || schlagData.size() < 1) {
+					List<Schlag> oldSchlagData = loadSchlagData(getErntejahr(oldEJ), betrieb);
+					for (Schlag oldSchlag : oldSchlagData) {
+						SchlagErntejahr oldSE = oldSchlag.getSchlagErntejahr(); 
+						
+						Sorte anbau = getSorte(oldSE.getAnbauSorte());
+						Kultur vorfrucht = getKulur(oldSE.getVorfrucht());
+						//save new schlag using the values from the old schlag
+						saveNewSchlag(betrieb, 
+								oldSchlag.getFlurstueck().getName(), 
+								oldSE.getFlaeche(), 
+								oldSE.getBemerkung(), 
+								erntejahr, 
+								anbau, 
+								vorfrucht);
+					}
+				}
+			}
+			
+		} else {
+			throw new RuntimeException("Error: The current User must not be null.");
 		}
 	}
 }

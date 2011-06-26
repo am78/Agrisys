@@ -256,6 +256,11 @@ public class AgrisysServiceImpl extends RemoteServiceServlet implements AgrisysS
 	public List<Erntejahr> loadErntejahrData() {
 		return serviceManager.loadErntejahrData();
 	}
+	
+	@Override
+	public void selectCurrentErntejahr(int erntejahr) {
+		serviceManager.selectCurrentErntejahr(erntejahr);
+	}
 
 
 	public List<Kultur> loadKulturData() {

@@ -1,33 +1,33 @@
-<!-- Indices written at Sun, 29 May 2011 09:23:20 UTC -->
+<!-- Indices written at Sat, 25 Jun 2011 15:31:35 UTC -->
 
 <datastore-indexes>
 
-    <!-- Used 11 times in query history -->
+    <!-- Used 24 times in query history -->
     <datastore-index kind="Duengung" ancestor="false" source="auto">
         <property name="schlagErntejahr" direction="asc"/>
         <property name="datum" direction="asc"/>
     </datastore-index>
 
-    <!-- Used 11 times in query history -->
-    <datastore-index kind="Ernte" ancestor="false" source="auto">
-        <property name="schlagErntejahr" direction="asc"/>
-        <property name="datum" direction="asc"/>
-    </datastore-index>
-
-    <!-- Used 11 times in query history -->
-    <datastore-index kind="Bodenbearbeitung" ancestor="false" source="auto">
-        <property name="schlagErntejahr" direction="asc"/>
-        <property name="datum" direction="asc"/>
-    </datastore-index>
-
-    <!-- Used 11 times in query history -->
+    <!-- Used 24 times in query history -->
     <datastore-index kind="Pflanzenschutz" ancestor="false" source="auto">
         <property name="schlagErntejahr" direction="asc"/>
         <property name="datum" direction="asc"/>
     </datastore-index>
 
-    <!-- Used 11 times in query history -->
+    <!-- Used 24 times in query history -->
+    <datastore-index kind="Ernte" ancestor="false" source="auto">
+        <property name="schlagErntejahr" direction="asc"/>
+        <property name="datum" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 24 times in query history -->
     <datastore-index kind="Aussaat" ancestor="false" source="auto">
+        <property name="schlagErntejahr" direction="asc"/>
+        <property name="datum" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 24 times in query history -->
+    <datastore-index kind="Bodenbearbeitung" ancestor="false" source="auto">
         <property name="schlagErntejahr" direction="asc"/>
         <property name="datum" direction="asc"/>
     </datastore-index>

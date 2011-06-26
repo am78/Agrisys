@@ -11,14 +11,20 @@ import com.anteboth.agrisys.client.grid.ErnteGrid;
 import com.anteboth.agrisys.client.grid.PflanzenschutzGrid;
 import com.anteboth.agrisys.client.grid.SchlaglisteGrid;
 import com.anteboth.agrisys.client.grid.data.SchlagRecord;
+import com.anteboth.agrisys.client.model.Erntejahr;
 import com.anteboth.agrisys.client.model.SchlagErntejahr;
 import com.anteboth.agrisys.client.model.UserDataTO;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.GWT.UncaughtExceptionHandler;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.maps.client.Maps;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.types.Side;
@@ -158,7 +164,7 @@ public class Agrisys implements EntryPoint, UncaughtExceptionHandler {
 		//create the user label
 		String user = 	 userData.getAccount().getUsername();
 		String betrieb = userData.getBetrieb().getName();
-		int erntejahr =  userData.getErntejahr().getErntejahr();
+		final int erntejahr =  userData.getErntejahr().getErntejahr();
 		Label userLabel = new Label(
 				"Benutzer: " + user + " | Betrieb: " + betrieb + " | Erntejahr: " + erntejahr);
 		userLabel.setWidth("300");
@@ -174,10 +180,100 @@ public class Agrisys implements EntryPoint, UncaughtExceptionHandler {
 			}
 		});
 		RootPanel.get("buttonStammdatenPanel").add(stammdatenLink);
+		
+		
+		//create the Erntejahr selection list box
+		final ListBox erntejahrListBox = new ListBox(false);
+		erntejahrListBox.setName("Erntejahr");
+		erntejahrListBox.setTitle("Erntejahr");
+		
+		//add Erntejahr entries
+		agrisysService.loadErntejahrData(new AsyncCallback<List<Erntejahr>>() {
+			@Override
+			public void onSuccess(List<Erntejahr> result) {
+				if (result != null) {
+					int index = 0;
+					for (Erntejahr ej : result) {
+						erntejahrListBox.addItem(Integer.toString(ej.getErntejahr()));
+						if (ej.getErntejahr() == erntejahr) {
+							erntejahrListBox.setSelectedIndex(index);
+						}
+						index++;
+					}
+				}
+			}
+			@Override
+			public void onFailure(Throwable caught) {
+				//handle excption
+				caught.printStackTrace(System.err);
+				Window.alert(caught.getLocalizedMessage());
+			}
+		});
+		
+		//add selection handler
+		erntejahrListBox.addChangeHandler(new ChangeHandler() {
+			public void onChange(ChangeEvent event) {
+				String selItem = erntejahrListBox.getItemText(erntejahrListBox.getSelectedIndex());
+				onErntejahrChanged(selItem);
+			}
+	    });
+		
+		//add Erntejahr Label
+		com.google.gwt.user.client.ui.Label ejLabel = 
+			new com.google.gwt.user.client.ui.Label("Erntejahr: ");
+		HorizontalPanel ejPnl = new HorizontalPanel();
+		ejPnl.add(ejLabel);
+		ejPnl.add(erntejahrListBox);
+		
+		//add the label and listbox to root layout
+        RootPanel.get("erntejahrSelectionPanel").add(ejPnl);
 
 	}
 
 
+	/**
+	 * Invoked when the user changes the erntejahr.
+	 * 
+	 * @param erntejahr the change erntejahr
+	 */
+	protected void onErntejahrChanged(String erntejahr) {
+		//get int from selected erntejahr value
+		int selectedEJ = Integer.parseInt(erntejahr);
+		
+		//get current EJ
+		int currentEJ =  userData.getErntejahr().getErntejahr();
+		
+		//if current EJ != selected EJ
+		if (currentEJ != selectedEJ) {
+			//ask user if he really wants to change the EJ
+			boolean confirm = Window.confirm(
+				"Möchten Sie das aktuelle Erntejahr wirklich auf " + selectedEJ + " ändern?");
+			if (confirm) {
+				//if so, change the EJ by calling service function
+				agrisysService.selectCurrentErntejahr(selectedEJ, new AsyncCallback<Void>() {
+					@Override
+					public void onSuccess(Void result) {
+						//reload/refresh the UI
+						reload();
+					}
+					
+					@Override
+					public void onFailure(Throwable caught) {
+						//Error handling
+						caught.printStackTrace(System.err);
+						Window.alert(caught.getLocalizedMessage());
+					}
+				});
+			} else {
+				//just reload the page to get the current Erntejahr (re)selected
+				reload();
+			}
+		}
+	}
+	
+	public native void reload() /*-{
+    	$wnd.location.reload();
+	}-*/; 
 
 	/**
 	 * Creates the right panel and it's subpanels.

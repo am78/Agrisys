@@ -51,7 +51,7 @@
 		<td align="left" width="230"> <!-- header -->
 			<img src="/img/agrisys_logo.png" alt="logo"/>
 		</td>
-		<td width="80" align="left">
+		<td width="70" align="left">
 			<div id="buttonStammdatenPanel" /> 
 		</td>
 		<td>
@@ -60,12 +60,15 @@
 		<td width="60" align="left">
 			<a href="<%= userService.createLogoutURL(request.getRequestURI()) %>">Logout</a>
 		</td>
+		<td align="center">
+			<div id="erntejahrSelectionPanel" />
+		</td>
 		<td align="left">
 			<div id="userInfoPanel" />
 		</td>
 	</tr>
 	<tr>
-		<td colspan="5">	
+		<td colspan="6">	
 			<p>
 			<!-- mainPanel holds the application panel -->
 			<div id="mainPanel" />
