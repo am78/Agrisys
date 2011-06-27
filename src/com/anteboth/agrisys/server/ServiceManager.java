@@ -774,12 +774,22 @@ public class ServiceManager {
 	}
 
 
-	public Kultur getKulur(Key<Kultur> key) {
+	/**
+	 * Get the Kultur entry for the specified key.
+	 * @param key the kultur key, must not be null
+	 * @return the found Kultur entry, null if nothing found
+	 */
+	public Kultur getKultur(Key<Kultur> key) {
 		Objectify ofy = ObjectifyService.begin();
 		return ofy.find(key);
 	}
 
 
+	/**
+	 * Get the Sorte entry for the specified key.
+	 * @param key the sorte key, must not be null
+	 * @return the sound sorte entry, null of nothing found
+	 */
 	public Sorte getSorte(Key<Sorte> key) {
 		Objectify ofy = ObjectifyService.begin();
 		return ofy.find(key);
@@ -945,7 +955,7 @@ public class ServiceManager {
 						SchlagErntejahr oldSE = oldSchlag.getSchlagErntejahr(); 
 						
 						Sorte anbau = getSorte(oldSE.getAnbauSorte());
-						Kultur vorfrucht = getKulur(oldSE.getVorfrucht());
+						Kultur vorfrucht = getKultur(oldSE.getVorfrucht());
 						//save new schlag using the values from the old schlag
 						saveNewSchlag(betrieb, 
 								oldSchlag.getFlurstueck().getName(), 
