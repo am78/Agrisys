@@ -73,7 +73,7 @@ extends AbstractListGrid<ErnteRecord> implements ISchlagErntejahrSelectionListen
 		ListGridField kulturField = ListGridFieldFactory.createStringField(
 				ErnteRecord.KULTUR, "Kultur");
 		ListGridField dtProHaField = ListGridFieldFactory.createFloatField(
-				ErnteRecord.DT_PRO_HA, "kg/ha");
+				ErnteRecord.DT_PRO_HA, "dt/ha");
 		ListGridField anlieferungField = ListGridFieldFactory.createStringField(
 				ErnteRecord.ANLIEFERUNG, "Anlieferung");
 		ListGridField gesamtmengeField = ListGridFieldFactory.createFloatField(

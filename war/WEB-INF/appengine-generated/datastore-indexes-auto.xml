@@ -1,9 +1,15 @@
-<!-- Indices written at Mon, 27 Jun 2011 21:29:38 UTC -->
+<!-- Indices written at Thu, 30 Jun 2011 20:32:06 UTC -->
 
 <datastore-indexes>
 
     <!-- Used 6 times in query history -->
-    <datastore-index kind="Bodenbearbeitung" ancestor="false" source="auto">
+    <datastore-index kind="Pflanzenschutz" ancestor="false" source="auto">
+        <property name="schlagErntejahr" direction="asc"/>
+        <property name="datum" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 6 times in query history -->
+    <datastore-index kind="Duengung" ancestor="false" source="auto">
         <property name="schlagErntejahr" direction="asc"/>
         <property name="datum" direction="asc"/>
     </datastore-index>
@@ -15,19 +21,13 @@
     </datastore-index>
 
     <!-- Used 6 times in query history -->
+    <datastore-index kind="Bodenbearbeitung" ancestor="false" source="auto">
+        <property name="schlagErntejahr" direction="asc"/>
+        <property name="datum" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 6 times in query history -->
     <datastore-index kind="Ernte" ancestor="false" source="auto">
-        <property name="schlagErntejahr" direction="asc"/>
-        <property name="datum" direction="asc"/>
-    </datastore-index>
-
-    <!-- Used 6 times in query history -->
-    <datastore-index kind="Pflanzenschutz" ancestor="false" source="auto">
-        <property name="schlagErntejahr" direction="asc"/>
-        <property name="datum" direction="asc"/>
-    </datastore-index>
-
-    <!-- Used 6 times in query history -->
-    <datastore-index kind="Duengung" ancestor="false" source="auto">
         <property name="schlagErntejahr" direction="asc"/>
         <property name="datum" direction="asc"/>
     </datastore-index>
