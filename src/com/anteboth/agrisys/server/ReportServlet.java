@@ -109,7 +109,8 @@ public class ReportServlet extends GenericServlet {
 		p.setLeading(200);
 
 		//create logo
-		Image img = Image.getInstance("img/agrisys_logo_bw.png");
+		Image img = Image.getInstance("img/agrisys_logo_report.png");
+		
 		//centered
 		img.setAlignment(Element.ALIGN_CENTER);
 		p.add(img);
