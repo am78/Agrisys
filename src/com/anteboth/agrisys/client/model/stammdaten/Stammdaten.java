@@ -12,6 +12,7 @@ public class Stammdaten implements Serializable {
 	private List<Duengerart> duengerartList;
 	private List<PSMittel> psMittelList;
 	private List<BodenbearbeitungTyp> bodenbearbeitungTypList;
+	private int erntejahr;
 
 	public List<Kultur> getKulturList() {
 		return kulturList;
@@ -53,5 +54,12 @@ public class Stammdaten implements Serializable {
 			List<BodenbearbeitungTyp> bodenbearbeitungTypList) {
 		this.bodenbearbeitungTypList = bodenbearbeitungTypList;
 	}
+
+	public void setCurrentErntejahr(int currentErntejahr) {
+		this.erntejahr = currentErntejahr;
+	}
 	
+	public int getCurrentErntejahr() {
+		return this.erntejahr;
+	}
 }

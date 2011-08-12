@@ -70,8 +70,6 @@ public class AktivitaetResource extends ServerResource implements IAktivitaetRes
 	
 	@Put ("json")
 	public void store(String json) {
-		System.out.println(json);
-		
 		Gson gson = new Gson();
 		BaseTO bto = gson.fromJson(json, BaseTO.class);
 		int type = bto.type;

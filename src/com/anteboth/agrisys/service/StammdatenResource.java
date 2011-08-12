@@ -1,6 +1,7 @@
 package com.anteboth.agrisys.service;
 
 import org.restlet.resource.Get;
+import org.restlet.resource.Put;
 import org.restlet.resource.ServerResource;
 
 import com.anteboth.agrisys.client.model.res.IStammdatenResource;
@@ -29,4 +30,10 @@ public class StammdatenResource extends ServerResource implements IStammdatenRes
 		return s;
 	}
 	
+	
+	@Put("json")
+	public void storeJson(String data) {		
+		int newEJ = Integer.parseInt(data);		
+		ServiceManager.getInstance().selectCurrentErntejahr(newEJ);		
+	}	
 }

@@ -1,5 +1,6 @@
 //var baseUrl = 'http://agri-sys.appspot.com';
-var baseUrl = '';
+//var baseUrl = 'http://192.168.178.23:8888';
+var baseUrl = 'http://localhost:8888';
 var schlagData;
 var actListData;
 var stammdaten;
@@ -8,7 +9,9 @@ var initialized = false;
 var longitude = -1;
 var latitude = -1;
 var currentActivity;
-
+var imageUploadUrl = '/upload';
+var erntejahr = 1970;
+	
 //init
 function init() {
 	blockUI();
@@ -97,6 +100,12 @@ function init() {
 		takeFoto(id);
 	});
 	
+	$('#saveSettings').live('tap',function(event, ui){			
+		onSaveSettings($('#settingsForm'));
+	});
+	$('#saveSettings').live('click',function(event, ui){
+		onSaveSettings($('#settingsForm'));
+	});
 
 	//refresh the geo location
 	refreshGeoPosition();
@@ -105,8 +114,8 @@ function init() {
 }
 
 function takeFoto(id) {
-	alert("take foto: " + id);
-	//window.AGRISYS.takePicture(id, imageUploadUrl);
+	//	displayMessage("take foto: " + id);
+	window.AGRISYS.takePicture(id, imageUploadUrl);
 }
 
 function loadStammdaten() {
@@ -127,11 +136,11 @@ function loadStammdaten() {
 			unblockUI();
 			//perform some post init task after the markup and the initial data has been loaded
 			postInit();
-			alert('Stammdaten geladen');
+			displayMessage('Stammdaten geladen');
 		},
 		error: function(error) { 
 			unblockUI();
-			alert("Fehler beim Laden der Stammdaten:\n" + error.status + " : " + error.statusText);
+			displayMessage("Fehler beim Laden der Stammdaten:\n" + error.status + " : " + error.statusText);
 		}
 	});
 }
@@ -151,11 +160,25 @@ function geoSuccess(position) {
 }
  
 function geoError(msg) {
-	alert(typeof msg == 'string' ? msg : "error");
+	displayMessage(typeof msg == 'string' ? msg : "error");
 }
+
+function updateErntejahrDisplay() {
+	$('#siteHeader').text('Agrisys - ' + erntejahr);
+	
+	//update settings form values
+	$('#settingsForm #currentErntejahr').text(erntejahr);
+	$('#settingsForm #erntejahrInput').attr('value', erntejahr);	
+}
+
 
 //perform some post init tasks after markup and initial data has been loaded
 function postInit() {
+	//update current erntejahr
+	erntejahr = stammdaten.erntejahr;
+	//update erntejahr fields
+	updateErntejahrDisplay();
+	
 	//add bodenbearbeitung types to input form
 	var btlst = stammdaten.bodenbearbeitungTypList;
 	if (btlst != null) {
@@ -247,7 +270,7 @@ function onSaveNewDuengung(form) {
 	var type = 2;
 	var fl = getDouble($('#newDuengungForm input[name=flaeche]').val());
 	var date = $('#newDuengungForm input[name=dateInput]').val();
-	var remark = $('#newDuengungForm textarea[name=remark]').val();
+	var remark = $('#newBodenForm textarea[name=remark]').val();
 	var duengerart = $('#newDuengungForm select[name=duengerartInput]').val();
 	var schlagErntejahrId = $('#newDuengungForm select[name=schlagInput]').val();
 	var kgProHa = getDouble($('#newDuengungForm input[name=kgProHa]').val());
@@ -271,7 +294,7 @@ function onSaveNewAussaat(form) {
 	var type = 1;
 	var fl = getDouble($('#newAussaatForm input[name=flaeche]').val());
 	var date = $('#newAussaatForm input[name=dateInput]').val();
-	var remark = $('#newAussaatForm textarea[name=remark]').val();
+	var remark = $('#newBodenForm textarea[name=remark]').val();
 	var schlagErntejahrId = $('#newAussaatForm select[name=schlagInput]').val();
 	var kgProHa = getDouble($('#newAussaatForm input[name=kgProHa]').val());
 	var beize = $('#newAussaatForm input[name=beize]').val();
@@ -293,7 +316,7 @@ function onSaveNewPflanzenschutz(form) {
 	var type = 4;
 	var fl = getDouble($('#newPflanzenschutzForm input[name=flaeche]').val());
 	var date = $('#newPflanzenschutzForm input[name=dateInput]').val();
-	var remark = $('#newPflanzenschutzForm textarea[name=remark]').val();
+	var remark = $('#newBodenForm textarea[name=remark]').val();
 	var psMittel = $('#newPflanzenschutzForm select[name=psMittelInput]').val();
 	var schlagErntejahrId = $('#newPflanzenschutzForm select[name=schlagInput]').val();
 	var kgProHa = getDouble($('#newPflanzenschutzForm input[name=kgProHa]').val());
@@ -319,7 +342,7 @@ function onSaveNewErnte(form) {
 	var type = 3;
 	var fl = getDouble($('#newErnteForm input[name=flaeche]').val());
 	var date = $('#newErnteForm input[name=dateInput]').val();
-	var remark = $('#newErnteForm textarea[name=remark]').val();
+	var remark = $('#newBodenForm textarea[name=remark]').val();
 	var schlagErntejahrId = $('#newErnteForm select[name=schlagInput]').val();
 	var dtProHa = getDouble($('#newErnteForm input[name=dtProHa]').val());
 	var gesamtmenge = getDouble($('#newErnteForm input[name=gesamtmenge]').val());
@@ -339,6 +362,35 @@ function onSaveNewErnte(form) {
 	save(data);
 }
 
+function onSaveSettings(form) {
+	var newErntejahr = getDouble($('#settingsForm input[name=erntejahrInput]').val());
+	
+	//save data		
+	if (newErntejahr != erntejahr) {
+		blockUI();
+		$.ajax({
+			url: baseUrl + '/service/stammdaten?media=json',
+			type:'PUT',
+			contentType: "application/json",
+			data: newErntejahr,
+			success : function() { 
+				displayMessage("Einstellungen gespeichert!");
+				unblockUI();
+				//enrtejahr changed successfully
+				//update display and so on
+				erntejahr = newErntejahr;
+				stammdaten.erntejahr = newErntejahr;
+				updateErntejahrDisplay();
+			},
+	    	error: function(error) {
+				unblockUI();
+				displayMessage("Fehler beim Speichern der Einstellungen:\n" + error.status + " : " + error.statusText);
+			}
+		});
+		
+	}
+}
+
 //saves the ontained data (using server) 
 function save(data) {
 	blockUI();
@@ -348,12 +400,12 @@ function save(data) {
 		contentType: "application/json",
 		data: data,
 		success : function() { 
-			alert("Daten gespeichert!");
+			displayMessage("Daten gespeichert!");
 			unblockUI();
 		},
     	error: function(error) {
 			unblockUI();
-			alert("Fehler beim Speichern der Daten:\n" + error.status + " : " + error.statusText);
+			displayMessage("Fehler beim Speichern der Daten:\n" + error.status + " : " + error.statusText);
 		}
 	});
 }
@@ -371,7 +423,7 @@ function displayPosition(pos) {
 
 //log error message
 function error(msg) {
-  alert(typeof msg == 'string' ? msg : "error");
+  displayMessage(typeof msg == 'string' ? msg : "error");
 }
 
 function getSchlag(schlagErntejahrId) {
@@ -409,7 +461,7 @@ function loadAndDisplayAktivitaetListData(schlagErntejahrId) {
 		},
 		error: function(error) { 
 			unblockUI();
-			alert("Fehler beim Laden der Daten:\n" + error.status + " : " + error.statusText); 
+			displayMessage("Fehler beim Laden der Daten:\n" + error.status + " : " + error.statusText); 
 		}
 	});
 }
@@ -576,7 +628,7 @@ function loadAndDisplaySchlagListData() {
 		},
 		error: function(error) { 
 			unblockUI();
-			alert("Fehler beim Laden der Daten:\n" + error.status + " : " + error.statusText); 
+			displayMessage("Fehler beim Laden der Daten:\n" + error.status + " : " + error.statusText); 
 		}
 	});
 }
@@ -816,6 +868,10 @@ function loadAndDisplayActEntry(id) {
 	$('#actDetails ul').listview('refresh');
 }
 
+function displayMessage(msg) {
+	alert(msg);
+//	console.log(msg);
+}
 
 function blockUI() {
 //	window.AGRISYS.showBusyIndicator();	

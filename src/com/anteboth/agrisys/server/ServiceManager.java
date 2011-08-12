@@ -201,6 +201,7 @@ public class ServiceManager {
 		sd.setDuengerartList(loadDuengerart());
 		sd.setPsMittelList(loadPSMittel());
 		sd.setSorteList(loadSorten());
+		sd.setCurrentErntejahr(getCurrentErntejahr());
 		return sd;
 	}
 

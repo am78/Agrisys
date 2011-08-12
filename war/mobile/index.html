@@ -26,7 +26,7 @@
 <!-- MAIN PAGE -->
 <div data-role="page" id="main">
 	<div data-role="header">
-		<h1>Agrisys</h1>
+		<h1 id="siteHeader">Agrisys</h1>
 	</div><!-- /header -->
 	<div data-role="content">			
 		<div id="wrapper">
@@ -44,6 +44,11 @@
 				<div id="mainBtn">
 					<a href="#newPflanzenschutzForm">
 						<img src="images/pflanzenschutz.png" height="100"/>
+					</a>
+				</div>
+				<div id="mainBtn">
+					<a href="#settingsForm">
+						<img src="images/settings.png" height="100"/>
 					</a>
 				</div>
 			</div>
@@ -337,6 +342,35 @@
 				<label for="remark">Bemerkung</label>
 				<textarea cols="40" rows="4" name="remark" id="remark"></textarea>
 			</div>				
+		</form>
+	</div>
+</div>
+<script type="text/javascript">
+	var date = getDateString(new Date());
+	$('#newErnteForm #dateInput').attr('value', date);
+</script>
+
+
+<!-- Eingabeformular für SettingsForm -->
+<div data-role="page" id="settingsForm">
+	<div data-role="header" data-position="inline">
+		<a href="#main" data-icon="delete">Abbrechen</a>
+		<h1>Agrisys</h1>
+		<a href="#main" id="saveSettings" data-icon="check" data-theme="b">Speichern</a>
+	</div><!-- /header -->
+	<div data-role="content">	
+		<form method="post" id="newErnteForm">
+			<div>
+				<label><strong>Aktuelles Erntejahr</strong></label>
+			</div>
+			<div>
+				<label id="currentErntejahr">1970</label>
+			</div>
+			<div>
+				<label class="mandatory" for="erntejahrInput"><strong>Neues Erntejahr</strong></label>
+				<input type="number" name="erntejahrInput" id="erntejahrInput" value="1970"/>
+			</div>
+							
 		</form>
 	</div>
 </div>

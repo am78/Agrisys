@@ -5,6 +5,7 @@ CACHE:
 style.css
 js/jquery.mobile-1.0a4.1.min.js
 js/jquery-1.5.min.js
+js/agrisys.js
 js/geo.js
 jquery.mobile-1.0a4.1.min.css
 images/aussaat.png
@@ -24,9 +25,4 @@ jquery.mobile/image/icons-36-black.png
 jquery.mobile/image/icons-36-white.png
 
 NETWORK:
-map.html
-index.html
-/mobile/index.html
-/service/stammdaten?media=json
-/service/schlagList?media=json
-/service/aktivitaetList
+*
