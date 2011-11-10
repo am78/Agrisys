@@ -319,8 +319,14 @@ public class ServiceManager {
 			ofy.query(SchlagErntejahr.class).filter("erntejahr", erntejahr).list();
 
 		for (SchlagErntejahr se : schlagErntejahrList) {
+			//filter deleted schlagErntejahr items
+			if (se.isDeleted()) {
+				continue;
+			}
+
 			//get Flurstueck
 			Flurstueck flurstueck = ofy.get(se.getFlurstueck());
+			
 
 			//only get Flurstueck for current users Betrieb
 			Betrieb fsBetrieb = flurstueck.getBetrieb() != null ? ofy.find(flurstueck.getBetrieb()) : null;
@@ -980,6 +986,14 @@ public class ServiceManager {
 	 * @param s the schlag to delete
 	 */
 	public void delete(Schlag s) {
-		//TODO
+		if (s != null) {
+			if (s.getSchlagErntejahr() != null) {
+				//set the deleted flag
+				s.getSchlagErntejahr().setDeleted(true);
+				//persist data
+				Objectify ofy = ObjectifyService.begin();
+				ofy.put(s.getSchlagErntejahr());
+			}
+		}
 	}
 }

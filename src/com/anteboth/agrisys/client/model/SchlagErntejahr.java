@@ -23,6 +23,7 @@ public class SchlagErntejahr implements Serializable, IDTO {
 
 	private double flaeche;
 	private String bemerkung;
+	private boolean deleted = false;
 	
 	public Long getId() {
 		return id;
@@ -73,5 +74,13 @@ public class SchlagErntejahr implements Serializable, IDTO {
 	
 	public void setAnbauSorte(Key<Sorte> anbauSorte) {
 		this.anbauSorte = anbauSorte;
+	}
+	
+	public boolean isDeleted() {
+		return deleted;
+	}
+	
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
 	}
 }
