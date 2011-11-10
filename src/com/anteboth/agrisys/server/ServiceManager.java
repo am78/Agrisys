@@ -973,4 +973,13 @@ public class ServiceManager {
 			throw new RuntimeException("Error: The current User must not be null.");
 		}
 	}
+
+
+	/**
+	 * Deletes the specified {@link Schlag}.
+	 * @param s the schlag to delete
+	 */
+	public void delete(Schlag s) {
+		//TODO
+	}
 }

@@ -276,42 +276,33 @@ function agrisys(){
       return parseInt(result[1]) * 1000 + parseInt(result[2]);
     }
     ;
-    if (function(){
-      return ua.indexOf('opera') != -1;
-    }
-    ())
+    if (ua.indexOf('opera') != -1) {
       return 'opera';
-    if (function(){
-      return ua.indexOf('webkit') != -1;
     }
-    ())
+     else if (ua.indexOf('webkit') != -1) {
       return 'safari';
-    if (function(){
-      return ua.indexOf('msie') != -1 && $doc_0.documentMode >= 9;
     }
-    ())
-      return 'ie9';
-    if (function(){
-      return ua.indexOf('msie') != -1 && $doc_0.documentMode >= 8;
+     else if (ua.indexOf('msie') != -1) {
+      if (document.documentMode >= 8) {
+        return 'ie8';
+      }
+       else {
+        var result_0 = /msie ([0-9]+)\.([0-9]+)/.exec(ua);
+        if (result_0 && result_0.length == 3) {
+          var v = makeVersion(result_0);
+          if (v >= 6000) {
+            return 'ie6';
+          }
+        }
+      }
     }
-    ())
-      return 'ie8';
-    if (function(){
-      var result = /msie ([0-9]+)\.([0-9]+)/.exec(ua);
-      if (result && result.length == 3)
-        return makeVersion(result) >= 6000;
-    }
-    ())
-      return 'ie6';
-    if (function(){
-      return ua.indexOf('gecko') != -1;
-    }
-    ())
+     else if (ua.indexOf('gecko') != -1) {
       return 'gecko1_8';
+    }
     return 'unknown';
   }
   ;
-  values['user.agent'] = {gecko1_8:0, ie6:1, ie8:2, ie9:3, opera:4, safari:5};
+  values['user.agent'] = {gecko1_8:0, ie6:1, ie8:2, opera:3, safari:4};
   agrisys.onScriptLoad = function(){
     if (frameInjected) {
       loadDone = true;
@@ -340,18 +331,16 @@ function agrisys(){
   $stats && $stats({moduleName:'agrisys', sessionId:$sessionId_0, subSystem:'startup', evtGroup:'bootstrap', millis:(new Date).getTime(), type:'selectingPermutation'});
   if (!isHostedMode()) {
     try {
-      unflattenKeylistIntoAnswers(['default', 'gecko1_8'], '149C24B1996723D0EF187B450CA11B71');
-      unflattenKeylistIntoAnswers(['default', 'ie6'], '1BE0D12A68FABFDC28B934503E3A09EB');
-      unflattenKeylistIntoAnswers(['de_DE', 'opera'], '32534B4B42BCE6F71684F5E04097B199');
-      unflattenKeylistIntoAnswers(['de_DE', 'ie9'], '36B092F19DD37D607A1793F7DC33D257');
-      unflattenKeylistIntoAnswers(['default', 'ie9'], '64D88C5F29967610F74C9F3D3A82ECC1');
-      unflattenKeylistIntoAnswers(['de_DE', 'gecko1_8'], '6A84357ACE5474F21596BE41416F30EE');
-      unflattenKeylistIntoAnswers(['de_DE', 'ie8'], '74B3335F15147610AC83D6E037F2C561');
-      unflattenKeylistIntoAnswers(['default', 'opera'], '8F561049B3CFAACE29D1694AD089F18F');
-      unflattenKeylistIntoAnswers(['de_DE', 'safari'], 'A66B06DF9875BDDC8C78A2B5B6D4BF62');
-      unflattenKeylistIntoAnswers(['default', 'safari'], 'BA13A29E7E075D71481B832E83A27A0F');
-      unflattenKeylistIntoAnswers(['de_DE', 'ie6'], 'E3EF988820C972BA5A782C1AF35BD91B');
-      unflattenKeylistIntoAnswers(['default', 'ie8'], 'F6AC4E06BBF278799DCBAE56C53A8B69');
+      unflattenKeylistIntoAnswers(['default', 'gecko1_8'], '180994374C6363128F66F5F83CC6591A');
+      unflattenKeylistIntoAnswers(['default', 'opera'], '4F7EFC487A9685AD207B776BB0A6631F');
+      unflattenKeylistIntoAnswers(['de_DE', 'gecko1_8'], '87497723D214D74B64BC174BA1E8D699');
+      unflattenKeylistIntoAnswers(['de_DE', 'opera'], '89BC7953376EDBBE590CB4017B35725E');
+      unflattenKeylistIntoAnswers(['default', 'safari'], '913510BBDA76569E0B9DE3ACFB9D7C37');
+      unflattenKeylistIntoAnswers(['de_DE', 'ie6'], 'AE9EC7FCF7313BF59E4003D147FDF239');
+      unflattenKeylistIntoAnswers(['de_DE', 'ie8'], 'AE9EC7FCF7313BF59E4003D147FDF239');
+      unflattenKeylistIntoAnswers(['default', 'ie6'], 'BE6D41B198A9D4FF0BD14B2817C9CCBE');
+      unflattenKeylistIntoAnswers(['default', 'ie8'], 'BE6D41B198A9D4FF0BD14B2817C9CCBE');
+      unflattenKeylistIntoAnswers(['de_DE', 'safari'], 'D32FFCF44ACB84658F876849F0F288EC');
       strongName = answers[computePropValue('locale')][computePropValue('user.agent')];
       var idx = strongName.indexOf(':');
       if (idx != -1) {

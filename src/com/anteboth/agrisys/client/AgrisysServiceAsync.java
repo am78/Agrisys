@@ -86,4 +86,5 @@ public interface AgrisysServiceAsync {
 	void getBlobstoreUploadUrl(AsyncCallback<String> callback);
 	
 	void selectCurrentErntejahr(int erntejahr, AsyncCallback<Void> callback);
+	void delete(Schlag s, AsyncCallback<Void> callback);
 }

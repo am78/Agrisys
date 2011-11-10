@@ -147,6 +147,12 @@ public interface AgrisysService extends RemoteService {
 			Sorte anbau, Kultur vorfrucht);
 	
 	/**
+	 * Deletes the {@link Schlag} item.
+	 * @param s the item to delete
+	 */
+	void delete(Schlag s);
+	
+	/**
 	 * Updates a {@link Schlag} item with the specified values.
 	 * @param s
 	 * @param betrieb

@@ -328,6 +328,12 @@ public class AgrisysServiceImpl extends RemoteServiceServlet implements AgrisysS
 		return serviceManager.saveNewSchlag(betrieb, name, flaeche, bemerkung,
 				jahr, anbau, vorfrucht);
 	}
+	
+	
+	@Override
+	public void delete(Schlag s) {
+		serviceManager.delete(s);
+	}
 
 
 	public Schlag updateSchlag(Schlag s, Betrieb betrieb, String name,

@@ -49,6 +49,8 @@ import com.smartgwt.client.widgets.toolbar.ToolStripButton;
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class Agrisys implements EntryPoint, UncaughtExceptionHandler {
+	
+	private static final String versionNumber = "1.0.4";
 
 	/** Create a remote service proxy to talk to the server-side Agrisys service. */
 	private static final AgrisysServiceAsync agrisysService = GWT.create(AgrisysService.class);
@@ -164,12 +166,14 @@ public class Agrisys implements EntryPoint, UncaughtExceptionHandler {
 		//create the user label
 		String user = 	 userData.getAccount().getUsername();
 		String betrieb = userData.getBetrieb().getName();
+		String versionString = versionNumber;
 		final int erntejahr =  userData.getErntejahr().getErntejahr();
 		Label userLabel = new Label(
-				"Benutzer: " + user + " | Betrieb: " + betrieb + " | Erntejahr: " + erntejahr);
+				"Benutzer: " + user + " | Betrieb: " + betrieb + " | Erntejahr: " + erntejahr +
+				"<br>Version " + versionString);
 		userLabel.setWidth("300");
 
-		RootPanel.get("userInfoPanel").add(userLabel);		
+		RootPanel.get("userInfoPanel").add(userLabel);	
 
 		//create the stammdaten button
 		Anchor stammdatenLink = new Anchor("Stammdaten");

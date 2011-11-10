@@ -1,3 +1,2 @@
 # Module agrisys
 # RPC service class, partial path of RPC policy file
-com.anteboth.agrisys.client.AgrisysService, 02239E24C69919C672BFBD215F95B9AE.gwt.rpc

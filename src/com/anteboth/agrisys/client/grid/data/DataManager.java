@@ -149,9 +149,29 @@ public class DataManager {
 			});
 	}
 	
-	public void delete(List<SchlagRecord> records, SchlaglisteGrid schlaglisteGrid) {
-		// TODO Auto-generated method stub
+	public void delete(List<SchlagRecord> records, final SchlaglisteGrid grid) {
+		if (records == null || records.isEmpty()) {
+			return;
+		}
 		
+		for (final SchlagRecord r : records) {
+			if (r != null && r.getDTO() != null){
+				Schlag s = r.getDTO();
+				AsyncCallback<Void> callback = new AsyncCallback<Void>() {
+					@Override
+					public void onSuccess(Void result) {
+						//if deleted, remove the record from the grid
+						grid.removeData(r);
+					}
+					@Override
+					public void onFailure(Throwable caught) {
+						handleException(caught);
+					}
+				};
+				//delete the entries
+				service.delete(s, callback);
+			}
+		}
 	}
 
 	/* Bodenbearbeitung */
