@@ -1,6 +1,7 @@
 //var baseUrl = 'http://agri-sys.appspot.com';
 //var baseUrl = 'http://192.168.178.23:8888';
 var baseUrl = 'http://localhost:8888';
+var indexUrl = baseUrl + "/mobile/index.html";
 var schlagData;
 var actListData;
 var stammdaten;
@@ -11,6 +12,19 @@ var latitude = -1;
 var currentActivity;
 var imageUploadUrl = '/upload';
 var erntejahr = 1970;
+
+function displayMessage(msg) {
+//	alert(msg);
+	console.log(msg);
+}
+
+function blockUI() {
+//	window.AGRISYS.showBusyIndicator();	
+}
+
+function unblockUI() {
+//	window.AGRISYS.hideBusyIndicator();	
+}
 	
 //init
 function init() {
@@ -150,13 +164,16 @@ function refreshGeoPosition() {
 	if (navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(geoSuccess, geoError, { enableHighAccuracy: true });
 	} else {
-		//console.log("Geo location Feature nicht unterstützt!");
+		displayMessage("GEO-Position kann nicht ermittelt werden!");
 	}
 }
 
 function geoSuccess(position) {
 	latitude = position.coords.latitude;
 	longitude = position.coords.longitude;
+	
+	$('#settingsForm #locLongitude').text(longitude);
+	$('#settingsForm #locLatitude').text(latitude);
 }
  
 function geoError(msg) {
@@ -381,6 +398,8 @@ function onSaveSettings(form) {
 				erntejahr = newErntejahr;
 				stammdaten.erntejahr = newErntejahr;
 				updateErntejahrDisplay();
+				//we need to reload the entire page
+				window.location.href = indexUrl;
 			},
 	    	error: function(error) {
 				unblockUI();
@@ -866,17 +885,4 @@ function loadAndDisplayActEntry(id) {
 	
 	//don't forget to refresh the list
 	$('#actDetails ul').listview('refresh');
-}
-
-function displayMessage(msg) {
-	alert(msg);
-//	console.log(msg);
-}
-
-function blockUI() {
-//	window.AGRISYS.showBusyIndicator();	
-}
-
-function unblockUI() {
-//	window.AGRISYS.hideBusyIndicator();	
 }
