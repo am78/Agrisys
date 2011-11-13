@@ -697,8 +697,18 @@ public class ServiceManager {
 			Kultur kultur = ofy.find(kk);
 			
 			for (Aussaat dto : data) {
-				dto.setSorte(sorte);
-				dto.setKultur(kultur);
+				if (dto.getSorteKey() == null) {
+					dto.setSorte(sorte);
+				} else {
+					Sorte as = ofy.find(dto.getSorteKey());
+					dto.setSorte(as);
+				}
+				if (dto.getKulturKey() == null) {
+					dto.setKultur(kultur);
+				} else {
+					Kultur ak = ofy.find(dto.getKulturKey());
+					dto.setKultur(ak);
+				}
 			}
 		}
 		
@@ -714,12 +724,22 @@ public class ServiceManager {
 		SchlagErntejahr schlagErntejahr = ofy.find(sek);
 		
 		if (schlagErntejahr != null) {
-			Key<Sorte> sk = schlagErntejahr.getAnbauSorte();
-			Sorte sorte = ofy.find(sk);
-			Key<Kultur> kk = schlagErntejahr.getAnbauKultur();
-			Kultur kultur = ofy.find(kk);
-			dto.setSorte(sorte);
-			dto.setKultur(kultur);
+			if (dto.getSorteKey() == null) {
+				Key<Sorte> sk = schlagErntejahr.getAnbauSorte();
+				Sorte sorte = ofy.find(sk);				
+				dto.setSorte(sorte);
+			} else {
+				Sorte as = ofy.find(dto.getSorteKey());
+				dto.setSorte(as);
+			}
+			if (dto.getKulturKey() == null) {
+				Key<Kultur> kk = schlagErntejahr.getAnbauKultur();
+				Kultur kultur = ofy.find(kk);
+				dto.setKultur(kultur);
+			} else {
+				Kultur ak = ofy.find(dto.getKulturKey());
+				dto.setKultur(ak);
+			}
 		}
 		
 		

@@ -5,7 +5,9 @@ import java.util.Map.Entry;
 
 import com.anteboth.agrisys.client.model.Aussaat;
 import com.anteboth.agrisys.client.model.ListRecord;
+import com.anteboth.agrisys.client.model.stammdaten.Sorte;
 import com.google.gwt.core.client.GWT;
+import com.googlecode.objectify.Key;
 
 public class AussaatRecord extends ListRecord<Aussaat> {
 
@@ -69,6 +71,17 @@ public class AussaatRecord extends ListRecord<Aussaat> {
 			}
 			else if (att.equals(BEIZE)) {
 				dto.setBeize((String) val);
+			}
+			else if (att.equals(SORTE)) {
+				if (val instanceof String) {
+					int id = Integer.parseInt((String) val);
+					dto.setSorte(null);
+					dto.setSorteKey(new Key<Sorte>(Sorte.class, id));
+				} else if (val instanceof Sorte) {
+					Sorte s = (Sorte) val;
+					dto.setSorte(s);
+					dto.setSorteKey(new Key<Sorte>(Sorte.class, s.getId()));
+				}
 			}
 		}
     }

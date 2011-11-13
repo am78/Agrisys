@@ -7,6 +7,7 @@ import com.anteboth.agrisys.client.grid.data.AussaatRecord;
 import com.anteboth.agrisys.client.grid.data.DataManager;
 import com.anteboth.agrisys.client.grid.data.StammdatenManager;
 import com.anteboth.agrisys.client.model.Aussaat;
+import com.anteboth.agrisys.client.model.SorteDataSource;
 import com.smartgwt.client.widgets.Button;
 import com.smartgwt.client.widgets.Window;
 import com.smartgwt.client.widgets.events.ClickEvent;
@@ -14,6 +15,7 @@ import com.smartgwt.client.widgets.events.ClickHandler;
 import com.smartgwt.client.widgets.form.DynamicForm;
 import com.smartgwt.client.widgets.form.fields.DateItem;
 import com.smartgwt.client.widgets.form.fields.FloatItem;
+import com.smartgwt.client.widgets.form.fields.SelectItem;
 import com.smartgwt.client.widgets.form.fields.TextAreaItem;
 import com.smartgwt.client.widgets.form.fields.TextItem;
 import com.smartgwt.client.widgets.layout.HLayout;
@@ -28,6 +30,7 @@ public class AussaatDetailsWindow extends Window {
 	private AbstractListGrid grid;
 	private StammdatenManager stammdatenManager;
 	private DataManager dataManager;
+	private SorteDataSource sorteDataSource;
 	
 	public AussaatDetailsWindow(final AussaatRecord record, final boolean addNewRecord, AbstractListGrid grid) {
 		super();
@@ -42,6 +45,10 @@ public class AussaatDetailsWindow extends Window {
 		setIsModal(true);  
         setShowModalMask(true);
         setAutoCenter(true);
+                
+        SelectItem sorteItem = new SelectItem(AussaatRecord.SORTE, "Sorte");  
+		sorteItem.setRequired(true);
+		this.sorteDataSource = new SorteDataSource(sorteItem);
         
 		/* create the form */
 		FloatItem flaecheItem = FormItemFactory.createFloatItem(
@@ -56,7 +63,7 @@ public class AussaatDetailsWindow extends Window {
         		AussaatRecord.BEMERKUNG, "Bemerkung", false);
 
         final DynamicForm form = new DynamicForm();
-        form.setItems(datumItem, flaecheItem, kgProHaItem, beizeItem, bemItem);
+        form.setItems(datumItem, flaecheItem, kgProHaItem, sorteItem, beizeItem, bemItem);
         
         //display values form an existing entry
         if (!addNewRecord && record != null) {
@@ -67,6 +74,9 @@ public class AussaatDetailsWindow extends Window {
         	datumItem.setValue(a.getDatum() != null ? a.getDatum() : new Date());
         	kgProHaItem.setValue(a.getKgProHa() != null ? a.getKgProHa() : Double.valueOf(0));
         	beizeItem.setValue(a.getBeize() != null ? a.getBeize() : "");
+        	
+        	this.sorteDataSource.kulturValueChanged(a.getKultur().getKey());
+        	this.sorteDataSource.setSelectedValue(a.getSorte().getId());
         }
 
 		/* create the save & cancel buttons */

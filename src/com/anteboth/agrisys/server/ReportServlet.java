@@ -127,37 +127,47 @@ public class ReportServlet extends GenericServlet {
 		document.add(p);
 
 		//print some meta data
-		Table tab = new Table(2);
-		tab.setBorder(Rectangle.NO_BORDER);
-		tab.setSpacing(5);
+		PdfPTable tab = new PdfPTable(2);
+		//tab.setBorder(Rectangle.NO_BORDER);
+		//tab.setSpacing(5);
 		
 		Cell dcell = new Cell();
 		dcell.setBorderWidth(0);
-		tab.setDefaultCell(dcell);
+		//tab.setDefaultCell(dcell);
 		
-		Cell leftCell = new Cell("Erntejahr:");
+		PdfPCell leftCell = new PdfPCell(new Phrase("Erntejahr:"));
 		leftCell.setBorderWidth(0);
 		leftCell.setHorizontalAlignment(Cell.ALIGN_RIGHT);
 		tab.addCell(leftCell);
-		tab.addCell(erntejahr.getErntejahr() + "");
+		PdfPCell rightCell = new PdfPCell(new Phrase(erntejahr.getErntejahr() + ""));
+		rightCell.setBorderWidth(0);
+		tab.addCell(rightCell);
 		
-		leftCell = new Cell("Betrieb:");
+		leftCell = new PdfPCell(new Phrase("Betrieb:"));
 		leftCell.setBorderWidth(0);
 		leftCell.setHorizontalAlignment(Cell.ALIGN_RIGHT);
 		tab.addCell(leftCell);
-		tab.addCell(betriebName);
+		rightCell = new PdfPCell(new Phrase(betriebName));
+		rightCell.setBorderWidth(0);
+		tab.addCell(rightCell);
 		
-		leftCell = new Cell("Adresse:");
+		leftCell = new PdfPCell(new Phrase("Adresse:"));
 		leftCell.setBorderWidth(0);
 		leftCell.setHorizontalAlignment(Cell.ALIGN_RIGHT);
 		tab.addCell(leftCell);
-		tab.addCell(adresse);
+		rightCell = new PdfPCell(new Phrase(adresse));
+		rightCell.setBorderWidth(0);
+		tab.addCell(rightCell);
 		
-		leftCell = new Cell("Tel.:");
+		Phrase pr0 = new Phrase("Tel.:");
+		pr0.setFont(new Font(Font.HELVETICA, 10, Font.ITALIC));
+		leftCell = new PdfPCell(pr0);
 		leftCell.setBorderWidth(0);
 		leftCell.setHorizontalAlignment(Cell.ALIGN_RIGHT);
 		tab.addCell(leftCell);
-		tab.addCell(tel);
+		rightCell = new PdfPCell(new Phrase(tel));
+		rightCell.setBorderWidth(0);
+		tab.addCell(rightCell);
 	
 		document.add(tab);
 		
