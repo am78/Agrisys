@@ -116,6 +116,8 @@ extends AbstractListGrid<AussaatRecord> implements ISchlagErntejahrSelectionList
 		//create the data entry
 		Aussaat a = new Aussaat();
 		a.setSchlagErntejahr(new Key<SchlagErntejahr>(SchlagErntejahr.class, schlagErntejahr.getId()));
+		a.setKulturKey(schlagErntejahr.getAnbauKultur());
+		a.setSorteKey(schlagErntejahr.getAnbauSorte());
 
 		//create new record
 		AussaatRecord r = new AussaatRecord(a);

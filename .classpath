@@ -16,6 +16,10 @@
 	<classpathentry kind="lib" path="war/WEB-INF/lib/iText-2.1.7-gae.jar" sourcepath="war/WEB-INF/lib/iText-src-2.1.7-gae.zip"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/commons-fileupload-1.2.2.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/gwt-maps.jar"/>
+<<<<<<< HEAD
+=======
+	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER/appengine-java-sdk-1.6.0"/>
+>>>>>>> d8863fc7acdae7c504c5a1d5e438e1ec214703bb
 	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER"/>
 	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER/appengine-java-sdk-1.4.3"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>

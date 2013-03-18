@@ -78,6 +78,12 @@ public class AussaatDetailsWindow extends Window {
         	this.sorteDataSource.kulturValueChanged(a.getKultur().getKey());
         	this.sorteDataSource.setSelectedValue(a.getSorte().getId());
         }
+        //if creating a new value
+        else if (addNewRecord) {
+        	Aussaat a = record.getDTO();
+        	this.sorteDataSource.kulturValueChanged(a.getKulturKey());
+        	this.sorteDataSource.setSelectedValue(a.getSorteKey().getId());
+        }
 
 		/* create the save & cancel buttons */
         Button saveBtn = new Button("Speichern");
