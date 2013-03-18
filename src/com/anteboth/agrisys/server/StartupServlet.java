@@ -16,6 +16,7 @@ import javax.servlet.ServletResponse;
 @SuppressWarnings("serial")
 public class StartupServlet extends GenericServlet {
 
+	@Override
 	public void init() {
 		String serverInfo = getServletContext().getServerInfo();
 		/* ServletContext.getServerInfo() will return "Google App Engine Development/x.x.x"

@@ -25,6 +25,7 @@ public class Ernte extends Aktivitaet {
 		setType(ERNTE_TYPE);
 	}
 
+	@Override
 	public Long getId() {
 		return id;
 	}

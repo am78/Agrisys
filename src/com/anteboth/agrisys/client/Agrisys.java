@@ -132,7 +132,7 @@ public class Agrisys implements EntryPoint, UncaughtExceptionHandler {
 	}
 
 	protected void setUserData(UserDataTO userData) {
-		this.userData = userData;
+		Agrisys.userData = userData;
 	}
 
 	/**
@@ -146,8 +146,8 @@ public class Agrisys implements EntryPoint, UncaughtExceptionHandler {
 
 		//main layout
 		HLayout mainLayout = new HLayout();  
-		mainLayout.setWidth("90%");
-		mainLayout.setHeight("75%");
+		mainLayout.setWidth("95%");
+		mainLayout.setHeight("85%");
 		mainLayout.setAlign(Alignment.CENTER);
 		mainLayout.setBorder("1px solid lightgray");
 		mainLayout.setBackgroundColor("#DDDDDD");
@@ -442,7 +442,7 @@ public class Agrisys implements EntryPoint, UncaughtExceptionHandler {
 	private VLayout createLeftPanel() {
 		//create the gridview
 		final ListGrid schlaglisteGrid = new SchlaglisteGrid();
-		schlaglisteGrid.setWidth(180);
+		schlaglisteGrid.setWidth(220);
 
 		schlaglisteGrid.addRecordClickHandler(new RecordClickHandler() {
 			@Override

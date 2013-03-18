@@ -45,9 +45,9 @@ public interface AgrisysServiceAsync {
 	
 	void loadSchlagData(Erntejahr erntejahr, Betrieb betrieb, AsyncCallback<List<Schlag>> callback);
 	void loadErntejahrData(AsyncCallback<List<Erntejahr>> callback);
-	void saveNewSchlag(Betrieb betrieb, String name, double flaeche, String bemerkung,
-			int erntejahr, Sorte anbau, Kultur vorfrucht, AsyncCallback<Schlag> callback);
-	void updateSchlag(Schlag s, Betrieb betrieb, String name, double flaeche, String bemerkung,
+	void saveNewSchlag(Betrieb betrieb, String name, int schlagNr, double flaeche,
+			String bemerkung, int erntejahr, Sorte anbau, Kultur vorfrucht, AsyncCallback<Schlag> callback);
+	void updateSchlag(Schlag s, Betrieb betrieb, String name, int schlagNr, double flaeche, String bemerkung,
 			int erntejahr, Sorte anbau, Kultur vorfrucht, AsyncCallback<Schlag> callback);
 
 	

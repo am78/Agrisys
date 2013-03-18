@@ -2,6 +2,7 @@ package com.anteboth.agrisys.server;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -34,12 +35,8 @@ import com.lowagie.text.DocumentException;
 import com.lowagie.text.Element;
 import com.lowagie.text.Font;
 import com.lowagie.text.FontFactory;
-import com.lowagie.text.Image;
-import com.lowagie.text.PageSize;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.Phrase;
-import com.lowagie.text.Rectangle;
-import com.lowagie.text.Table;
 import com.lowagie.text.awt.Color;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
@@ -137,7 +134,7 @@ public class ReportServlet extends GenericServlet {
 		
 		PdfPCell leftCell = new PdfPCell(new Phrase("Erntejahr:"));
 		leftCell.setBorderWidth(0);
-		leftCell.setHorizontalAlignment(Cell.ALIGN_RIGHT);
+		leftCell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 		tab.addCell(leftCell);
 		PdfPCell rightCell = new PdfPCell(new Phrase(erntejahr.getErntejahr() + ""));
 		rightCell.setBorderWidth(0);
@@ -145,7 +142,7 @@ public class ReportServlet extends GenericServlet {
 		
 		leftCell = new PdfPCell(new Phrase("Betrieb:"));
 		leftCell.setBorderWidth(0);
-		leftCell.setHorizontalAlignment(Cell.ALIGN_RIGHT);
+		leftCell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 		tab.addCell(leftCell);
 		rightCell = new PdfPCell(new Phrase(betriebName));
 		rightCell.setBorderWidth(0);
@@ -153,7 +150,7 @@ public class ReportServlet extends GenericServlet {
 		
 		leftCell = new PdfPCell(new Phrase("Adresse:"));
 		leftCell.setBorderWidth(0);
-		leftCell.setHorizontalAlignment(Cell.ALIGN_RIGHT);
+		leftCell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 		tab.addCell(leftCell);
 		rightCell = new PdfPCell(new Phrase(adresse));
 		rightCell.setBorderWidth(0);
@@ -163,7 +160,7 @@ public class ReportServlet extends GenericServlet {
 		pr0.setFont(new Font(Font.HELVETICA, 10, Font.ITALIC));
 		leftCell = new PdfPCell(pr0);
 		leftCell.setBorderWidth(0);
-		leftCell.setHorizontalAlignment(Cell.ALIGN_RIGHT);
+		leftCell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 		tab.addCell(leftCell);
 		rightCell = new PdfPCell(new Phrase(tel));
 		rightCell.setBorderWidth(0);
@@ -191,7 +188,7 @@ public class ReportServlet extends GenericServlet {
 		//create Schlagliste table
 		PdfPTable table = new PdfPTable(4);
 		table.setHeaderRows(1);
-		table.setHorizontalAlignment(PdfTable.ALIGN_LEFT);
+		table.setHorizontalAlignment(Element.ALIGN_LEFT);
 		
 		table.addCell(createHeaderCell(table, "Schlag"));			
 		table.addCell(createHeaderCell(table, "Fläche"));
@@ -306,7 +303,7 @@ public class ReportServlet extends GenericServlet {
 		PdfPTable table = new PdfPTable(7);
 		table.setHeaderRows(1);
 		table.setWidthPercentage(100);
-		table.setHorizontalAlignment(PdfTable.ALIGN_LEFT);
+		table.setHorizontalAlignment(Element.ALIGN_LEFT);
 		
 		table.addCell(createHeaderCell(table, "Datum"));			
 		table.addCell(createHeaderCell(table, "Sorte"));
@@ -320,7 +317,7 @@ public class ReportServlet extends GenericServlet {
 			Date d = e.getDatum();
 			String bem = e.getBemerkung();
 			double flaeche = e.getFlaeche();
-			String date = SimpleDateFormat.getDateInstance().format(d);
+			String date = DateFormat.getDateInstance().format(d);
 			String sorte = e.getSorte().getName();
 			String dtProHa = e.getDtProHa() + "";
 			String anlieferung = e.getAnlieferung();
@@ -354,7 +351,7 @@ public class ReportServlet extends GenericServlet {
 		PdfPTable table = new PdfPTable(7);
 		table.setHeaderRows(1);
 		table.setWidthPercentage(100);
-		table.setHorizontalAlignment(PdfTable.ALIGN_LEFT);
+		table.setHorizontalAlignment(Element.ALIGN_LEFT);
 		
 		table.addCell(createHeaderCell(table, "Datum"));			
 		table.addCell(createHeaderCell(table, "PS-Mittel"));
@@ -368,7 +365,7 @@ public class ReportServlet extends GenericServlet {
 			Date d = ps.getDatum();
 			String bem = ps.getBemerkung();
 			double flaeche = ps.getFlaeche();
-			String date = SimpleDateFormat.getDateInstance().format(d);
+			String date = DateFormat.getDateInstance().format(d);
 			String psMittel = ps.getPsMittel().getName();
 			String kgProHa = ps.getKgProHa() + "";
 			String ec = ps.getEc() + "";
@@ -401,7 +398,7 @@ public class ReportServlet extends GenericServlet {
 		PdfPTable table = new PdfPTable(6);
 		table.setHeaderRows(1);
 		table.setWidthPercentage(100);
-		table.setHorizontalAlignment(PdfTable.ALIGN_LEFT);
+		table.setHorizontalAlignment(Element.ALIGN_LEFT);
 		
 		table.addCell(createHeaderCell(table, "Datum"));
 		table.addCell(createHeaderCell(table, "Düngerart"));
@@ -414,7 +411,7 @@ public class ReportServlet extends GenericServlet {
 			Date d = due.getDatum();
 			String bem = due.getBemerkung();
 			double flaeche = due.getFlaeche();
-			String date = SimpleDateFormat.getDateInstance().format(d);
+			String date = DateFormat.getDateInstance().format(d);
 			String duengerart = due.getDuengerart().getName();
 			String kgProHa = due.getKgProHa() + "";
 			String ec = due.getEc() + "";
@@ -445,7 +442,7 @@ public class ReportServlet extends GenericServlet {
 	throws DocumentException {
 		PdfPTable table = new PdfPTable(6);
 		table.setHeaderRows(1);
-		table.setHorizontalAlignment(PdfTable.ALIGN_LEFT);
+		table.setHorizontalAlignment(Element.ALIGN_LEFT);
 		table.setWidthPercentage(100);
 		
 		table.addCell(createHeaderCell(table, "Datum"));			
@@ -459,7 +456,7 @@ public class ReportServlet extends GenericServlet {
 			Date d = a.getDatum();
 			String bem = a.getBemerkung();
 			double flaeche = a.getFlaeche();
-			String date = SimpleDateFormat.getDateInstance().format(d);
+			String date = DateFormat.getDateInstance().format(d);
 			String sorte = a.getSorte().getName();
 			String kgProHa = a.getKgProHa() + "";
 			String beize = a.getBeize();

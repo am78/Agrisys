@@ -136,6 +136,7 @@ public interface AgrisysService extends RemoteService {
 	 * Saves a new {@link Schlag} item for the specified {@link Betrieb}.
 	 * @param betrieb
 	 * @param name
+	 * @param schlagNr
 	 * @param flaeche
 	 * @param bemerkung
 	 * @param erntejahr
@@ -143,7 +144,7 @@ public interface AgrisysService extends RemoteService {
 	 * @param vorfrucht
 	 * @return
 	 */
-	Schlag saveNewSchlag(Betrieb betrieb, String name, double flaeche, String bemerkung, int erntejahr, 
+	Schlag saveNewSchlag(Betrieb betrieb, String name, int schlagNr, double flaeche, String bemerkung, int erntejahr, 
 			Sorte anbau, Kultur vorfrucht);
 	
 	/**
@@ -157,6 +158,7 @@ public interface AgrisysService extends RemoteService {
 	 * @param s
 	 * @param betrieb
 	 * @param name
+	 * @patam schlagNr
 	 * @param flaeche
 	 * @param bemerkung
 	 * @param erntejahr
@@ -164,7 +166,7 @@ public interface AgrisysService extends RemoteService {
 	 * @param vorfrucht
 	 * @return
 	 */
-	Schlag updateSchlag(Schlag s, Betrieb betrieb, String name, double flaeche,
+	Schlag updateSchlag(Schlag s, Betrieb betrieb, String name, int schlagNr, double flaeche,
 			String bemerkung, int erntejahr, Sorte anbau, Kultur vorfrucht);
 
 	

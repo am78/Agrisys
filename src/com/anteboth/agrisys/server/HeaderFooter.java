@@ -16,18 +16,21 @@ class HeaderFooter extends PdfPageEventHelper {
 	/* (non-Javadoc)
 	 * @see com.lowagie.text.pdf.PdfPageEventHelper#onOpenDocument(com.lowagie.text.pdf.PdfWriter, com.lowagie.text.Document)
 	 */
+	@Override
 	public void onOpenDocument(PdfWriter writer, Document document) {
 	}
 
 	/* (non-Javadoc)
 	 * @see com.lowagie.text.pdf.PdfPageEventHelper#onChapter(com.lowagie.text.pdf.PdfWriter, com.lowagie.text.Document, float, com.lowagie.text.Paragraph)
 	 */
+	@Override
 	public void onChapter(PdfWriter writer, Document document, float paragraphPosition, Paragraph title) {
 	}
 
 	/* (non-Javadoc)
 	 * @see com.lowagie.text.pdf.PdfPageEventHelper#onStartPage(com.lowagie.text.pdf.PdfWriter, com.lowagie.text.Document)
 	 */
+	@Override
 	public void onStartPage(PdfWriter writer, Document document) {
 		pagenumber++;
 	}
@@ -35,6 +38,7 @@ class HeaderFooter extends PdfPageEventHelper {
 	/* (non-Javadoc)
 	 * @see com.lowagie.text.pdf.PdfPageEventHelper#onEndPage(com.lowagie.text.pdf.PdfWriter, com.lowagie.text.Document)
 	 */
+	@Override
 	public void onEndPage(PdfWriter writer, Document document) {
 		Rectangle rect = document.getPageSize();
 		ColumnText.showTextAligned(

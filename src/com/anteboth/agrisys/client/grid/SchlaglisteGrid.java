@@ -45,8 +45,13 @@ public class SchlaglisteGrid extends AbstractListGrid<SchlagRecord> {
 	protected void initGridFields() {
 		//ListGridField nrField = new ListGridField("nummer", "#");
 		ListGridField nameField = new ListGridField(SchlagRecord.NAME, "Schlag");
-		ListGridField areaField = new ListGridField(SchlagRecord.FLAECHE, "Fl&auml;che");  
-		setFields(new ListGridField[] {nameField, areaField});  
+		nameField.setWidth(130);
+		ListGridField areaField = new ListGridField(SchlagRecord.FLAECHE, "Fl&auml;che");
+		ListGridField schlagNrField = new ListGridField(SchlagRecord.SCHLAG_NR, "Schlagnr");		
+		setFields(new ListGridField[] {nameField, areaField, schlagNrField}); 
+		//default ordering (schlagNr)
+		setSortField(SchlagRecord.SCHLAG_NR);
+		
 	}
 	
 	@Override

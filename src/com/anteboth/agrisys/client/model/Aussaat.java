@@ -27,6 +27,7 @@ public class Aussaat extends Aktivitaet {
 		setType(AUSSAAT_TYPE);
 	}
 
+	@Override
 	public Long getId() {
 		return id;
 	}

@@ -6,7 +6,6 @@ import java.util.Map;
 import com.anteboth.agrisys.client.ISchlagErntejahrSelectionListener;
 import com.anteboth.agrisys.client.grid.data.AussaatRecord;
 import com.anteboth.agrisys.client.grid.data.DataManager;
-import com.anteboth.agrisys.client.grid.data.ErnteRecord;
 import com.anteboth.agrisys.client.model.Aussaat;
 import com.anteboth.agrisys.client.model.ListRecord;
 import com.anteboth.agrisys.client.model.SchlagErntejahr;

@@ -312,7 +312,7 @@ public class ServiceManager {
 		}
 		
 		Objectify ofy = ObjectifyService.begin();
-		List<Schlag> result = new ArrayList<Schlag>();
+		List<Schlag> result = new ArrayList<Schlag>();			
 		
 		//get SchlagErntejahr entries for requested erntejahr
 		List<SchlagErntejahr> schlagErntejahrList = 
@@ -338,6 +338,18 @@ public class ServiceManager {
 				result.add(schlag);
 			}
 		}
+		
+		//Sort schlag result list be schlagNummer
+		Collections.sort(result, new Comparator<Schlag>() {
+			@Override
+			public int compare(Schlag s0, Schlag s1) {
+				if (s0 != null && s1 != null && s0.getFlurstueck() != null && s1.getFlurstueck() != null) {
+					return s0.getFlurstueck().getSchlagNr() - s1.getFlurstueck().getSchlagNr();
+				}
+				return 0;
+			}
+		});
+		
 		return result;
 	}
 	
@@ -370,13 +382,13 @@ public class ServiceManager {
 		return s;
 	}
 	
-	public Schlag saveNewSchlag(Betrieb betrieb, String name, double flaeche, String bemerkung, 
+	public Schlag saveNewSchlag(Betrieb betrieb, String name, int schlagNr, double flaeche, String bemerkung, 
 			int jahr, Sorte anbau, Kultur vorfrucht) 
 	{
 		Objectify ofy = ObjectifyService.begin();
 
 		Erntejahr erntejahr = getErntejahr(jahr);
-		Flurstueck f = getOrCreateFlurstueck(name, flaeche, betrieb);		
+		Flurstueck f = getOrCreateFlurstueck(name, schlagNr, flaeche, betrieb);		
 		
 		SchlagErntejahr se = new SchlagErntejahr();
 		se.setFlurstueck(new Key<Flurstueck>(Flurstueck.class, f.getID()));
@@ -400,13 +412,14 @@ public class ServiceManager {
 		return s;
 	}
 	
-	public Schlag updateSchlag(Schlag s, Betrieb betrieb, String name, double flaeche,
+	public Schlag updateSchlag(Schlag s, Betrieb betrieb, String name, int schlagNr, double flaeche,
 			String bemerkung, int jahr, Sorte anbau, Kultur vorfrucht) 
 	{
 		Objectify ofy = ObjectifyService.begin();
 
 		Flurstueck f = s.getFlurstueck();
 		f.setName(name);
+		f.setSchlagNr(schlagNr);
 		
 		//save Flurstueck entry
 		ofy.put(f);
@@ -439,12 +452,13 @@ public class ServiceManager {
 	 * @param betrieb 
 	 * @return {@link Flurstueck} value
 	 */
-	private Flurstueck getOrCreateFlurstueck(String name, double flaeche, Betrieb betrieb) {
+	private Flurstueck getOrCreateFlurstueck(String name, int schlagNr, double flaeche, Betrieb betrieb) {
 		Objectify ofy = ObjectifyService.begin();
 		Flurstueck f = ofy.query(Flurstueck.class).filter("name", name).filter("betrieb", betrieb).get();
 		if (f == null) {
 			f = new Flurstueck();
 			f.setName(name);
+			f.setSchlagNr(schlagNr);
 			f.setFlaeche(flaeche);
 			f.setBetrieb(new Key<Betrieb>(Betrieb.class, betrieb.getId()));
 			ofy.put(f);
@@ -985,9 +999,10 @@ public class ServiceManager {
 						Kultur vorfrucht = getKultur(oldSE.getVorfrucht());
 						//save new schlag using the values from the old schlag
 						saveNewSchlag(betrieb, 
-								oldSchlag.getFlurstueck().getName(), 
+								oldSchlag.getFlurstueck().getName(),
+								oldSchlag.getFlurstueck().getSchlagNr(),								
 								oldSE.getFlaeche(), 
-								oldSE.getBemerkung(), 
+								oldSE.getBemerkung(),								
 								erntejahr, 
 								anbau, 
 								vorfrucht);

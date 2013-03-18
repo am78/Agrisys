@@ -92,6 +92,7 @@ public class DataManager {
 	 * Saves a new {@link Schlag} item with the obtained values
 	 * and item add to the grid view.
 	 * @param name
+	 * @param schlagNr TODO
 	 * @param flaeche
 	 * @param bemerkung
 	 * @param erntejahr
@@ -99,12 +100,12 @@ public class DataManager {
 	 * @param vorfrucht
 	 * @param grid
 	 */
-	public void saveSchlag(String name, double flaeche, String bemerkung, int erntejahr, 
-			Sorte anbau, Kultur vorfrucht, final AbstractListGrid<SchlagRecord> grid) 
+	public void saveSchlag(String name, int schlagNr, double flaeche, String bemerkung, 
+			int erntejahr, Sorte anbau, Kultur vorfrucht, final AbstractListGrid<SchlagRecord> grid) 
 	{
 		service.saveNewSchlag(
-			this.userData.getBetrieb(), name, flaeche, bemerkung, erntejahr, anbau, vorfrucht, 
-		new AsyncCallback<Schlag>() {
+			this.userData.getBetrieb(), name, schlagNr, flaeche, bemerkung, erntejahr, anbau, 
+		vorfrucht, new AsyncCallback<Schlag>() {
 			@Override
 			public void onSuccess(Schlag result) {
 				if (result != null) {
@@ -123,6 +124,7 @@ public class DataManager {
 	 * Update the {@link Schlag} item with the obtained values
 	 * and item add to the grid view.
 	 * @param name
+	 * @param schlagNr TODO
 	 * @param flaeche
 	 * @param bemerkung
 	 * @param erntejahr
@@ -130,10 +132,10 @@ public class DataManager {
 	 * @param vorfrucht
 	 * @param grid
 	 */
-	public void updateSchlag(Schlag s, String name, double flaeche, String bemerkung, int erntejahr, 
-			Sorte anbau, Kultur vorfrucht, final AbstractListGrid<SchlagRecord> grid) 
+	public void updateSchlag(Schlag s, String name, int schlagNr, double flaeche, String bemerkung, 
+			int erntejahr, Sorte anbau, Kultur vorfrucht, final AbstractListGrid<SchlagRecord> grid) 
 	{
-		service.updateSchlag(s, this.userData.getBetrieb(), name, flaeche, bemerkung, erntejahr, anbau, vorfrucht, 
+		service.updateSchlag(s, this.userData.getBetrieb(), name, schlagNr, flaeche, bemerkung, erntejahr, anbau, vorfrucht, 
 			new AsyncCallback<Schlag>() {
 				@Override
 				public void onSuccess(Schlag result) {

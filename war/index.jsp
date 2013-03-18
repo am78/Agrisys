@@ -46,7 +46,7 @@
     </noscript>
 
 
-<table border="0" width="90%" align="center">
+<table border="0" width="95%" align="center">
 	<tr>
 		<td align="left" width="230"> <!-- header -->
 			<img src="/img/agrisys_logo.png" alt="logo"/>

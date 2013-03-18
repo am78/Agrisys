@@ -9,13 +9,11 @@ import com.anteboth.agrisys.client.model.Schlag;
 import com.anteboth.agrisys.client.model.SorteDataSource;
 import com.anteboth.agrisys.client.model.stammdaten.Kultur;
 import com.anteboth.agrisys.client.model.stammdaten.Sorte;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.ui.Button;
 import com.googlecode.objectify.Key;
 import com.smartgwt.client.widgets.Window;
 import com.smartgwt.client.widgets.form.DynamicForm;
 import com.smartgwt.client.widgets.form.fields.FloatItem;
+import com.smartgwt.client.widgets.form.fields.IntegerItem;
 import com.smartgwt.client.widgets.form.fields.SelectItem;
 import com.smartgwt.client.widgets.form.fields.TextAreaItem;
 import com.smartgwt.client.widgets.form.fields.TextItem;
@@ -54,6 +52,11 @@ public class SchlagdetailsWindow extends Window {
 		flaecheItem.setTitle("Fl&auml;che");
 		flaecheItem.setRequired(true);
 		
+		IntegerItem schlagNrItem = new IntegerItem();
+		schlagNrItem.setName(SchlagRecord.SCHLAG_NR);
+		schlagNrItem.setTitle("Schlagnummer");
+		schlagNrItem.setRequired(true);
+		
 		SelectItem erntejahrItem = new SelectItem(SchlagRecord.ERNTEJAHR, "Erntejahr");  
         erntejahrItem.setRequired(true);
         this.stammdatenManager.loadErntejahrData(erntejahrItem);
@@ -84,7 +87,7 @@ public class SchlagdetailsWindow extends Window {
         TextAreaItem bemItem = new TextAreaItem(SchlagRecord.BEMERKUNG, "Bemerkung");
 
         final DynamicForm form = new DynamicForm();
-        form.setItems(erntejahrItem, nameItem, flaecheItem, kulturItem, sorteItem, vorfruchtItem, bemItem);
+        form.setItems(erntejahrItem, nameItem, schlagNrItem, flaecheItem, kulturItem, sorteItem, vorfruchtItem, bemItem);
         
         //display values form an existing entry
         if (!addNewRecord && record != null) {
@@ -92,6 +95,7 @@ public class SchlagdetailsWindow extends Window {
         	//so set the old field values
         	Schlag s = record.getDTO();
         	String name = s.getFlurstueck().getName();
+        	int schlagNr = s.getFlurstueck().getSchlagNr();
         	double flaeche = s.getSchlagErntejahr().getFlaeche();
         	String bemerkung = s.getSchlagErntejahr().getBemerkung();
 
@@ -100,6 +104,7 @@ public class SchlagdetailsWindow extends Window {
     			erntejahrItem, s.getSchlagErntejahr().getErntejahr());
         	
         	nameItem.setValue(name);
+        	schlagNrItem.setValue(schlagNr);
         	flaecheItem.setValue(flaeche);
         	bemItem.setValue(bemerkung);
 
@@ -130,6 +135,8 @@ public class SchlagdetailsWindow extends Window {
 					onSavePressed(record, form, addNewRecord);
 					//close dialog window
 					SchlagdetailsWindow.this.destroy();
+					SchlagdetailsWindow.this.setVisible(false);
+					SchlagdetailsWindow.this.hide();					
 				}  
 			}
 		});
@@ -181,6 +188,7 @@ public class SchlagdetailsWindow extends Window {
 		double flaeche = Double.valueOf(form.getValueAsString(SchlagRecord.FLAECHE));
 		String bemerkung = form.getValueAsString(SchlagRecord.BEMERKUNG);
 		int erntejahr = Integer.parseInt(form.getValueAsString(SchlagRecord.ERNTEJAHR));
+		int schlagNr = Integer.parseInt(form.getValueAsString(SchlagRecord.SCHLAG_NR));
 
 		//get selected Anbausorte
 		String sorteId = (String) form.getValue(SchlagRecord.SORTE);
@@ -192,12 +200,12 @@ public class SchlagdetailsWindow extends Window {
 		
 		if (addNewRecord) {
 			//save data and add to table
-			this.dataManager.saveSchlag(name, flaeche, bemerkung, erntejahr, anbau, vorfrucht, this.grid);
+			this.dataManager.saveSchlag(name, schlagNr, flaeche, bemerkung, erntejahr, anbau, vorfrucht, this.grid);
 		}
 		else {
 			//save data and update table
 			Schlag schlag = record.getDTO();
-			this.dataManager.updateSchlag(schlag, name, flaeche, bemerkung, erntejahr, anbau, vorfrucht, this.grid);
+			this.dataManager.updateSchlag(schlag, name, schlagNr, flaeche, bemerkung, erntejahr, anbau, vorfrucht, this.grid);
 			record.updateDTO(form.getValues());
 			this.grid.redraw();
 		}

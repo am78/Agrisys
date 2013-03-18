@@ -22,7 +22,6 @@ import com.smartgwt.client.data.RecordList;
 import com.smartgwt.client.util.SC;
 import com.smartgwt.client.widgets.form.fields.SelectItem;
 import com.smartgwt.client.widgets.grid.ListGrid;
-import com.smartgwt.client.widgets.grid.ListGridRecord;
 
 public class StammdatenManager {
 	

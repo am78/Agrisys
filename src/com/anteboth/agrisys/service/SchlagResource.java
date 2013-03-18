@@ -3,7 +3,6 @@ import org.restlet.resource.Get;
 import org.restlet.resource.ServerResource;
 
 import com.anteboth.agrisys.client.model.Schlag;
-import com.anteboth.agrisys.client.model.SchlagErntejahr;
 import com.anteboth.agrisys.client.model.res.ISchlagResource;
 import com.anteboth.agrisys.server.ServiceManager;
 import com.google.gson.Gson;

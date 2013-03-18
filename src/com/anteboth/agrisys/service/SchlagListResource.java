@@ -30,6 +30,8 @@ public class SchlagListResource extends ServerResource implements ISchlagListRes
 		
 		List<Schlag> data = mgr.loadSchlagData(erntejahr, betrieb);
 		
+		
+		
 //		try {
 //			Thread.sleep(2000);
 //		} catch (InterruptedException e) {

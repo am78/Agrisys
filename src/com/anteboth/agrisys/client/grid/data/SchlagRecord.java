@@ -18,6 +18,7 @@ public class SchlagRecord extends ListRecord<Schlag> {
 	public static final String SORTE 		= "sorte";
 	public static final String VORFRUCHT 	= "vorfrucht";
 	public static final String KULTUR 		= "kultur";
+	public static final String SCHLAG_NR	= "schlagNr";	
 
 	public SchlagRecord(Schlag s) {
     	super(s);
@@ -37,6 +38,7 @@ public class SchlagRecord extends ListRecord<Schlag> {
 		String name = f != null ? f.getName() : "";
 		String beschreibung = f != null ? f.getBeschreibung() : "";
 		Long id = f != null ? f.getID() : null;
+		Integer schlagNr = f != null ? f.getSchlagNr() : 100;
 		
 		double flaeche = se != null ? se.getFlaeche() : 0; 
 		
@@ -44,6 +46,7 @@ public class SchlagRecord extends ListRecord<Schlag> {
 		setAttribute(NAME, name);
 		setAttribute(BEMERKUNG, beschreibung);
 		setAttribute(FLAECHE, flaeche);
+		setAttribute(SCHLAG_NR, schlagNr);
 //		setAttribute("sorte", se.getAnbau());
 	}
 
@@ -63,6 +66,9 @@ public class SchlagRecord extends ListRecord<Schlag> {
 			}
 			else if (BEMERKUNG.equals(att)) {
 				s.getSchlagErntejahr().setBemerkung((String) val);
+			}
+			else if (SCHLAG_NR.equals(att)) {
+				s.getFlurstueck().setSchlagNr((Integer) val);
 			}
 		}
 	}

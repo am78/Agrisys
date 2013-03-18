@@ -16,7 +16,14 @@ public class Flurstueck implements Serializable, IDTO {
 	private String name;
 	private String beschreibung;
 	private double flaeche;
+	private int schlagNr;
 	
+	public int getSchlagNr() {
+		return schlagNr;
+	}
+	public void setSchlagNr(int schlagNr) {
+		this.schlagNr = schlagNr;
+	}
 	public String getName() {
 		return name;
 	}

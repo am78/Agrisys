@@ -8,7 +8,6 @@ import java.util.List;
 
 import com.anteboth.agrisys.client.Agrisys;
 import com.anteboth.agrisys.client.model.stammdaten.BodenbearbeitungTyp;
-import com.anteboth.agrisys.client.model.stammdaten.Kultur;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.smartgwt.client.widgets.form.fields.SelectItem;

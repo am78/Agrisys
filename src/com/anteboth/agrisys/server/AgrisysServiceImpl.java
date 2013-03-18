@@ -323,9 +323,9 @@ public class AgrisysServiceImpl extends RemoteServiceServlet implements AgrisysS
 	}
 
 
-	public Schlag saveNewSchlag(Betrieb betrieb, String name, double flaeche,
+	public Schlag saveNewSchlag(Betrieb betrieb, String name, int schlagNr, double flaeche,
 			String bemerkung, int jahr, Sorte anbau, Kultur vorfrucht) {
-		return serviceManager.saveNewSchlag(betrieb, name, flaeche, bemerkung,
+		return serviceManager.saveNewSchlag(betrieb, name, schlagNr, flaeche, bemerkung,
 				jahr, anbau, vorfrucht);
 	}
 	
@@ -336,10 +336,10 @@ public class AgrisysServiceImpl extends RemoteServiceServlet implements AgrisysS
 	}
 
 
-	public Schlag updateSchlag(Schlag s, Betrieb betrieb, String name,
+	public Schlag updateSchlag(Schlag s, Betrieb betrieb, String name, int schlagNr,
 			double flaeche, String bemerkung, int jahr, Sorte anbau,
 			Kultur vorfrucht) {
-		return serviceManager.updateSchlag(s, betrieb, name, flaeche,
+		return serviceManager.updateSchlag(s, betrieb, name, schlagNr, flaeche,
 				bemerkung, jahr, anbau, vorfrucht);
 	}
 
